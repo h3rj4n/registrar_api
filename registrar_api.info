@@ -1,0 +1,6 @@
+; $Id$
+
+name = Registrar API
+description = Connects to various domain registrar API's to allow domain registration and management through Drupal
+package = Other
+core = 6.x
