@@ -270,11 +270,11 @@ function namecheap_domains_setregistrarlock() {
 
 function _namecheap_init_request($command, $username = NULL) {
   if (!$username) {
-    $username = variable_get('namecheap_api_user');
+    $username = variable_get('namecheap_api_user', '');
   }
   $request = array(
-    'ApiUser' => variable_get('namecheap_api_user'),
-    'ApiKey' => variable_get('namecheap_api_key'),
+    'ApiUser' => variable_get('namecheap_api_user', ''),
+    'ApiKey' => variable_get('namecheap_api_key', ''),
     'UserName' => $username,
     'ClientIP' => $_SERVER['REMOTE_ADDR'],
     'command' => $command,
@@ -289,7 +289,7 @@ function _namecheap_request($request) {
   foreach ($request as $field => $value) {
     $request_arr[] .= urlencode($field) . "=" . urlencode($value);
   }
-  $request_str = variable_get('namecheap_uri') . "?" . implode("&", $request_arr);
+  $request_str = variable_get('namecheap_uri', '') . "?" . implode("&", $request_arr);
 
   $f = @fopen($request_str, "r");
   $response = stream_get_contents($f);

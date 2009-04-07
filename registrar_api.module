@@ -18,6 +18,7 @@ function registrar_api_help($path, $arg) {
  * Implementation of hook_init().
  */
 function registrar_api_init() {
+  module_load_include('inc', 'registrar_api');
   module_load_include('inc', 'registrar_api', 'includes/namecheap');
 }
 
@@ -25,7 +26,19 @@ function registrar_api_init() {
  * Implementation of hook_perm().
  */
 function registrar_api_perm() {
-  return array('register domains');
+  return array('register domains', 'edit own domains', 'manage domains');
+}
+
+function registrar_api_access($op, $node, $account) {
+  switch ($op) {
+    case 'create':
+      return user_access('register domains', $account);
+    break;
+    case 'update':
+    case 'delete':
+      return user_access('edit own domains', $account) && ($account->uid == $node->uid) || user_access('manage domains', $account);
+    break;
+  }
 }
 
 function registrar_api_menu() {
@@ -83,9 +96,103 @@ function registrar_api_admin() {
   return system_settings_form($form);
 }
 
+/**** Hooks to implement the domain custom content type ****/
+
+/**
+* Implementation of hook_node_info().
+*/
+function registrar_api_node_info() {
+  return array(
+    'registrar_domain2' => array(
+      'name' => t('Domain'),
+      'module' => 'registrar_api',
+      'description' => "Domain Name",
+    )
+  );
+}
+
+/**
+ * Implementation of hook_form()
+ */
+function registrar_api_form(&$node) {
+  $type = node_get_types('type', $node);
+  
+  // Define the form elements for the node's title and body.
+  $form['title'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Domain Name'),
+    '#required' => TRUE,
+    '#default_value' => $node->title,
+    '#weight' => -5
+  );
+  
+  // We want the body and filter elements to be adjacent. We could try doing
+  // this by setting their weights, but another module might add elements to the
+  // form with the same weights and end up between ours. By putting them into a
+  // sub-array together, we're able force them to be rendered together.
+
+//   $form['body_filter']['body'] = array(
+//     '#type' => 'textarea',
+//     '#title' => check_plain($type->body_label),
+//     '#default_value' => $node->body,
+//     '#required' => FALSE
+//   );
+//   $form['body_filter']['filter'] = filter_form($node->format);
+
+  $form['years'] = array(
+    '#type' => 'select',
+    '#title' => t('Years'),
+    '#default_value' => 1,
+    '#options' => array(1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6,
+                        7 => 7, 8 => 8, 9 => 9, 10 => 10),
+    '#required' => TRUE,
+  );
+
+  $form += _registrar_api_get_form();
+
+  return $form;
+}
+
+/**
+ * Implementation of hook_insert()
+ */
+function registrar_api_insert($node) {
+  global $user;
+
+  //dsm($node);
+  $status = registrar_api_domains_create($node->title, $node->years, $node->registrar_api_registrant, $node->registrar_api_admin, $node->registrar_api_tech, $node->registrar_api_aux_billing);
+  
+  //$set_str = _registrar_api_get_set_str($node);
+  //db_query("INSERT INTO {registrar_api_content} SET $set_str, nid = %d, uid = %d, years = %d, created = '%s', updated = '%s'", $node->nid, $user->uid, $node->years, $created, $created);
+  
+}
+
+/**
+ * Implementation of hook_update()
+ */
+function registrar_api_update($node) {
+  global $user;
+  
+  $set_str = _registrar_api_get_set_str($node);
+  db_query("UPDATE {registrar_api_content} SET $set_str, years = %d, updated = '%s' WHERE nid = %d, uid = %d", $node->years, $updated, $node->nid, $user->uid);
+
+}
+
+/**
+ * Implementation of hook_delete()
+ */
+function registrar_api_delete(&$node) {
+  
+}
+
+/**
+ * Implementation of hook_validate()
+ */
+function registrar_api_validate($node, &$form) {
+}
+
 /**
  * Implementation of hook_user()
- *
  */
 function registrar_api_user($op, &$edit, &$account, $category = NULL) {
   // We only do updates if the user is not anonymous.
@@ -101,31 +208,22 @@ function registrar_api_user($op, &$edit, &$account, $category = NULL) {
       break;
 
     case 'delete':
-      registrar_api_user_delete($edit, $account);
+      db_query("DELETE FROM {registrar_api_user} WHERE uid = %d",$account->uid);
       break;
     case 'form':
       return registrar_api_user_form($edit, $account, $category);
       break;
     case 'load':
-      registrar_api_user_load($account);
+      $account->registrar_contacts = registrar_api_get_contacts($user->uid);
       break;
     case 'update':
-      registrar_api_user_update($edit, $account, $category);
-      break;
     case 'submit':
-      registrar_api_user_submit($account);
+      registrar_api_user_update($edit, $account, $category);
       break;
   }
 }
 
 /* Functions used by hook_user() */
-
-/**
- * Remove the user information from the system, if the account is deleted
- */
-function registrar_api_user_delete($edit, $user) {
-  db_query("DELETE FROM {registrar_api_user} WHERE uid = %d", $user->uid);
-}
 
 /**
  * Adds the contact forms to the user account form
@@ -134,204 +232,10 @@ function registrar_api_user_form($edit, $user, $category = NULL) {
   $form = array();
 
   if ($category == 'registrar_api') {
-    $form['registrar_api_registrant'] = array(
-      '#type'          => 'fieldset',
-      '#title'         => t('Registrant Contact'),      
-      '#tree'          => TRUE,
-      '#collapsible'   => TRUE,
-      '#collapsed'     => FALSE,
-      '#weight'        => 1,
-    );
-    $form['registrar_api_registrant']['first_name'] = array(
-      '#type'          => 'textfield',
-      '#title'         => t('First Name'),
-      '#maxlength'     => 255,
-      '#default_value' => $user->registrar_contacts['registrant']['first_name'],
-      '#required'      => TRUE,
-    );
-    $form['registrar_api_registrant']['last_name'] = array(
-      '#type'          => 'textfield',
-      '#title'         => t('Last Name'),
-      '#maxlength'     => 255,
-      '#default_value' => $user->registrar_contacts['registrant']['last_name'],
-      '#required'      => TRUE,
-    );
-    $form['registrar_api_registrant']['organization_name'] = array(
-      '#type'          => 'textfield',
-      '#title'         => t('Organization Name'),
-      '#maxlength'     => 255,
-      '#default_value' => $user->registrar_contacts['registrant']['organization_name'],
-      '#required'      => TRUE,
-    );
-    $form['registrar_api_registrant']['address1'] = array(
-      '#type'          => 'textfield',
-      '#title'         => t('Street Address'),
-      '#maxlength'     => 255,
-      '#default_value' => $user->registrar_contacts['registrant']['address1'],
-      '#required'      => TRUE,
-    );
-    $form['registrar_api_registrant']['address2'] = array(
-      '#type'          => 'textfield',
-      '#title'         => t('Address 2'),
-      '#maxlength'     => 255,
-      '#default_value' => $user->registrar_contacts['registrant']['address2'],
-      '#required'      => FALSE,
-    );
-    $form['registrar_api_registrant']['job_title'] = array(
-      '#type'          => 'textfield',
-      '#title'         => t('Job Title'),
-      '#maxlength'     => 255,
-      '#default_value' => $user->registrar_contacts['registrant']['job_title'],
-      '#required'      => FALSE,
-    );
-    $form['registrar_api_registrant']['city'] = array(
-      '#type'          => 'textfield',
-      '#title'         => t('City'),
-      '#maxlength'     => 50,
-      '#default_value' => $user->registrar_contacts['registrant']['city'],
-      '#required'      => TRUE,
-    );
-    $form['registrar_api_registrant']['state_province'] = array(
-      '#type'          => 'textfield',
-      '#title'         => t('State / Prov'),
-      '#maxlength'     => 50,
-      '#default_value' => $user->registrar_contacts['registrant']['state_province'],
-      '#required'      => TRUE,      
-    );
-    $form['registrar_api_registrant']['postal_code'] = array(
-      '#type'          => 'textfield',
-      '#title'         => t('Zip / Postal Code'),
-      '#maxlength'     => 50,
-      '#default_value' => $user->registrar_contacts['registrant']['postal_code'],
-      '#required'      => TRUE,
-    );
-    $form['registrar_api_registrant']['country'] = array(
-      '#type'          => 'textfield',
-      '#title'         => t('Country'),
-      '#maxlength'     => 50,
-      '#default_value' => $user->registrar_contacts['registrant']['country'],
-      '#required'      => TRUE,
-    );
-    $form['registrar_api_registrant']['phone'] = array(
-      '#type'          => 'textfield',
-      '#title'         => t('Phone Number'),
-      '#maxlength'     => 50,
-      '#default_value' => $user->registrar_contacts['registrant']['phone'],
-      '#required'      => TRUE,
-    );
-    $form['registrar_api_registrant']['fax'] = array(
-      '#type'          => 'textfield',
-      '#title'         => t('Fax'),
-      '#maxlength'     => 50,
-      '#default_value' => $user->registrar_contacts['registrant']['fax'],
-      '#required'      => FALSE,
-    );
-    $form['registrar_api_registrant']['email_address'] = array(
-      '#type'          => 'textfield',
-      '#title'         => t('Email'),
-      '#maxlength'     => 255,
-      '#default_value' => $user->registrar_contacts['registrant']['email_address'],
-      '#required'      => TRUE,
-    );
-
-     /* Admin Contact */
-    $form['registrar_api_admin'] = array(
-      '#type'          => 'fieldset',
-      '#title'         => t('Admin Contact'),      
-      '#tree'          => TRUE,
-      '#collapsible'   => TRUE,
-      '#collapsed'     => TRUE,
-      '#weight'        => 2,
-    );
-
-    // Recycle the registrant form for the admin form
-    foreach ($form['registrar_api_registrant'] as $field => $values) {
-      if ($field[0] == '#') {
-        continue;
-      }
-      
-      $form['registrar_api_admin'][$field] = array(
-        '#type' => $values['#type'],
-        '#title' => $values['#title'],
-        '#maxlength' => $values['#maxlength'],
-        '#default_value' => $user->registrar_contacts['admin'][$field],
-        '#required'      => $values['#required'],
-      );
-    }
-
-     /* Tech Contact */
-    $form['registrar_api_tech'] = array(
-      '#type'          => 'fieldset',
-      '#title'         => t('Tech Contact'),      
-      '#tree'          => TRUE,
-      '#collapsible'   => TRUE,
-      '#collapsed'     => TRUE,
-      '#weight'        => 3,
-    );
-
-    // Recycle the registrant form for the tech form
-    foreach ($form['registrar_api_registrant'] as $field => $values) {
-      if ($field[0] == '#') {
-        continue;
-      }
-      
-      $form['registrar_api_tech'][$field] = array(
-        '#type' => $values['#type'],
-        '#title' => $values['#title'],
-        '#maxlength' => $values['#maxlength'],
-        '#default_value' => $user->registrar_contacts['tech'][$field],
-        '#required'      => $values['#required'],
-      );
-    }
-
-     /* Billing Contact */
-    $form['registrar_api_aux_billing'] = array(
-      '#type'          => 'fieldset',
-      '#title'         => t('Billing Contact'),      
-      '#tree'          => TRUE,
-      '#collapsible'   => TRUE,
-      '#collapsed'     => TRUE,
-      '#weight'        => 4,
-    );
-
-    // Recycle the registrant form for the billing form
-    foreach ($form['registrar_api_registrant'] as $field => $values) {
-      if ($field[0] == '#') {
-        continue;
-      }
-      
-      $form['registrar_api_aux_billing'][$field] = array(
-        '#type' => $values['#type'],
-        '#title' => $values['#title'],
-        '#maxlength' => $values['#maxlength'],
-        '#default_value' => $user->registrar_contacts['aux_billing'][$field],
-        '#required'      => $values['#required'],
-      );
-    }
-    
+    $form = _registrar_api_get_form();
   }
+  
   return $form;
-}
-
-/**
- * Load the user information into the user variable
- */
-function registrar_api_user_load(&$user) {
-  $contacts = db_fetch_array(db_query("SELECT * FROM {registrar_api_contact} WHERE uid = %d", $user->uid));
-  if ($contacts == NULL) {
-    return;
-  }
-  foreach ($contacts as $contact => $value) {
-    list($type, $field) = explode('_', $contact, 2);
-    if ($type == 'aux') {
-      $type = 'aux_billing';
-      $field = substr($field, 8);
-    }
-    elseif ($type == 'uid') {
-      continue;
-    }
-    $user->registrar_contacts[$type][$field] = $value;
-  }
 }
 
 /**
@@ -342,41 +246,264 @@ function registrar_api_user_update($edit, $user, $category = NULL) {
     return;
   }
 
-  $uid = db_result(db_query("SELECT uid FROM {registrar_api_contact} WHERE uid = %d", $user->uid));
+  $uid = db_result(db_query("SELECT uid FROM {registrar_api_contact} " .
+                            "WHERE uid = %d", $user->uid));
 
-  // Build the set query
-  $field_mapping = array(
-    'first_name' => 'first_name',
-    'last_name' => 'last_name',
-    'organization_name' => 'organization_name',
-    'address1' => 'address1',
-    'address2' => 'address2',
-    'job_title' => 'job_title',
-    'city' => 'city',
-    'state_province' => 'state_province',
-    'postal_code' => 'postal_code',
-    'country' => 'country',
-    'phone' => 'phone',
-    'fax' => 'fax',
-    'email_address' => 'email_address',
-  );
+  $set_str = _registrar_api_get_set_str($edit);
 
-  $set_array = array();
-  foreach ($field_mapping as $key => $field) {
-    foreach (array('registrant', 'admin', 'tech', 'aux_billing') as $type) {
-      $field_type = "registrar_api_" . strtolower($type);
-      $set_array[] = $type . '_' . $key . " = '" . $edit[$field_type][$field] . "'";
-    }
-  }
-  $set_str = implode(", ", $set_array);
-  
   // INSERT or UPDATE?
   if ($uid == NULL) {
     db_query("INSERT INTO {registrar_api_contact} SET $set_str, uid = %d",
              $user->uid);
   }
   else {
-    db_query("UPDATE {registrar_api_contact} SET $set_str WHERE uid = %d", $uid);
+    db_query("UPDATE {registrar_api_contact} SET $set_str WHERE uid = %d",$uid);
   }
 }
 
+/**** Misc utility functions ****/
+
+function registrar_api_get_contacts($uid, $type = NULL) {
+  $contacts = db_fetch_array(db_query("SELECT * FROM {registrar_api_contact} WHERE uid = %d", $uid));
+  $contacts_array = array();
+  
+  if ($contacts == NULL) {
+    return;
+  }
+  foreach ($contacts as $contact => $value) {
+    list($content_type, $field) = explode('_', $contact, 2);
+    if ($content_type == 'aux') {
+      $content_type = 'aux_billing';
+      $field = substr($field, 8);
+    }
+    elseif ($content_type == 'uid') {
+      continue;
+    }
+    $contacts_array[$content_type][$field] = $value;
+  }
+
+  if (in_array($type, array('registrant', 'admin', 'tech', 'aux_billing'))) {
+    return $contacts_array[$type];
+  }
+  else {
+    return $contacts_array;
+  }
+}
+
+
+/**** Private helper function ****/
+
+function _registrar_api_get_form() {
+  global $user;
+  $contacts = registrar_api_get_contacts($user->uid);
+    
+  $form['registrar_api_registrant'] = array(
+    '#type'          => 'fieldset',
+    '#title'         => t('Registrant Contact'),      
+    '#tree'          => TRUE,
+    '#collapsible'   => TRUE,
+    '#collapsed'     => FALSE,
+    '#weight'        => 1,
+  );
+  $form['registrar_api_registrant']['first_name'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('First Name'),
+    '#maxlength'     => 255,
+    '#default_value' => $contacts['registrant']['first_name'],
+    '#required'      => TRUE,
+  );
+  $form['registrar_api_registrant']['last_name'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Last Name'),
+    '#maxlength'     => 255,
+    '#default_value' => $contacts['registrant']['last_name'],
+    '#required'      => TRUE,
+  );
+  $form['registrar_api_registrant']['organization_name'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Organization Name'),
+    '#maxlength'     => 255,
+    '#default_value' => $contacts['registrant']['organization_name'],
+    '#required'      => TRUE,
+  );
+  $form['registrar_api_registrant']['address1'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Street Address'),
+    '#maxlength'     => 255,
+    '#default_value' => $contacts['registrant']['address1'],
+    '#required'      => TRUE,
+  );
+  $form['registrar_api_registrant']['address2'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Address 2'),
+    '#maxlength'     => 255,
+    '#default_value' => $contacts['registrant']['address2'],
+    '#required'      => FALSE,
+  );
+  $form['registrar_api_registrant']['job_title'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Job Title'),
+    '#maxlength'     => 255,
+    '#default_value' => $contacts['registrant']['job_title'],
+    '#required'      => FALSE,
+  );
+  $form['registrar_api_registrant']['city'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('City'),
+    '#maxlength'     => 50,
+    '#default_value' => $contacts['registrant']['city'],
+    '#required'      => TRUE,
+  );
+  $form['registrar_api_registrant']['state_province'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('State / Prov'),
+    '#maxlength'     => 50,
+    '#default_value' => $contacts['registrant']['state_province'],
+    '#required'      => TRUE,
+  );
+  $form['registrar_api_registrant']['state_province_choice'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('State or Prov Choice'),
+    '#maxlength'     => 50,
+    '#default_value' => $contacts['registrant']['state_province_choice'],
+    '#required'      => FALSE,
+  );
+  $form['registrar_api_registrant']['postal_code'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Zip / Postal Code'),
+    '#maxlength'     => 50,
+    '#default_value' => $contacts['registrant']['postal_code'],
+    '#required'      => TRUE,
+  );
+  $form['registrar_api_registrant']['country'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Country'),
+    '#maxlength'     => 50,
+    '#default_value' => $contacts['registrant']['country'],
+    '#required'      => TRUE,
+  );
+  $form['registrar_api_registrant']['phone'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Phone Number'),
+    '#maxlength'     => 50,
+    '#default_value' => $contacts['registrant']['phone'],
+    '#required'      => TRUE,
+  );
+  $form['registrar_api_registrant']['phone_ext'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Phone Ext'),
+    '#maxlength'     => 50,
+    '#default_value' => $contacts['registrant']['phone_ext'],
+    '#required'      => FALSE,
+  );
+  $form['registrar_api_registrant']['fax'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Fax'),
+    '#maxlength'     => 50,
+    '#default_value' => $contacts['registrant']['fax'],
+    '#required'      => FALSE,
+  );
+  $form['registrar_api_registrant']['email_address'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Email'),
+    '#maxlength'     => 255,
+    '#default_value' => $contacts['registrant']['email_address'],
+    '#required'      => TRUE,
+  );
+  
+
+  /* Admin Contact */
+  $form['registrar_api_admin'] = array(
+    '#type'          => 'fieldset',
+    '#title'         => t('Admin Contact'),      
+    '#tree'          => TRUE,
+    '#collapsible'   => TRUE,
+    '#collapsed'     => TRUE,
+    '#weight'        => 2,
+  );
+
+  // Recycle the registrant form for the admin form
+  foreach ($form['registrar_api_registrant'] as $field => $values) {
+    if ($field[0] == '#') {
+      continue;
+    }
+      
+    $form['registrar_api_admin'][$field] = array(
+      '#type' => $values['#type'],
+      '#title' => $values['#title'],
+      '#maxlength' => $values['#maxlength'],
+      '#default_value' => $contacts['admin'][$field],
+      '#required'      => $values['#required'],
+    );
+  }
+
+  /* Tech Contact */
+  $form['registrar_api_tech'] = array(
+    '#type'          => 'fieldset',
+    '#title'         => t('Tech Contact'),      
+    '#tree'          => TRUE,
+    '#collapsible'   => TRUE,
+    '#collapsed'     => TRUE,
+    '#weight'        => 3,
+  );
+
+  // Recycle the registrant form for the tech form
+  foreach ($form['registrar_api_registrant'] as $field => $values) {
+    if ($field[0] == '#') {
+      continue;
+    }
+      
+    $form['registrar_api_tech'][$field] = array(
+      '#type' => $values['#type'],
+      '#title' => $values['#title'],
+      '#maxlength' => $values['#maxlength'],
+      '#default_value' => $contacts['tech'][$field],
+      '#required'      => $values['#required'],
+    );
+  }
+
+  /* Billing Contact */
+  $form['registrar_api_aux_billing'] = array(
+    '#type'          => 'fieldset',
+    '#title'         => t('Billing Contact'),      
+    '#tree'          => TRUE,
+    '#collapsible'   => TRUE,
+    '#collapsed'     => TRUE,
+    '#weight'        => 4,
+  );
+
+  // Recycle the registrant form for the billing form
+  foreach ($form['registrar_api_registrant'] as $field => $values) {
+    if ($field[0] == '#') {
+      continue;
+    }
+      
+    $form['registrar_api_aux_billing'][$field] = array(
+      '#type' => $values['#type'],
+      '#title' => $values['#title'],
+      '#maxlength' => $values['#maxlength'],
+      '#default_value' => $contacts['aux_billing'][$field],
+      '#required'      => $values['#required'],
+    );
+  }
+  
+  return $form;
+}
+
+function _registrar_api_get_set_str($values) {
+  // Build the set query
+  $fields = array('first_name', 'last_name', 'organization_name', 'address1',
+                  'address2', 'job_title', 'city', 'state_province',
+                  'state_province_choice', 'postal_code', 'country', 'phone',
+                  'phone_ext', 'fax', 'email_address');
+
+  $set_arr = array();
+  foreach ($fields as $field) {
+    foreach (array('registrant', 'admin', 'tech', 'aux_billing') as $type) {
+      $ftype = "registrar_api_" . $type;
+      $set_arr[] = $type . '_' . $field . " = '" .
+        db_escape_string($values[$ftype][$field]) . "'";
+    }
+  }
+  return implode(", ", $set_arr);
+}  
