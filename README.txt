@@ -40,6 +40,14 @@ Namecheap.com - Details at: http://developer.namecheap.com/docs/doku.php?id=over
  
  * Configure the registrars API settings in Administer >> Settings >> Registrar API
 
+-- CREATING DOMAINS --
+ * Before creating a domain you should fill in the generic contact information
+   on the user profile form My Account >> Edit >> Registrar Contact Info
+
+ * The registrar_api front end adds a new node type called 'domain'. This will,
+   by default, pull in the data entered on the users profile form and can be
+   changed at the time of registration.
+   
 -- CONTACT --
 
 Current maintainer:

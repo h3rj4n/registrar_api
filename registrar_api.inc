@@ -80,7 +80,7 @@ function registrar_api_domains_create($domain_name, $years, $registrant, $tech, 
  * @return array containing renewal information
  */
 function registrar_api_domains_renew($domain, $years) {
-  return namecheap_domains_renew($domain, $year);
+  return namecheap_domains_renew($domain, $years);
 }
 
 /**

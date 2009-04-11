@@ -22,7 +22,7 @@ function registrar_api_node_info() {
 /**
  * Implementation of hook_form().
  */
-function registrar_api_form(&$node) {
+function registrar_api_form(&$node, $form_state) {
   $type = node_get_types('type', $node);
 
   // Define the form elements for the node's title and body.
@@ -43,7 +43,15 @@ function registrar_api_form(&$node) {
     '#required' => TRUE,
   );
 
-  $form += _registrar_api_get_form();
+  if ($node->nid) {
+    $form += _registrar_api_get_form("node", $node->nid);
+  }
+  else {
+    // this is a fresh node, so use the user profile settings
+    global $user;
+    $form += _registrar_api_get_form("user", $user->uid);
+  }
+  
   return $form;
 }
 
@@ -78,7 +86,7 @@ function registrar_api_update($node) {
       registrar_api_domains_renew($node->title, $node->years);
     }
 
-    // Update the contact information
+    // Update the contact information on the registrar
     registrar_api_domains_setcontacts(
       $node->title, $node->years,
       $node->registrar_api_registrant,

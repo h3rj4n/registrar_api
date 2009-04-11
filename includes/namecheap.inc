@@ -208,11 +208,12 @@ function namecheap_domains_reactivate() {
 
 function namecheap_domains_renew($domain_name, $years) {
   // TODO: Add promotion code field
-
+  // <Error Number="1">Unknown</Error>
   $request = _namecheap_init_request('namecheap.domains.renew');
   $request['DomainName'] = $domain_name;
   $request['Years'] = $years;
-
+  dsm($domain_name);
+  dsm($years);
   $response = _namecheap_request($request);
 
   $sxml = new SimpleXMLElement($response);
@@ -294,6 +295,7 @@ function _namecheap_request($request) {
   $response = stream_get_contents($f);
   fclose($f);
 
+  dsm($response);
   return $response;
 }
 
