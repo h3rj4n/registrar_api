@@ -20,11 +20,11 @@ function registrar_api_node_info() {
 }
 
 /**
- * Implementation of hook_form()
+ * Implementation of hook_form().
  */
 function registrar_api_form(&$node) {
   $type = node_get_types('type', $node);
-  
+
   // Define the form elements for the node's title and body.
   $form['title'] = array(
     '#type' => 'textfield',
@@ -33,19 +33,6 @@ function registrar_api_form(&$node) {
     '#default_value' => $node->title,
     '#weight' => -5
   );
-  
-  // We want the body and filter elements to be adjacent. We could try doing
-  // this by setting their weights, but another module might add elements to the
-  // form with the same weights and end up between ours. By putting them into a
-  // sub-array together, we're able force them to be rendered together.
-
-//   $form['body_filter']['body'] = array(
-//     '#type' => 'textarea',
-//     '#title' => check_plain($type->body_label),
-//     '#default_value' => $node->body,
-//     '#required' => FALSE
-//   );
-//   $form['body_filter']['filter'] = filter_form($node->format);
 
   $form['years'] = array(
     '#type' => 'select',
@@ -57,27 +44,22 @@ function registrar_api_form(&$node) {
   );
 
   $form += _registrar_api_get_form();
-
   return $form;
 }
 
 /**
- * Implementation of hook_insert()
+ * Implementation of hook_insert().
  */
 function registrar_api_insert($node) {
-  global $user;
-
   $status = registrar_api_domains_create($node->title, $node->years, $node->registrar_api_registrant, $node->registrar_api_admin, $node->registrar_api_tech, $node->registrar_api_aux_billing);
 
-  // 'years' attribute is not saved to the db. it's only used to create and
-  // renew the domain.
   $set_str = _registrar_api_get_set_str($node);
   db_query("INSERT INTO {registrar_api_node} SET $set_str, nid = %d",
-           $node->nid);
+    $node->nid);
 }
 
 /**
- * Implementation of hook_update()
+ * Implementation of hook_update().
  */
 function registrar_api_update($node) {
   if ($node->op == "Sync") {
@@ -95,7 +77,7 @@ function registrar_api_update($node) {
       // Renew the domain
       registrar_api_domains_renew($node->title, $node->years);
     }
-  
+
     // Update the contact information
     registrar_api_domains_setcontacts(
       $node->title, $node->years,
@@ -104,21 +86,22 @@ function registrar_api_update($node) {
       $node->registrar_api_tech,
       $node->registrar_api_aux_billing
     );
-  
+
     $set_str = _registrar_api_get_set_str($node);
   }
-  db_query("UPDATE {registrar_api_node} SET $set_str WHERE nid = %d", $node->nid);
+  db_query("UPDATE {registrar_api_node} SET $set_str WHERE nid = %d",
+    $node->nid);
 }
 
 /**
- * Implementation of hook_delete()
+ * Implementation of hook_delete().
  */
 function registrar_api_delete(&$node) {
   db_query("DELETE FROM {registrar_api_node} WHERE nid = %d", $node->nid);
 }
 
 /**
- * Implementation of hook_validate()
+ * Implementation of hook_validate().
  */
 function registrar_api_validate($node, &$form) {
   // TODO: Check the proper format on each field
@@ -132,7 +115,7 @@ function registrar_api_validate($node, &$form) {
 }
 
 /**
- * Implementation of hook_form_alter()
+ * Implementation of hook_form_alter().
  */
 function registrar_api_form_alter(&$form, $form_state, $form_id) {
   if ($form_id == 'registrar_domain_node_form') {
@@ -145,7 +128,7 @@ function registrar_api_form_alter(&$form, $form_state, $form_id) {
       $extra['menu'] = 5;
       variable_set('content_extra_weights_registrar_domain', $extra);
     }
-    
+
     // Preview doesn't make sense in this context
     unset($form['buttons']['preview']);
     unset($form['buttons']['delete']);
@@ -180,7 +163,7 @@ function registrar_api_form_alter(&$form, $form_state, $form_id) {
 }
 
 /**
- * Implementation of hook_view
+ * Implementation of hook_view().
  */
 function registrar_api_view($node, $teaser = FALSE, $page = FALSE) {
   $contacts = registrar_api_get_node_contacts($node->nid);
@@ -189,6 +172,9 @@ function registrar_api_view($node, $teaser = FALSE, $page = FALSE) {
   return $node;
 }
 
+/**
+ * Theme the domain contact info
+ */
 function theme_registrar_api_contacts($contacts) {
   $content = "";
   foreach ($contacts as $type => $values) {
@@ -203,6 +189,6 @@ function theme_registrar_api_contacts($contacts) {
       }
     }
   }
-    
+
   return $content;
 }

@@ -1,5 +1,9 @@
 <?php
 // $Id$
+/**
+ * @file
+ * Contains install and update functions for the registrar_api.
+ */
 
 /**
  * Implementation of hook_enable().
@@ -23,7 +27,7 @@ function registrar_api_uninstall() {
 }
 
 /**
- * Implementation of hook_schema()
+ * Implementation of hook_schema().
  */
 function registrar_api_schema() {
   return registrar_api_schema_1();
@@ -139,8 +143,7 @@ function registrar_api_schema_1() {
       'default'     => '',
     ),
   );
-  
-  
+
   $schema['registrar_api_contact'] = array(
     'description' => t("Stores domain contact information"),
     'fields' => array(

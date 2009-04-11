@@ -1,4 +1,9 @@
 <?php
+// $Id$
+/**
+ * @file
+ * Provides all of the Registrar API calls.
+ */
 
 /**
  * Check the availability status on a list of domains.
@@ -53,8 +58,9 @@ function registrar_api_domain_check($domain) {
  */
 function registrar_api_domains_create($domain_name, $years, $registrant, $tech, $admin, $auxbilling, $nameservers = NULL) {
 
-  $contact = _registrar_api_convert_contacts($registrant, $tech, $admin,
-                                             $auxbilling);
+  $contact = _registrar_api_convert_contacts(
+    $registrant, $tech, $admin, $auxbilling);
+
   return namecheap_domains_create(
     $domain_name, $years, $contact['registrant'], $contact['tech'],
     $contact['admin'], $contact['auxbilling'], $nameservers
@@ -94,12 +100,12 @@ function registrar_api_domains_renew($domain, $years) {
  * @return none
  */
 function registrar_api_domains_setcontacts($domain, $years, $registrant,
-                                           $tech, $admin, $auxbilling) {
-  $contact = _registrar_api_convert_contacts($registrant, $tech, $admin,
-                                             $auxbilling);
+  $tech, $admin, $auxbilling) {
+
+  $contact = _registrar_api_convert_contacts(
+    $registrant, $tech, $admin, $auxbilling);
   namecheap_domains_setcontacts($domain, $contact['registrant'],
-                                $contact['tech'], $contact['admin'],
-                                $contact['auxbilling']);
+    $contact['tech'], $contact['admin'], $contact['auxbilling']);
 }
 
 /**
@@ -110,15 +116,20 @@ function registrar_api_domains_setcontacts($domain, $years, $registrant,
  */
 function registrar_api_domains_getcontacts($domain) {
   $contacts = namecheap_domains_getcontacts($domain);
-  return _registrar_api_convert_contacts_reverse($contacts['Registrant'], $contacts['Tech'], $contacts['Admin'], $contacts['AuxBilling']);
+  return _registrar_api_convert_contacts_reverse(
+    $contacts['Registrant'], $contacts['Tech'],
+    $contacts['Admin'], $contacts['AuxBilling']);
 }
 
 /**** Helper functions ****/
 function _registrar_api_convert_contacts($registrant, $tech, $admin,
-                                         $auxbilling) {
+  $auxbilling) {
+
   // Convert the contact details' keys to CamelCase
-  $contact_copy = array('registrant' => array(), 'tech' => array(),
-                        'admin' => array(), 'auxbilling' => array());
+  $contact_copy = array(
+    'registrant' => array(), 'tech' => array(),
+    'admin' => array(), 'auxbilling' => array());
+
   foreach ($contact_copy as $type => $values) {
     foreach ($$type as $key => $value) {
       $newkey = str_replace('_', ' ', $key);
@@ -130,8 +141,8 @@ function _registrar_api_convert_contacts($registrant, $tech, $admin,
   return $contact_copy;
 }
 
-function _registrar_api_convert_contacts_reverse($registrant, $tech, $admin,
-                                                 $auxbilling) {
+function _registrar_api_convert_contacts_reverse(
+  $registrant, $tech, $admin, $auxbilling) {
   // Convert the contact details' keys from CamelCase to lower with _'s
   $field_map = array(
     'OrganizationName' => 'organization_name',

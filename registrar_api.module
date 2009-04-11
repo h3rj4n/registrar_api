@@ -2,6 +2,12 @@
 // $Id$
 
 /**
+ * @file
+ * The registrar_api module provides a basic user interface and api calls
+ * to registrars with available APIs.
+ */
+
+/**
  * Implementation of hook_help().
  */
 function registrar_api_help($path, $arg) {
@@ -54,7 +60,7 @@ function registrar_api_access($op, $node, $account) {
  */
 function registrar_api_menu() {
   global $user;
-  
+
   $items = array();
   $items['registrar/test'] = array(
     'title' => t('registrar test url'),
@@ -62,7 +68,7 @@ function registrar_api_menu() {
     'access arguments' => array('administer nodes'),
     'type' => MENU_CALLBACK,
   );
-  
+
   $items['admin/settings/registrar_api'] = array(
     'title' => 'Registrar API settings',
     'description' => 'Manage the registrar API settings',
@@ -70,7 +76,7 @@ function registrar_api_menu() {
     'page arguments' => array('registrar_api_admin'),
     'access arguments' => array('access administration pages'),
     'type' => MENU_NORMAL_ITEM,
-   );
+  );
 
   $items['admin/content/manage_domains'] = array(
     'title' => 'Manage Domains',
@@ -78,8 +84,8 @@ function registrar_api_menu() {
     'page callback' => 'registrar_api_manage_domains',
     'access arguments' => array('register domains'),
     'type' => MENU_NORMAL_ITEM,
-   );
-  
+  );
+
   return $items;
 }
 
@@ -93,7 +99,7 @@ function registrar_api_admin() {
 }
 
 /**
- * Implementation of hook_theme
+ * Implementation of hook_theme().
  */
 function registrar_api_theme() {
   return array(
@@ -106,7 +112,7 @@ function registrar_api_theme() {
 /**** User Profile Form ****/
 
 /**
- * Implementation of hook_user()
+ * Implementation of hook_user().
  */
 function registrar_api_user($op, &$edit, &$account, $category = NULL) {
   // We only do updates if the user is not anonymous.
@@ -122,7 +128,7 @@ function registrar_api_user($op, &$edit, &$account, $category = NULL) {
       break;
 
     case 'delete':
-      db_query("DELETE FROM {registrar_api_user} WHERE uid = %d",$account->uid);
+      db_query("DELETE FROM {registrar_api_user} WHERE uid = %d", $account->uid);
       break;
     case 'form':
       return registrar_api_user_form($edit, $account, $category);
@@ -148,14 +154,14 @@ function registrar_api_user_form($edit, $user, $category = NULL) {
   if ($category == 'registrar_api') {
     $form = _registrar_api_get_form();
   }
-  
+
   return $form;
 }
 
 /**
  * Update the user information in the system, if the account is updated
  */
-function registrar_api_user_update($edit, $user, $category = NULL) {  
+function registrar_api_user_update($edit, $user, $category = NULL) {
   if ($category != 'registrar_api') {
     return;
   }
@@ -168,10 +174,11 @@ function registrar_api_user_update($edit, $user, $category = NULL) {
   // INSERT or UPDATE?
   if ($uid == NULL) {
     db_query("INSERT INTO {registrar_api_contact} SET $set_str, uid = %d",
-             $user->uid);
+      $user->uid);
   }
   else {
-    db_query("UPDATE {registrar_api_contact} SET $set_str WHERE uid = %d",$uid);
+    db_query("UPDATE {registrar_api_contact} SET $set_str WHERE uid = %d",
+      $uid);
   }
 }
 
@@ -196,7 +203,7 @@ function _registrar_api_contacts($contacts, $type) {
     list($content_type, $field) = explode('_', $contact, 2);
     if ($content_type == 'aux') {
       $content_type = 'aux_billing';
-      $field = substr($field, 8);
+      $field = drupal_substr($field, 8);
     }
     elseif ($content_type == 'uid') {
       continue;
@@ -218,10 +225,10 @@ function _registrar_api_contacts($contacts, $type) {
 function _registrar_api_get_form() {
   global $user;
   $contacts = registrar_api_get_contacts($user->uid);
-    
+
   $form['registrar_api_registrant'] = array(
     '#type'          => 'fieldset',
-    '#title'         => t('Registrant Contact'),      
+    '#title'         => t('Registrant Contact'),
     '#tree'          => TRUE,
     '#collapsible'   => TRUE,
     '#collapsed'     => FALSE,
@@ -332,12 +339,11 @@ function _registrar_api_get_form() {
     '#default_value' => $contacts['registrant']['email_address'],
     '#required'      => TRUE,
   );
-  
 
   /* Tech Contact */
   $form['registrar_api_tech'] = array(
     '#type'          => 'fieldset',
-    '#title'         => t('Tech Contact'),      
+    '#title'         => t('Tech Contact'),
     '#tree'          => TRUE,
     '#collapsible'   => TRUE,
     '#collapsed'     => TRUE,
@@ -349,7 +355,7 @@ function _registrar_api_get_form() {
     if ($field[0] == '#') {
       continue;
     }
-      
+
     $form['registrar_api_tech'][$field] = array(
       '#type' => $values['#type'],
       '#title' => $values['#title'],
@@ -362,7 +368,7 @@ function _registrar_api_get_form() {
   /* Admin Contact */
   $form['registrar_api_admin'] = array(
     '#type'          => 'fieldset',
-    '#title'         => t('Admin Contact'),      
+    '#title'         => t('Admin Contact'),
     '#tree'          => TRUE,
     '#collapsible'   => TRUE,
     '#collapsed'     => TRUE,
@@ -374,7 +380,7 @@ function _registrar_api_get_form() {
     if ($field[0] == '#') {
       continue;
     }
-      
+
     $form['registrar_api_admin'][$field] = array(
       '#type' => $values['#type'],
       '#title' => $values['#title'],
@@ -387,7 +393,7 @@ function _registrar_api_get_form() {
   /* Billing Contact */
   $form['registrar_api_aux_billing'] = array(
     '#type'          => 'fieldset',
-    '#title'         => t('Billing Contact'),      
+    '#title'         => t('Billing Contact'),
     '#tree'          => TRUE,
     '#collapsible'   => TRUE,
     '#collapsed'     => TRUE,
@@ -399,7 +405,7 @@ function _registrar_api_get_form() {
     if ($field[0] == '#') {
       continue;
     }
-      
+
     $form['registrar_api_aux_billing'][$field] = array(
       '#type' => $values['#type'],
       '#title' => $values['#title'],
@@ -408,7 +414,7 @@ function _registrar_api_get_form() {
       '#required'      => $values['#required'],
     );
   }
-  
+
   return $form;
 }
 
@@ -439,4 +445,4 @@ function _registrar_api_get_set_str($values) {
     }
   }
   return implode(", ", $set_arr);
-}  
+}

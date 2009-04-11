@@ -15,7 +15,7 @@ function namecheap_admin_form() {
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
   );
-   
+
   $form['namecheap']['namecheap_uri'] = array(
     '#type' => 'textfield',
     '#title' => t('Namecheap Service URL'),
@@ -30,7 +30,7 @@ function namecheap_admin_form() {
     '#default_value' => variable_get('namecheap_api_key', ''),
     '#required' => TRUE,
   );
-  
+
   $form['namecheap']['namecheap_api_user'] = array(
     '#type' => 'textfield',
     '#title' => t('Namecheap API User'),
@@ -50,14 +50,14 @@ function namecheap_admin_form() {
  *   [domain1.com] => Array (
  *     [Domain] => domain1.com
  *     [Available] => false
- *     [ErrorNo] => 
- *     [Description] => 
+ *     [ErrorNo] =>
+ *     [Description] =>
  *   )
  *   [availabledomain.com] => Array (
  *     [Domain] => availabledomain.com
  *     [Available] => true
- *     [ErrorNo] => 
- *     [Description] => 
+ *     [ErrorNo] =>
+ *     [Description] =>
  *   )
  *   [err.tld] => Array (
  *     [Domain] => err.tld
@@ -68,9 +68,8 @@ function namecheap_admin_form() {
  * )
  */
 function namecheap_domains_check($domain_list) {
-
   // TODO: Retry on failed attempts
-  
+
   $request = _namecheap_init_request('namecheap.domains.check');
   $request['DomainList'] = $domain_list;
   $response = _namecheap_request($request);
@@ -83,7 +82,7 @@ function namecheap_domains_check($domain_list) {
     $attributes,
     'Domain'
   );
-  
+
   return ($domains);
 }
 
@@ -113,10 +112,10 @@ function namecheap_domains_create($domain_name, $years, $registrant, $tech, $adm
   if ($nameservers) {
     $request['Nameservers'] = $nameservers;
   }
-  
+
   $response = _namecheap_request($request);
   $sxml = new SimpleXMLElement($response);
-  
+
   $attributes = array('Domain', 'DomainID', 'Registered', 'OrderId',
                       'TransactionId', 'ChargedAmount');
   $domain = _namecheap_xmlattr2array(
@@ -131,7 +130,7 @@ function namecheap_domains_create($domain_name, $years, $registrant, $tech, $adm
 function namecheap_domains_getcontacts($domain_name) {
   // TODO: Handle requests when the domain isn't in this users account
   // Test this with all 4 different contact types have different data
-  
+
   $request = _namecheap_init_request('namecheap.domains.getContacts');
   $request['DomainName'] = $domain_name;
   $response = _namecheap_request($request);
@@ -153,7 +152,7 @@ function namecheap_domains_getcontacts($domain_name) {
     'Admin' => array(),
     'AuxBilling' => array(),
   );
-  
+
   $fields = array('OrganizationName', 'JobTitle', 'FirstName', 'LastName', 'Address1', 'Address2', 'City', 'StateProvince', 'StateProvinceChoice', 'PostalCode', 'Country', 'Phone', 'Fax', 'EmailAddress', 'PhoneExt');
 
   foreach ($contacts as $type => $data) {
@@ -178,12 +177,12 @@ function namecheap_domains_getcontacts($domain_name) {
  *     [Expires] => 03/24/2010
  *     [IsExpired] => false
  *   )
- * ) 
+ * )
  *
  */
 function namecheap_domains_getlist() {
   // TODO: Handle the case when there is no domains to list
-  
+
   $request = _namecheap_init_request('namecheap.domains.getList');
   $response = _namecheap_request($request);
 
@@ -195,7 +194,7 @@ function namecheap_domains_getlist() {
     $attributes,
     'Name'
   );
-  
+
   return ($domains);
 }
 
@@ -209,7 +208,7 @@ function namecheap_domains_reactivate() {
 
 function namecheap_domains_renew($domain_name, $years) {
   // TODO: Add promotion code field
-  
+
   $request = _namecheap_init_request('namecheap.domains.renew');
   $request['DomainName'] = $domain_name;
   $request['Years'] = $years;
@@ -224,7 +223,7 @@ function namecheap_domains_renew($domain_name, $years) {
     $sxml->CommandResponse->DomainRenewResult,
     $attributes
   );
-  
+
   return ($domain[0]);
 
 }
@@ -266,7 +265,7 @@ function namecheap_domains_setregistrarlock() {
 }
 
 
-/* Utility Functions */
+/**** Utility Functions ****/
 
 function _namecheap_init_request($command, $username = NULL) {
   if (!$username) {
@@ -294,7 +293,7 @@ function _namecheap_request($request) {
   $f = @fopen($request_str, "r");
   $response = stream_get_contents($f);
   fclose($f);
-  
+
   return $response;
 }
 
@@ -311,7 +310,7 @@ function _namecheap_request($request) {
  */
 function _namecheap_xmlattr2array($response, $sxml_obj, $attributes, $index = NULL) {
   $data = array();
-  
+
   foreach ($sxml_obj as $xrecord) {
     $record = array();
     foreach ($attributes as $attribute) {
@@ -324,9 +323,6 @@ function _namecheap_xmlattr2array($response, $sxml_obj, $attributes, $index = NU
       $data[$record[$index]] = $record;
     }
   }
-  
+
   return ($data);
-
 }
-
-
