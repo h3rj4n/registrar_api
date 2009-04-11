@@ -1,0 +1,5275 @@
+$content['type']  = array (
+  'name' => 'Domain',
+  'type' => 'registrar_domain',
+  'description' => '',
+  'title_label' => 'Domain name',
+  'body_label' => '',
+  'min_word_count' => '0',
+  'help' => '',
+  'node_options' => 
+  array (
+    'status' => true,
+    'promote' => false,
+    'sticky' => false,
+    'revision' => false,
+  ),
+  'upload' => '0',
+  'old_type' => 'registrar_domain',
+  'orig_type' => '',
+  'module' => 'node',
+  'custom' => '1',
+  'modified' => '1',
+  'locked' => '0',
+  'rsvp_node_datefields' => 0,
+  'comment' => '0',
+  'comment_default_mode' => '4',
+  'comment_default_order' => '1',
+  'comment_default_per_page' => '50',
+  'comment_controls' => '3',
+  'comment_anonymous' => 0,
+  'comment_subject_field' => '1',
+  'comment_preview' => '1',
+  'comment_form_location' => '0',
+);
+$content['groups']  = array (
+  0 => 
+  array (
+    'label' => 'Registrant',
+    'group_type' => 'standard',
+    'settings' => 
+    array (
+      'form' => 
+      array (
+        'style' => 'fieldset_collapsible',
+        'description' => '',
+      ),
+      'display' => 
+      array (
+        'description' => '',
+        'teaser' => 
+        array (
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        'full' => 
+        array (
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        4 => 
+        array (
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        'email_plain' => 
+        array (
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        'email_html' => 
+        array (
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        'label' => 'above',
+      ),
+    ),
+    'weight' => '2',
+    'group_name' => 'group_registrant',
+  ),
+  1 => 
+  array (
+    'label' => 'Admin',
+    'group_type' => 'standard',
+    'settings' => 
+    array (
+      'form' => 
+      array (
+        'style' => 'fieldset_collapsible',
+        'description' => '',
+      ),
+      'display' => 
+      array (
+        'description' => '',
+        'teaser' => 
+        array (
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        'full' => 
+        array (
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        4 => 
+        array (
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        'email_plain' => 
+        array (
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        'email_html' => 
+        array (
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        'label' => 'above',
+      ),
+    ),
+    'weight' => '3',
+    'group_name' => 'group_admin',
+  ),
+  2 => 
+  array (
+    'label' => 'Tech',
+    'group_type' => 'standard',
+    'settings' => 
+    array (
+      'form' => 
+      array (
+        'style' => 'fieldset_collapsible',
+        'description' => '',
+      ),
+      'display' => 
+      array (
+        'description' => '',
+        'teaser' => 
+        array (
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        'full' => 
+        array (
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        4 => 
+        array (
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        'email_plain' => 
+        array (
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        'email_html' => 
+        array (
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        'label' => 'above',
+      ),
+    ),
+    'weight' => '4',
+    'group_name' => 'group_tech',
+  ),
+  3 => 
+  array (
+    'label' => 'Billing',
+    'group_type' => 'standard',
+    'settings' => 
+    array (
+      'form' => 
+      array (
+        'style' => 'fieldset_collapsible',
+        'description' => '',
+      ),
+      'display' => 
+      array (
+        'description' => '',
+        'teaser' => 
+        array (
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        'full' => 
+        array (
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        4 => 
+        array (
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        'email_plain' => 
+        array (
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        'email_html' => 
+        array (
+          'format' => 'fieldset',
+          'exclude' => 0,
+        ),
+        'label' => 'above',
+      ),
+    ),
+    'weight' => '5',
+    'group_name' => 'group_billing',
+  ),
+);
+$content['fields']  = array (
+  0 => 
+  array (
+    'label' => 'Years',
+    'field_name' => 'field_years',
+    'type' => 'number_integer',
+    'widget_type' => 'number',
+    'change' => 'Change basic information',
+    'weight' => '-3',
+    'description' => '',
+    'default_value' => 
+    array (
+      0 => 
+      array (
+        'value' => '1',
+        '_error_element' => 'default_value_widget][field_years][0][value',
+      ),
+    ),
+    'default_value_php' => '',
+    'default_value_widget' => NULL,
+    'group' => false,
+    'required' => 1,
+    'multiple' => '0',
+    'min' => '1',
+    'max' => '10',
+    'prefix' => '',
+    'suffix' => '',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'number',
+    'widget_module' => 'number',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'int',
+        'not null' => false,
+        'sortable' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  1 => 
+  array (
+    'label' => 'First Name',
+    'field_name' => 'field_registrant_first_name',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '3',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'registrant\');
+return array(0 => array(\'value\' => $contact[\'first_name\']));',
+    'default_value_widget' => 
+    array (
+      'field_registrant_first_name' => 
+      array (
+        0 => 
+        array (
+          'value' => 'Scott1',
+          '_error_element' => 'default_value_widget][field_registrant_first_name][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_registrant',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  2 => 
+  array (
+    'label' => 'Last Name',
+    'field_name' => 'field_registrant_last_name',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '4',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'registrant\');
+return array(0 => array(\'value\' => $contact[\'last_name\']));',
+    'default_value_widget' => 
+    array (
+      'field_registrant_last_name' => 
+      array (
+        0 => 
+        array (
+          'value' => 'Hadfield1',
+          '_error_element' => 'default_value_widget][field_registrant_last_name][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_registrant',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  3 => 
+  array (
+    'label' => 'Organization Name',
+    'field_name' => 'field_registrant_org_name',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '5',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'registrant\');
+return array(0 => array(\'value\' => $contact[\'organization_name\']));',
+    'default_value_widget' => 
+    array (
+      'field_registrant_org_name' => 
+      array (
+        0 => 
+        array (
+          'value' => 'Hatch1',
+          '_error_element' => 'default_value_widget][field_registrant_org_name][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_registrant',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  4 => 
+  array (
+    'label' => 'Street Address',
+    'field_name' => 'field_registrant_street_address',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '6',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'registrant\');
+return array(0 => array(\'value\' => $contact[\'address1\']));',
+    'default_value_widget' => 
+    array (
+      'field_registrant_street_address' => 
+      array (
+        0 => 
+        array (
+          'value' => '1234 Noname street1',
+          '_error_element' => 'default_value_widget][field_registrant_street_address][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_registrant',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  5 => 
+  array (
+    'label' => 'Address 2',
+    'field_name' => 'field_registrant_address2',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '7',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'registrant\');
+return array(0 => array(\'value\' => $contact[\'address2\']));',
+    'default_value_widget' => 
+    array (
+      'field_registrant_address2' => 
+      array (
+        0 => 
+        array (
+          'value' => 'Address 21',
+          '_error_element' => 'default_value_widget][field_registrant_address2][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_registrant',
+    'required' => 0,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  6 => 
+  array (
+    'label' => 'Job Title',
+    'field_name' => 'field_registrant_job_title',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '8',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'registrant\');
+return array(0 => array(\'value\' => $contact[\'job_title\']));',
+    'default_value_widget' => 
+    array (
+      'field_registrant_job_title' => 
+      array (
+        0 => 
+        array (
+          'value' => 'not specified1',
+          '_error_element' => 'default_value_widget][field_registrant_job_title][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_registrant',
+    'required' => 0,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  7 => 
+  array (
+    'label' => 'City',
+    'field_name' => 'field_registrant_city',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '9',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'registrant\');
+return array(0 => array(\'value\' => $contact[\'city\']));',
+    'default_value_widget' => 
+    array (
+      'field_registrant_city' => 
+      array (
+        0 => 
+        array (
+          'value' => 'vernon1',
+          '_error_element' => 'default_value_widget][field_registrant_city][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_registrant',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  8 => 
+  array (
+    'label' => 'State / Prov',
+    'field_name' => 'field_registrant_state_province',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '10',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'registrant\');
+return array(0 => array(\'value\' => $contact[\'state_province\']));',
+    'default_value_widget' => 
+    array (
+      'field_registrant_state_province' => 
+      array (
+        0 => 
+        array (
+          'value' => 'BC1',
+          '_error_element' => 'default_value_widget][field_registrant_state_province][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_registrant',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  9 => 
+  array (
+    'label' => 'State / Prov Choice',
+    'field_name' => 'field_registrant_state_prov_cho',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '11',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'registrant\');
+return array(0 => array(\'value\' => $contact[\'state_province_choice\']));',
+    'default_value_widget' => 
+    array (
+      'field_registrant_state_prov_cho' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_registrant_state_prov_cho][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_registrant',
+    'required' => 0,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  10 => 
+  array (
+    'label' => 'Zip / Postal Code',
+    'field_name' => 'field_registrant_postal_code',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '13',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'registrant\');
+return array(0 => array(\'value\' => $contact[\'postal_code\']));',
+    'default_value_widget' => 
+    array (
+      'field_registrant_postal_code' => 
+      array (
+        0 => 
+        array (
+          'value' => 'v1b3k51',
+          '_error_element' => 'default_value_widget][field_registrant_postal_code][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_registrant',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  11 => 
+  array (
+    'label' => 'Country',
+    'field_name' => 'field_registrant_country',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '14',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'registrant\');
+return array(0 => array(\'value\' => $contact[\'country\']));',
+    'default_value_widget' => 
+    array (
+      'field_registrant_country' => 
+      array (
+        0 => 
+        array (
+          'value' => 'canada1',
+          '_error_element' => 'default_value_widget][field_registrant_country][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_registrant',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  12 => 
+  array (
+    'label' => 'Phone Number',
+    'field_name' => 'field_registrant_phone',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '15',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'registrant\');
+return array(0 => array(\'value\' => $contact[\'phone\']));',
+    'default_value_widget' => 
+    array (
+      'field_registrant_phone' => 
+      array (
+        0 => 
+        array (
+          'value' => '+1.55555551',
+          '_error_element' => 'default_value_widget][field_registrant_phone][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_registrant',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  13 => 
+  array (
+    'label' => 'Phone Extension',
+    'field_name' => 'field_registrant_phone_ext',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '16',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'registrant\');
+return array(0 => array(\'value\' => $contact[\'phone_ext\']));',
+    'default_value_widget' => 
+    array (
+      'field_registrant_phone_ext' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_registrant_phone_ext][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_registrant',
+    'required' => 0,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  14 => 
+  array (
+    'label' => 'Fax',
+    'field_name' => 'field_registrant_fax',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '17',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'registrant\');
+return array(0 => array(\'value\' => $contact[\'fax\']));',
+    'default_value_widget' => 
+    array (
+      'field_registrant_fax' => 
+      array (
+        0 => 
+        array (
+          'value' => 'fax1',
+          '_error_element' => 'default_value_widget][field_registrant_fax][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_registrant',
+    'required' => 0,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  15 => 
+  array (
+    'label' => 'Email Address',
+    'field_name' => 'field_registrant_email_address',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '18',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'registrant\');
+return array(0 => array(\'value\' => $contact[\'email_address\']));',
+    'default_value_widget' => 
+    array (
+      'field_registrant_email_address' => 
+      array (
+        0 => 
+        array (
+          'value' => 'hadfield@hatchwebstudio.com1',
+          '_error_element' => 'default_value_widget][field_registrant_email_address][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_registrant',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  16 => 
+  array (
+    'label' => 'First Name',
+    'field_name' => 'field_admin_first_name',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '3',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'admin\');
+return array(0 => array(\'value\' => $contact[\'first_name\']));',
+    'default_value_widget' => 
+    array (
+      'field_admin_first_name' => 
+      array (
+        0 => 
+        array (
+          'value' => 'Scott2',
+          '_error_element' => 'default_value_widget][field_admin_first_name][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_admin',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  17 => 
+  array (
+    'label' => 'Last Name',
+    'field_name' => 'field_admin_last_name',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '4',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'admin\');
+return array(0 => array(\'value\' => $contact[\'last_name\']));',
+    'default_value_widget' => 
+    array (
+      'field_admin_last_name' => 
+      array (
+        0 => 
+        array (
+          'value' => 'Hadfield2',
+          '_error_element' => 'default_value_widget][field_admin_last_name][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_admin',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  18 => 
+  array (
+    'label' => 'Organization Name',
+    'field_name' => 'field_admin_org_name',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '5',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'admin\');
+return array(0 => array(\'value\' => $contact[\'organization_name\']));',
+    'default_value_widget' => 
+    array (
+      'field_admin_org_name' => 
+      array (
+        0 => 
+        array (
+          'value' => 'Hatch2',
+          '_error_element' => 'default_value_widget][field_admin_org_name][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_admin',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  19 => 
+  array (
+    'label' => 'Street Address',
+    'field_name' => 'field_admin_street_address',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '6',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'admin\');
+return array(0 => array(\'value\' => $contact[\'address1\']));',
+    'default_value_widget' => 
+    array (
+      'field_admin_street_address' => 
+      array (
+        0 => 
+        array (
+          'value' => '1234 Noname street2',
+          '_error_element' => 'default_value_widget][field_admin_street_address][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_admin',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  20 => 
+  array (
+    'label' => 'Address 2',
+    'field_name' => 'field_admin_address2',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '7',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'admin\');
+return array(0 => array(\'value\' => $contact[\'address2\']));',
+    'default_value_widget' => 
+    array (
+      'field_admin_address2' => 
+      array (
+        0 => 
+        array (
+          'value' => 'Address 22',
+          '_error_element' => 'default_value_widget][field_admin_address2][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_admin',
+    'required' => 0,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  21 => 
+  array (
+    'label' => 'Job Title',
+    'field_name' => 'field_admin_job_title',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '8',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'admin\');
+return array(0 => array(\'value\' => $contact[\'job_title\']));',
+    'default_value_widget' => 
+    array (
+      'field_admin_job_title' => 
+      array (
+        0 => 
+        array (
+          'value' => 'Job Title2',
+          '_error_element' => 'default_value_widget][field_admin_job_title][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_admin',
+    'required' => 0,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  22 => 
+  array (
+    'label' => 'City',
+    'field_name' => 'field_admin_city',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '9',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'admin\');
+return array(0 => array(\'value\' => $contact[\'city\']));',
+    'default_value_widget' => 
+    array (
+      'field_admin_city' => 
+      array (
+        0 => 
+        array (
+          'value' => 'Vernon2',
+          '_error_element' => 'default_value_widget][field_admin_city][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_admin',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  23 => 
+  array (
+    'label' => 'State / Prov',
+    'field_name' => 'field_admin_state_province',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '10',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'admin\');
+return array(0 => array(\'value\' => $contact[\'state_province\']));',
+    'default_value_widget' => 
+    array (
+      'field_admin_state_province' => 
+      array (
+        0 => 
+        array (
+          'value' => 'BC2',
+          '_error_element' => 'default_value_widget][field_admin_state_province][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_admin',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  24 => 
+  array (
+    'label' => 'State / Prov Choice',
+    'field_name' => 'field_admin_state_prov_cho',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '11',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'admin\');
+return array(0 => array(\'value\' => $contact[\'state_province_choice\']));',
+    'default_value_widget' => 
+    array (
+      'field_admin_state_prov_cho' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_admin_state_prov_cho][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_admin',
+    'required' => 0,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  25 => 
+  array (
+    'label' => 'Zip / Postal Code',
+    'field_name' => 'field_admin_postal_code',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '13',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'admin\');
+return array(0 => array(\'value\' => $contact[\'postal_code\']));',
+    'default_value_widget' => 
+    array (
+      'field_admin_postal_code' => 
+      array (
+        0 => 
+        array (
+          'value' => 'V1B3K52',
+          '_error_element' => 'default_value_widget][field_admin_postal_code][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_admin',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  26 => 
+  array (
+    'label' => 'Country',
+    'field_name' => 'field_admin_country',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '14',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'admin\');
+return array(0 => array(\'value\' => $contact[\'country\']));',
+    'default_value_widget' => 
+    array (
+      'field_admin_country' => 
+      array (
+        0 => 
+        array (
+          'value' => 'Canada2',
+          '_error_element' => 'default_value_widget][field_admin_country][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_admin',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  27 => 
+  array (
+    'label' => 'Phone Number',
+    'field_name' => 'field_admin_phone',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '15',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'admin\');
+return array(0 => array(\'value\' => $contact[\'phone\']));',
+    'default_value_widget' => 
+    array (
+      'field_admin_phone' => 
+      array (
+        0 => 
+        array (
+          'value' => '+1.55555555552',
+          '_error_element' => 'default_value_widget][field_admin_phone][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_admin',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  28 => 
+  array (
+    'label' => 'Phone Extension',
+    'field_name' => 'field_admin_phone_ext',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '16',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'admin\');
+return array(0 => array(\'value\' => $contact[\'phone_ext\']));',
+    'default_value_widget' => 
+    array (
+      'field_admin_phone_ext' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_admin_phone_ext][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_admin',
+    'required' => 0,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  29 => 
+  array (
+    'label' => 'Fax',
+    'field_name' => 'field_admin_fax',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '17',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'admin\');
+return array(0 => array(\'value\' => $contact[\'fax\']));',
+    'default_value_widget' => 
+    array (
+      'field_admin_fax' => 
+      array (
+        0 => 
+        array (
+          'value' => 'fax2',
+          '_error_element' => 'default_value_widget][field_admin_fax][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_admin',
+    'required' => 0,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  30 => 
+  array (
+    'label' => 'Email Address',
+    'field_name' => 'field_admin_email_address',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '18',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'admin\');
+return array(0 => array(\'value\' => $contact[\'email_address\']));',
+    'default_value_widget' => 
+    array (
+      'field_admin_email_address' => 
+      array (
+        0 => 
+        array (
+          'value' => 'hadfield@hatchwebstudio.com2',
+          '_error_element' => 'default_value_widget][field_admin_email_address][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_admin',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  31 => 
+  array (
+    'label' => 'First Name',
+    'field_name' => 'field_tech_first_name',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '3',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'tech\');
+return array(0 => array(\'value\' => $contact[\'first_name\']));',
+    'default_value_widget' => 
+    array (
+      'field_tech_first_name' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_tech_first_name][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_tech',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  32 => 
+  array (
+    'label' => 'Last Name',
+    'field_name' => 'field_tech_last_name',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '4',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'tech\');
+return array(0 => array(\'value\' => $contact[\'last_name\']));',
+    'default_value_widget' => 
+    array (
+      'field_tech_last_name' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_tech_last_name][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_tech',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  33 => 
+  array (
+    'label' => 'Organization Name',
+    'field_name' => 'field_tech_org_name',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '5',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'tech\');
+return array(0 => array(\'value\' => $contact[\'organization_name\']));',
+    'default_value_widget' => 
+    array (
+      'field_tech_org_name' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_tech_org_name][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_tech',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  34 => 
+  array (
+    'label' => 'Street Address',
+    'field_name' => 'field_tech_street_address',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '6',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'tech\');
+return array(0 => array(\'value\' => $contact[\'address1\']));',
+    'default_value_widget' => 
+    array (
+      'field_tech_street_address' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_tech_street_address][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_tech',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  35 => 
+  array (
+    'label' => 'Address 2',
+    'field_name' => 'field_tech_address2',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '7',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'tech\');
+return array(0 => array(\'value\' => $contact[\'address2\']));',
+    'default_value_widget' => 
+    array (
+      'field_tech_address2' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_tech_address2][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_tech',
+    'required' => 0,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  36 => 
+  array (
+    'label' => 'Job Title',
+    'field_name' => 'field_tech_job_title',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '8',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'tech\');
+return array(0 => array(\'value\' => $contact[\'job_title\']));',
+    'default_value_widget' => 
+    array (
+      'field_tech_job_title' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_tech_job_title][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_tech',
+    'required' => 0,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  37 => 
+  array (
+    'label' => 'City',
+    'field_name' => 'field_tech_city',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '9',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'tech\');
+return array(0 => array(\'value\' => $contact[\'city\']));',
+    'default_value_widget' => 
+    array (
+      'field_tech_city' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_tech_city][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_tech',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  38 => 
+  array (
+    'label' => 'State / Prov',
+    'field_name' => 'field_tech_state_province',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '10',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'tech\');
+return array(0 => array(\'value\' => $contact[\'state_province\']));',
+    'default_value_widget' => 
+    array (
+      'field_tech_state_province' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_tech_state_province][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_tech',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  39 => 
+  array (
+    'label' => 'State / Prov Choice',
+    'field_name' => 'field_tech_state_prov_cho',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '11',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'tech\');
+return array(0 => array(\'value\' => $contact[\'state_province_choice\']));',
+    'default_value_widget' => 
+    array (
+      'field_tech_state_prov_cho' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_tech_state_prov_cho][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_tech',
+    'required' => 0,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  40 => 
+  array (
+    'label' => 'Zip / Postal Code',
+    'field_name' => 'field_tech_postal_code',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '13',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'tech\');
+return array(0 => array(\'value\' => $contact[\'postal_code\']));',
+    'default_value_widget' => 
+    array (
+      'field_tech_postal_code' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_tech_postal_code][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_tech',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  41 => 
+  array (
+    'label' => 'Country',
+    'field_name' => 'field_tech_country',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '14',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'tech\');
+return array(0 => array(\'value\' => $contact[\'country\']));',
+    'default_value_widget' => 
+    array (
+      'field_tech_country' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_tech_country][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_tech',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  42 => 
+  array (
+    'label' => 'Phone Number',
+    'field_name' => 'field_tech_phone',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '15',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'tech\');
+return array(0 => array(\'value\' => $contact[\'phone\']));',
+    'default_value_widget' => 
+    array (
+      'field_tech_phone' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_tech_phone][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_tech',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  43 => 
+  array (
+    'label' => 'Phone Extension',
+    'field_name' => 'field_tech_phone_ext',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '16',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'tech\');
+return array(0 => array(\'value\' => $contact[\'phone_ext\']));',
+    'default_value_widget' => 
+    array (
+      'field_tech_phone_ext' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_tech_phone_ext][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_tech',
+    'required' => 0,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  44 => 
+  array (
+    'label' => 'Fax',
+    'field_name' => 'field_tech_fax',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '17',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'tech\');
+return array(0 => array(\'value\' => $contact[\'fax\']));',
+    'default_value_widget' => 
+    array (
+      'field_tech_fax' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_tech_fax][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_tech',
+    'required' => 0,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  45 => 
+  array (
+    'label' => 'Email Address',
+    'field_name' => 'field_tech_email_address',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '18',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'tech\');
+return array(0 => array(\'value\' => $contact[\'email_address\']));',
+    'default_value_widget' => 
+    array (
+      'field_tech_email_address' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_tech_email_address][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_tech',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  46 => 
+  array (
+    'label' => 'First Name',
+    'field_name' => 'field_billing_first_name',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '3',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'aux_billing\');
+return array(0 => array(\'value\' => $contact[\'first_name\']));',
+    'default_value_widget' => 
+    array (
+      'field_billing_first_name' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_billing_first_name][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_billing',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  47 => 
+  array (
+    'label' => 'Last Name',
+    'field_name' => 'field_billing_last_name',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '4',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'aux_billing\');
+return array(0 => array(\'value\' => $contact[\'last_name\']));',
+    'default_value_widget' => 
+    array (
+      'field_billing_last_name' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_billing_last_name][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_billing',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  48 => 
+  array (
+    'label' => 'Organization Name',
+    'field_name' => 'field_billing_org_name',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '5',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'aux_billing\');
+return array(0 => array(\'value\' => $contact[\'organization_name\']));',
+    'default_value_widget' => 
+    array (
+      'field_billing_org_name' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_billing_org_name][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_billing',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  49 => 
+  array (
+    'label' => 'Street Address',
+    'field_name' => 'field_billing_street_address',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '6',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'aux_billing\');
+return array(0 => array(\'value\' => $contact[\'address1\']));',
+    'default_value_widget' => 
+    array (
+      'field_billing_street_address' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_billing_street_address][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_billing',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  50 => 
+  array (
+    'label' => 'Address 2',
+    'field_name' => 'field_billing_address2',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '7',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'aux_billing\');
+return array(0 => array(\'value\' => $contact[\'address2\']));',
+    'default_value_widget' => 
+    array (
+      'field_billing_address2' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_billing_address2][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_billing',
+    'required' => 0,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  51 => 
+  array (
+    'label' => 'Job Title',
+    'field_name' => 'field_billing_job_title',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '8',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'aux_billing\');
+return array(0 => array(\'value\' => $contact[\'job_title\']));',
+    'default_value_widget' => 
+    array (
+      'field_billing_job_title' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_billing_job_title][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_billing',
+    'required' => 0,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  52 => 
+  array (
+    'label' => 'City',
+    'field_name' => 'field_billing_city',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '9',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'aux_billing\');
+return array(0 => array(\'value\' => $contact[\'city\']));',
+    'default_value_widget' => 
+    array (
+      'field_billing_city' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_billing_city][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_billing',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  53 => 
+  array (
+    'label' => 'State / Prov',
+    'field_name' => 'field_billing_state_province',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '10',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'aux_billing\');
+return array(0 => array(\'value\' => $contact[\'state_province\']));',
+    'default_value_widget' => 
+    array (
+      'field_billing_state_province' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_billing_state_province][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_billing',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  54 => 
+  array (
+    'label' => 'State / Prov Choice',
+    'field_name' => 'field_billing_state_prov_cho',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '11',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'aux_billing\');
+return array(0 => array(\'value\' => $contact[\'state_province_choice\']));',
+    'default_value_widget' => 
+    array (
+      'field_billing_state_prov_cho' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_billing_state_prov_cho][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_billing',
+    'required' => 0,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  55 => 
+  array (
+    'label' => 'Zip / Postal Code',
+    'field_name' => 'field_billing_postal_code',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '12',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'aux_billing\');
+return array(0 => array(\'value\' => $contact[\'postal_code\']));',
+    'default_value_widget' => 
+    array (
+      'field_billing_postal_code' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_billing_postal_code][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_billing',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  56 => 
+  array (
+    'label' => 'Country',
+    'field_name' => 'field_billing_country',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '13',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'aux_billing\');
+return array(0 => array(\'value\' => $contact[\'country\']));',
+    'default_value_widget' => 
+    array (
+      'field_billing_country' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_billing_country][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_billing',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  57 => 
+  array (
+    'label' => 'Phone Number',
+    'field_name' => 'field_billing_phone',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '14',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'aux_billing\');
+return array(0 => array(\'value\' => $contact[\'phone\']));',
+    'default_value_widget' => 
+    array (
+      'field_billing_phone' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_billing_phone][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_billing',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  58 => 
+  array (
+    'label' => 'Phone Extension',
+    'field_name' => 'field_billing_phone_ext',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '15',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'aux_billing\');
+return array(0 => array(\'value\' => $contact[\'phone_ext\']));',
+    'default_value_widget' => 
+    array (
+      'field_billing_phone_ext' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_billing_phone_ext][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_billing',
+    'required' => 0,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  59 => 
+  array (
+    'label' => 'Fax',
+    'field_name' => 'field_billing_fax',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '16',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'aux_billing\');
+return array(0 => array(\'value\' => $contact[\'fax\']));',
+    'default_value_widget' => 
+    array (
+      'field_billing_fax' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_billing_fax][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_billing',
+    'required' => 0,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '50',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+  60 => 
+  array (
+    'label' => 'Email Address',
+    'field_name' => 'field_billing_email_address',
+    'type' => 'text',
+    'widget_type' => 'text_textfield',
+    'change' => 'Change basic information',
+    'weight' => '17',
+    'rows' => 5,
+    'size' => '60',
+    'description' => '',
+    'default_value' => 
+    array (
+    ),
+    'default_value_php' => 'global $user;
+$contact = registrar_api_get_contacts($user->uid, \'aux_billing\');
+return array(0 => array(\'value\' => $contact[\'email_address\']));',
+    'default_value_widget' => 
+    array (
+      'field_billing_email_address' => 
+      array (
+        0 => 
+        array (
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_billing_email_address][0][value',
+        ),
+      ),
+    ),
+    'group' => 'group_billing',
+    'required' => 1,
+    'multiple' => '0',
+    'text_processing' => '0',
+    'max_length' => '255',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'op' => 'Save field settings',
+    'module' => 'text',
+    'widget_module' => 'text',
+    'columns' => 
+    array (
+      'value' => 
+      array (
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => false,
+        'sortable' => true,
+        'views' => true,
+      ),
+    ),
+    'display_settings' => 
+    array (
+      'label' => 
+      array (
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      4 => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_plain' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'email_html' => 
+      array (
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+  ),
+);
+$content['extra']  = array (
+  'title' => '-5',
+  'menu' => '6',
+);

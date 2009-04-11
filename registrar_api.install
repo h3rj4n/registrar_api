@@ -26,6 +26,121 @@ function registrar_api_uninstall() {
  * Implementation of hook_schema()
  */
 function registrar_api_schema() {
+  return registrar_api_schema_1();
+}
+
+function registrar_api_schema_1() {
+
+  // Setup the contact fields for use in the table schemas
+  $contacts = array(
+    '_first_name' => array(
+      'description' => t("First Name"),
+      'type'        => 'varchar',
+      'length'      => 255,
+      'not null'    => TRUE,
+      'default'     => '',
+    ),
+    '_last_name' => array(
+      'description' => t("Last Name"),
+      'type'        => 'varchar',
+      'length'      => 255,
+      'not null'    => TRUE,
+      'default'     => '',
+    ),
+    '_organization_name' => array(
+      'description' => t("Organization Name"),
+      'type'        => 'varchar',
+      'length'      => 255,
+      'not null'    => TRUE,
+      'default'     => '',
+    ),
+    '_address1' => array(
+      'description' => t("Street Address"),
+      'type'        => 'varchar',
+      'length'      => 255,
+      'not null'    => TRUE,
+      'default'     => '',
+    ),
+    '_address2' => array(
+      'description' => t("Address 2"),
+      'type'        => 'varchar',
+      'length'      => 255,
+      'not null'    => FALSE,
+      'default'     => '',
+    ),
+    '_job_title' => array(
+      'description' => t("Job Title"),
+      'type'        => 'varchar',
+      'length'      => 255,
+      'not null'    => FALSE,
+      'default'     => '',
+    ),
+    '_city' => array(
+      'description' => t("City"),
+      'type'        => 'varchar',
+      'length'      => 50,
+      'not null'    => TRUE,
+      'default'     => '',
+    ),
+    '_state_province' => array(
+      'description' => t("State / Prov"),
+      'type'        => 'varchar',
+      'length'      => 50,
+      'not null'    => TRUE,
+      'default'     => '',
+    ),
+    '_state_province_choice' => array(
+      'description' => t("State or Prov Choice"),
+      'type'        => 'varchar',
+      'length'      => 50,
+      'not null'    => FALSE,
+      'default'     => '',
+    ),
+    '_postal_code' => array(
+      'description' => t("Zip / Postal Code"),
+      'type'        => 'varchar',
+      'length'      => 50,
+      'not null'    => TRUE,
+      'default'     => '',
+    ),
+    '_country' => array(
+      'description' => t("Country"),
+      'type'        => 'varchar',
+      'length'      => 50,
+      'not null'    => TRUE,
+      'default'     => '',
+    ),
+    '_phone' => array(
+      'description' => t("Phone Number"),
+      'type'        => 'varchar',
+      'length'      => 50,
+      'not null'    => TRUE,
+      'default'     => '',
+    ),
+    '_phone_ext' => array(
+      'description' => t("Phone Ext"),
+      'type'        => 'varchar',
+      'length'      => 50,
+      'not null'    => FALSE,
+      'default'     => '',
+    ),
+    '_fax' => array(
+      'description' => t("Fax"),
+      'type'        => 'varchar',
+      'length'      => 50,
+      'not null'    => FALSE,
+      'default'     => '',
+    ),
+    '_email_address' => array(
+      'description' => t("Email"),
+      'type'        => 'varchar',
+      'length'      => 255,
+      'not null'    => TRUE,
+      'default'     => '',
+    ),
+  );
+  
+  
   $schema['registrar_api_contact'] = array(
     'description' => t("Stores domain contact information"),
     'fields' => array(
@@ -34,443 +149,29 @@ function registrar_api_schema() {
         'type'        => 'int',
         'not null'    => TRUE,
       ),
-
-      /* Registrant Contact */
-      
-      'registrant_first_name' => array(
-        'description' => t("First Name"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'registrant_last_name' => array(
-        'description' => t("Last Name"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'registrant_organization_name' => array(
-        'description' => t("Organization Name"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'registrant_address1' => array(
-        'description' => t("Street Address"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'registrant_address2' => array(
-        'description' => t("Address 2"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => FALSE,
-        'default'     => '',
-      ),
-      'registrant_job_title' => array(
-        'description' => t("Job Title"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => FALSE,
-        'default'     => '',
-      ),
-      'registrant_city' => array(
-        'description' => t("City"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'registrant_state_province' => array(
-        'description' => t("State / Prov"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'registrant_state_province_choice' => array(
-        'description' => t("State or Prov Choice"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => FALSE,
-        'default'     => '',
-      ),
-      'registrant_postal_code' => array(
-        'description' => t("Zip / Postal Code"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'registrant_country' => array(
-        'description' => t("Country"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'registrant_phone' => array(
-        'description' => t("Phone Number"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'registrant_phone_ext' => array(
-        'description' => t("Phone Ext"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => FALSE,
-        'default'     => '',
-      ),
-      'registrant_fax' => array(
-        'description' => t("Fax"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => FALSE,
-        'default'     => '',
-      ),
-      'registrant_email_address' => array(
-        'description' => t("Email"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-
-      /* Admin Contact */
-      
-      'admin_first_name' => array(
-        'description' => t("First Name"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'admin_last_name' => array(
-        'description' => t("Last Name"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'admin_organization_name' => array(
-        'description' => t("Organization Name"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'admin_address1' => array(
-        'description' => t("Street Address"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'admin_address2' => array(
-        'description' => t("Address 2"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => FALSE,
-        'default'     => '',
-      ),
-      'admin_job_title' => array(
-        'description' => t("Job Title"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => FALSE,
-        'default'     => '',
-      ),
-      'admin_city' => array(
-        'description' => t("City"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'admin_state_province' => array(
-        'description' => t("State / Prov"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'admin_state_province_choice' => array(
-        'description' => t("State or Prov Choice"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => FALSE,
-        'default'     => '',
-      ),
-      'admin_postal_code' => array(
-        'description' => t("Zip / Postal Code"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'admin_country' => array(
-        'description' => t("Country"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'admin_phone' => array(
-        'description' => t("Phone Number"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'admin_phone_ext' => array(
-        'description' => t("Phone Ext"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => FALSE,
-        'default'     => '',
-      ),
-      'admin_fax' => array(
-        'description' => t("Fax"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => FALSE,
-        'default'     => '',
-      ),
-      'admin_email_address' => array(
-        'description' => t("Email"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-
-      /* Tech Contact */
-      
-      'tech_first_name' => array(
-        'description' => t("First Name"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'tech_last_name' => array(
-        'description' => t("Last Name"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'tech_organization_name' => array(
-        'description' => t("Organization Name"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'tech_address1' => array(
-        'description' => t("Street Address"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'tech_address2' => array(
-        'description' => t("Address 2"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => FALSE,
-        'default'     => '',
-      ),
-      'tech_job_title' => array(
-        'description' => t("Job Title"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => FALSE,
-        'default'     => '',
-      ),
-      'tech_city' => array(
-        'description' => t("City"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'tech_state_province' => array(
-        'description' => t("State / Prov"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'tech_state_province_choice' => array(
-        'description' => t("State or Prov Choice"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => FALSE,
-        'default'     => '',
-      ),
-      'tech_postal_code' => array(
-        'description' => t("Zip / Postal Code"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'tech_country' => array(
-        'description' => t("Country"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'tech_phone' => array(
-        'description' => t("Phone Number"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'tech_phone_ext' => array(
-        'description' => t("Phone Ext"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => FALSE,
-        'default'     => '',
-      ),
-      'tech_fax' => array(
-        'description' => t("Fax"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => FALSE,
-        'default'     => '',
-      ),
-      'tech_email_address' => array(
-        'description' => t("Email"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-
-      /* Billing Contact */
-      
-      'aux_billing_first_name' => array(
-        'description' => t("First Name"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'aux_billing_last_name' => array(
-        'description' => t("Last Name"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'aux_billing_organization_name' => array(
-        'description' => t("Organization Name"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'aux_billing_address1' => array(
-        'description' => t("Street Address"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'aux_billing_address2' => array(
-        'description' => t("Address 2"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => FALSE,
-        'default'     => '',
-      ),
-      'aux_billing_job_title' => array(
-        'description' => t("Job Title"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => FALSE,
-        'default'     => '',
-      ),
-      'aux_billing_city' => array(
-        'description' => t("City"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'aux_billing_state_province' => array(
-        'description' => t("State / Prov"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'aux_billing_state_province_choice' => array(
-        'description' => t("State or Prov Choice"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => FALSE,
-        'default'     => '',
-      ),
-      'aux_billing_postal_code' => array(
-        'description' => t("Zip / Postal Code"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'aux_billing_country' => array(
-        'description' => t("Country"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'aux_billing_phone' => array(
-        'description' => t("Phone Number"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      'aux_billing_phone_ext' => array(
-        'description' => t("Phone Ext"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => FALSE,
-        'default'     => '',
-      ),
-      'aux_billing_fax' => array(
-        'description' => t("Fax"),
-        'type'        => 'varchar',
-        'length'      => 50,
-        'not null'    => FALSE,
-        'default'     => '',
-      ),
-      'aux_billing_email_address' => array(
-        'description' => t("Email"),
-        'type'        => 'varchar',
-        'length'      => 255,
-        'not null'    => TRUE,
-        'default'     => '',
-      ),
-      
-
     ),
     'primary key' => array('uid'),
   );
+
+  $schema['registrar_api_node'] = array(
+    'description' => t("Stores the information for each domain node"),
+    'fields' => array(
+      'nid' => array(
+        'description' => t("Primary key: Node table nid"),
+        'type'        => 'int',
+        'not null'    => TRUE,
+      ),
+    ),
+    'primary key' => array('nid'),
+  );
+
+  // Add all contact fields to the two tables
+  foreach (array('registrant', 'tech', 'admin', 'aux_billing') as $type) {
+    foreach ($contacts as $key => $value) {
+      $schema['registrar_api_contact']['fields'][$type . $key] = $value;
+      $schema['registrar_api_node']['fields'][$type . $key] = $value;
+    }
+  }
 
   return $schema;
 }

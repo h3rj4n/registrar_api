@@ -295,7 +295,6 @@ function _namecheap_request($request) {
   $response = stream_get_contents($f);
   fclose($f);
   
-  print $response;
   return $response;
 }
 

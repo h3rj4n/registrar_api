@@ -1,5 +1,9 @@
 <?php
+// $Id$
 
+/**
+ * Implementation of hook_help().
+ */
 function registrar_api_help($path, $arg) {
   switch ($path) {
     case 'admin/modules#name':
@@ -19,6 +23,7 @@ function registrar_api_help($path, $arg) {
  */
 function registrar_api_init() {
   module_load_include('inc', 'registrar_api');
+  module_load_include('inc', 'registrar_api', 'registrar_api.node');
   module_load_include('inc', 'registrar_api', 'includes/namecheap');
 }
 
@@ -29,6 +34,9 @@ function registrar_api_perm() {
   return array('register domains', 'edit own domains', 'manage domains');
 }
 
+/**
+ * Implementation of hook_access().
+ */
 function registrar_api_access($op, $node, $account) {
   switch ($op) {
     case 'create':
@@ -41,6 +49,9 @@ function registrar_api_access($op, $node, $account) {
   }
 }
 
+/**
+ * Implementation of hook_menu().
+ */
 function registrar_api_menu() {
   global $user;
   
@@ -61,34 +72,19 @@ function registrar_api_menu() {
     'type' => MENU_NORMAL_ITEM,
    );
 
+  $items['admin/content/manage_domains'] = array(
+    'title' => 'Manage Domains',
+    'description' => 'Manage Domain Names',
+    'page callback' => 'registrar_api_manage_domains',
+    'access arguments' => array('register domains'),
+    'type' => MENU_NORMAL_ITEM,
+   );
+  
   return $items;
 }
 
 function registrar_api_test() {
-  //print_r(namecheap_api_domains_check("domain1.com"));
-  //print_r(namecheap_api_domains_getlist());
-  //print_r(namecheap_api_domains_getcontacts("domaintest.com"));
-
-  $registrant = $tech = $admin = $auxbilling = Array (
-    'OrganizationName' => 'Hatch',
-    'JobTitle' => 'Not Specified',
-    'FirstName' => 'Scott',
-    'LastName' => 'Hadfield',
-    'Address1' => '1234 Noname street',
-    'Address2' => '',
-    'City' => 'Vernon',
-    'StateProvince' => 'BC',
-    'StateProvinceChoice' => 'S',
-    'PostalCode' => 'v1b3k5',
-    'Country' => 'CA',
-    'Phone' => '+1.5555555',
-    'Fax' => '+1.5555555555',
-    'EmailAddress' => 'hadfield@hatchwebstudio.com',
-    'PhoneExt' => '',
-  );
-  //print_r(namecheap_api_domains_create("abcdedomain.com", 1, $registrant, $tech, $admin, $auxbilling));
-  //print_r(namecheap_api_domains_renew("abcdedomain.com", 1));
-  //print_r(namecheap_api_domains_setcontacts("abcdedomain.com", $registrant, $tech, $admin, $auxbilling));
+  // Testing function
 }
 
 function registrar_api_admin() {
@@ -96,100 +92,18 @@ function registrar_api_admin() {
   return system_settings_form($form);
 }
 
-/**** Hooks to implement the domain custom content type ****/
-
 /**
-* Implementation of hook_node_info().
-*/
-function registrar_api_node_info() {
+ * Implementation of hook_theme
+ */
+function registrar_api_theme() {
   return array(
-    'registrar_domain2' => array(
-      'name' => t('Domain'),
-      'module' => 'registrar_api',
-      'description' => "Domain Name",
-    )
+    'registrar_api_contacts' => array(
+      'arguments' => array('contacts' => NULL),
+    ),
   );
 }
 
-/**
- * Implementation of hook_form()
- */
-function registrar_api_form(&$node) {
-  $type = node_get_types('type', $node);
-  
-  // Define the form elements for the node's title and body.
-  $form['title'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Domain Name'),
-    '#required' => TRUE,
-    '#default_value' => $node->title,
-    '#weight' => -5
-  );
-  
-  // We want the body and filter elements to be adjacent. We could try doing
-  // this by setting their weights, but another module might add elements to the
-  // form with the same weights and end up between ours. By putting them into a
-  // sub-array together, we're able force them to be rendered together.
-
-//   $form['body_filter']['body'] = array(
-//     '#type' => 'textarea',
-//     '#title' => check_plain($type->body_label),
-//     '#default_value' => $node->body,
-//     '#required' => FALSE
-//   );
-//   $form['body_filter']['filter'] = filter_form($node->format);
-
-  $form['years'] = array(
-    '#type' => 'select',
-    '#title' => t('Years'),
-    '#default_value' => 1,
-    '#options' => array(1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6,
-                        7 => 7, 8 => 8, 9 => 9, 10 => 10),
-    '#required' => TRUE,
-  );
-
-  $form += _registrar_api_get_form();
-
-  return $form;
-}
-
-/**
- * Implementation of hook_insert()
- */
-function registrar_api_insert($node) {
-  global $user;
-
-  //dsm($node);
-  $status = registrar_api_domains_create($node->title, $node->years, $node->registrar_api_registrant, $node->registrar_api_admin, $node->registrar_api_tech, $node->registrar_api_aux_billing);
-  
-  //$set_str = _registrar_api_get_set_str($node);
-  //db_query("INSERT INTO {registrar_api_content} SET $set_str, nid = %d, uid = %d, years = %d, created = '%s', updated = '%s'", $node->nid, $user->uid, $node->years, $created, $created);
-  
-}
-
-/**
- * Implementation of hook_update()
- */
-function registrar_api_update($node) {
-  global $user;
-  
-  $set_str = _registrar_api_get_set_str($node);
-  db_query("UPDATE {registrar_api_content} SET $set_str, years = %d, updated = '%s' WHERE nid = %d, uid = %d", $node->years, $updated, $node->nid, $user->uid);
-
-}
-
-/**
- * Implementation of hook_delete()
- */
-function registrar_api_delete(&$node) {
-  
-}
-
-/**
- * Implementation of hook_validate()
- */
-function registrar_api_validate($node, &$form) {
-}
+/**** User Profile Form ****/
 
 /**
  * Implementation of hook_user()
@@ -241,7 +155,7 @@ function registrar_api_user_form($edit, $user, $category = NULL) {
 /**
  * Update the user information in the system, if the account is updated
  */
-function registrar_api_user_update($edit, $user, $category = NULL) {
+function registrar_api_user_update($edit, $user, $category = NULL) {  
   if ($category != 'registrar_api') {
     return;
   }
@@ -263,10 +177,18 @@ function registrar_api_user_update($edit, $user, $category = NULL) {
 
 /**** Misc utility functions ****/
 
+function registrar_api_get_node_contacts($nid, $type = NULL) {
+  $contacts = db_fetch_array(db_query("SELECT * FROM {registrar_api_node} WHERE nid = %d", $nid));
+  return _registrar_api_contacts($contacts, $type);
+}
+
 function registrar_api_get_contacts($uid, $type = NULL) {
   $contacts = db_fetch_array(db_query("SELECT * FROM {registrar_api_contact} WHERE uid = %d", $uid));
+  return _registrar_api_contacts($contacts, $type);
+}
+
+function _registrar_api_contacts($contacts, $type) {
   $contacts_array = array();
-  
   if ($contacts == NULL) {
     return;
   }
@@ -282,7 +204,7 @@ function registrar_api_get_contacts($uid, $type = NULL) {
     $contacts_array[$content_type][$field] = $value;
   }
 
-  if (in_array($type, array('registrant', 'admin', 'tech', 'aux_billing'))) {
+  if (in_array($type, array('registrant', 'tech', 'admin', 'aux_billing'))) {
     return $contacts_array[$type];
   }
   else {
@@ -412,31 +334,6 @@ function _registrar_api_get_form() {
   );
   
 
-  /* Admin Contact */
-  $form['registrar_api_admin'] = array(
-    '#type'          => 'fieldset',
-    '#title'         => t('Admin Contact'),      
-    '#tree'          => TRUE,
-    '#collapsible'   => TRUE,
-    '#collapsed'     => TRUE,
-    '#weight'        => 2,
-  );
-
-  // Recycle the registrant form for the admin form
-  foreach ($form['registrar_api_registrant'] as $field => $values) {
-    if ($field[0] == '#') {
-      continue;
-    }
-      
-    $form['registrar_api_admin'][$field] = array(
-      '#type' => $values['#type'],
-      '#title' => $values['#title'],
-      '#maxlength' => $values['#maxlength'],
-      '#default_value' => $contacts['admin'][$field],
-      '#required'      => $values['#required'],
-    );
-  }
-
   /* Tech Contact */
   $form['registrar_api_tech'] = array(
     '#type'          => 'fieldset',
@@ -444,7 +341,7 @@ function _registrar_api_get_form() {
     '#tree'          => TRUE,
     '#collapsible'   => TRUE,
     '#collapsed'     => TRUE,
-    '#weight'        => 3,
+    '#weight'        => 2,
   );
 
   // Recycle the registrant form for the tech form
@@ -458,6 +355,31 @@ function _registrar_api_get_form() {
       '#title' => $values['#title'],
       '#maxlength' => $values['#maxlength'],
       '#default_value' => $contacts['tech'][$field],
+      '#required'      => $values['#required'],
+    );
+  }
+
+  /* Admin Contact */
+  $form['registrar_api_admin'] = array(
+    '#type'          => 'fieldset',
+    '#title'         => t('Admin Contact'),      
+    '#tree'          => TRUE,
+    '#collapsible'   => TRUE,
+    '#collapsed'     => TRUE,
+    '#weight'        => 3,
+  );
+
+  // Recycle the registrant form for the admin form
+  foreach ($form['registrar_api_registrant'] as $field => $values) {
+    if ($field[0] == '#') {
+      continue;
+    }
+      
+    $form['registrar_api_admin'][$field] = array(
+      '#type' => $values['#type'],
+      '#title' => $values['#title'],
+      '#maxlength' => $values['#maxlength'],
+      '#default_value' => $contacts['admin'][$field],
       '#required'      => $values['#required'],
     );
   }
@@ -491,6 +413,7 @@ function _registrar_api_get_form() {
 }
 
 function _registrar_api_get_set_str($values) {
+  dsm($values);
   // Build the set query
   $fields = array('first_name', 'last_name', 'organization_name', 'address1',
                   'address2', 'job_title', 'city', 'state_province',
@@ -499,10 +422,21 @@ function _registrar_api_get_set_str($values) {
 
   $set_arr = array();
   foreach ($fields as $field) {
-    foreach (array('registrant', 'admin', 'tech', 'aux_billing') as $type) {
+    foreach (array('registrant', 'tech', 'admin', 'aux_billing') as $type) {
       $ftype = "registrar_api_" . $type;
-      $set_arr[] = $type . '_' . $field . " = '" .
-        db_escape_string($values[$ftype][$field]) . "'";
+      if (is_array($values)) {
+        $set_arr[] = $type . '_' . $field . " = '" .
+          db_escape_string($values[$ftype][$field]) . "'";
+      }
+      elseif (is_object($values)) {
+        $vftype = $values->$ftype;
+        $set_arr[] = $type . '_' . $field . " = '" .
+          db_escape_string($vftype[$field]) . "'";
+      }
+      else {
+        drupal_set_message("Error in values type in _registrar_api_get_set_str", 'error');
+        return;
+      }
     }
   }
   return implode(", ", $set_arr);
