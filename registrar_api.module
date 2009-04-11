@@ -413,7 +413,6 @@ function _registrar_api_get_form() {
 }
 
 function _registrar_api_get_set_str($values) {
-  dsm($values);
   // Build the set query
   $fields = array('first_name', 'last_name', 'organization_name', 'address1',
                   'address2', 'job_title', 'city', 'state_province',

@@ -80,23 +80,33 @@ function registrar_api_insert($node) {
  * Implementation of hook_update()
  */
 function registrar_api_update($node) {
-  global $user;
-
-  if ($node->op == "Renew") {
-    // Renew the domain
-    registrar_api_domains_renew($node->title, $node->years);
+  if ($node->op == "Sync") {
+    // Get the contact info from the registrar
+    $contacts = registrar_api_domains_getcontacts($node->title);
+    $set_str = _registrar_api_get_set_str(array(
+      'registrar_api_registrant' => $contacts['registrant'],
+      'registrar_api_tech' => $contacts['tech'],
+      'registrar_api_admin' => $contacts['admin'],
+      'registrar_api_aux_billing' => $contacts['aux_billing'],
+    ));
   }
+  else {
+    if ($node->op == "Renew") {
+      // Renew the domain
+      registrar_api_domains_renew($node->title, $node->years);
+    }
   
-  // Update the contact information
-  registrar_api_domains_setcontacts(
-    $node->title, $node->years,
-    $node->registrar_api_registrant,
-    $node->registrar_api_admin,
-    $node->registrar_api_tech,
-    $node->registrar_api_aux_billing
-  );
+    // Update the contact information
+    registrar_api_domains_setcontacts(
+      $node->title, $node->years,
+      $node->registrar_api_registrant,
+      $node->registrar_api_admin,
+      $node->registrar_api_tech,
+      $node->registrar_api_aux_billing
+    );
   
-  $set_str = _registrar_api_get_set_str($node);
+    $set_str = _registrar_api_get_set_str($node);
+  }
   db_query("UPDATE {registrar_api_node} SET $set_str WHERE nid = %d", $node->nid);
 }
 
@@ -147,10 +157,23 @@ function registrar_api_form_alter(&$form, $form_state, $form_id) {
       $form['title']['#value'] = $form['title']['#default_value'];
 
       $form['years']['#description'] = t('Only used when renewing a domain');
+
+      // Add renew and sync buttons
       $form['buttons']['Renew'] = array(
         '#type' => 'submit',
         '#value' => t('Renew'),
+        '#submit' => array('node_form_submit'),
         '#weight' => 6,
+      );
+      $form['buttons']['Sync'] = array(
+        '#type' => 'submit',
+        '#value' => t('Sync'),
+        '#submit' => array('node_form_submit'),
+        '#weight' => 7,
+      );
+      $form['buttons']['sync_info'] = array(
+        '#value' => '<div>' . t('The "sync" button will replace your contact information with that currently set by the registrar.') . '</div>',
+        '#weight' => 10,
       );
     }
   }

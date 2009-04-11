@@ -102,6 +102,16 @@ function registrar_api_domains_setcontacts($domain, $years, $registrant,
                                 $contact['auxbilling']);
 }
 
+/**
+ * @param $domain
+ *   The name of the domain to retrieve the contact information for
+ *
+ * @return array containing the domain contact information
+ */
+function registrar_api_domains_getcontacts($domain) {
+  $contacts = namecheap_domains_getcontacts($domain);
+  return _registrar_api_convert_contacts_reverse($contacts['Registrant'], $contacts['Tech'], $contacts['Admin'], $contacts['AuxBilling']);
+}
 
 /**** Helper functions ****/
 function _registrar_api_convert_contacts($registrant, $tech, $admin,
@@ -113,6 +123,38 @@ function _registrar_api_convert_contacts($registrant, $tech, $admin,
     foreach ($$type as $key => $value) {
       $newkey = str_replace('_', ' ', $key);
       $newkey = str_replace(' ', '', ucwords($newkey));
+      $contact_copy[$type][$newkey] = $value;
+    }
+  }
+
+  return $contact_copy;
+}
+
+function _registrar_api_convert_contacts_reverse($registrant, $tech, $admin,
+                                                 $auxbilling) {
+  // Convert the contact details' keys from CamelCase to lower with _'s
+  $field_map = array(
+    'OrganizationName' => 'organization_name',
+    'JobTitle' => 'job_title',
+    'FirstName' => 'first_name',
+    'LastName' => 'last_name',
+    'Address1' => 'address1',
+    'Address2' => 'address2',
+    'City' => 'city',
+    'StateProvince' => 'state_province',
+    'StateProvinceChoice' => 'state_province_choice',
+    'PostalCode' => 'postal_code',
+    'Country' => 'country',
+    'Phone' => 'phone',
+    'Fax' => 'fax',
+    'EmailAddress' => 'email_address',
+    'PhoneExt' => 'phone_ext'
+  );
+  $contact_copy = array('registrant' => array(), 'tech' => array(),
+                        'admin' => array(), 'auxbilling' => array());
+  foreach ($contact_copy as $type => $values) {
+    foreach ($$type as $key => $value) {
+      $newkey = $field_map[$key];
       $contact_copy[$type][$newkey] = $value;
     }
   }
