@@ -1,0 +1,77 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ *   simpletest tests for the registrar API
+ */
+
+class NamecheapAPITestCase extends DrupalWebTestCase {
+  
+  /**
+   * Implementation of getInfo().
+   */
+  function getInfo() {
+    return array(
+      'name' => t('Namecheap API tests'),
+      'description' => t('Test Namecheap.com API calls.'),
+      'group' => t('Registrar API'),
+    );
+  }
+
+  /**
+   * Override the namecheap api settings so as to not accidentally run
+   * tests on a production environment
+   */
+  function setUp() {
+    parent::setUp();
+
+    $this->temp_api_url = variable_get('namecheap_uri', '');
+    $this->temp_api_key = variable_get('namecheap_api_key', '');
+    $this->temp_api_user = variable_get('namecheap_api_user', '');
+    
+    variable_set('namecheap_uri',
+                 'https://api.sandbox.namecheap.com/xml.response');
+    variable_set('namecheap_api_key', 'e0a92fa3f3c245cb89f9476c0789cf70');
+    variable_set('namecheap_api_user', 'hadsie');
+  }
+  
+  function tearDown() {
+    variable_set('namecheap_uri', $this->temp_api_url);
+    variable_set('namecheap_api_key', $this->temp_api_key);
+    variable_set('namecheap_api_user', $this->temp_api_user);
+
+    parent::tearDown();
+  }
+  
+  /**
+   * Test domains_register
+   */
+  function testNamecheapAPIDomainsCheck() {
+    // Test an a registered name
+    $actual = namecheap_check_domains('namecheap.com');
+    $desired = array(
+      'namecheap.com' => array(
+        'Domain' => 'namecheap.com',
+        'Available' => 'false',
+        'ErrorNo' => '',
+        'Description' => '',
+      )
+    );
+
+    $this->assertEqual($actual, $desired, t('Testing check_domains on a registered domain name'));
+
+    // Test on an available domain
+    $actual = namecheap_check_domains('thisisnotregdyet.com');
+    $desired = array(
+      'thisisnotregdyet.com' => array(
+        'Domain' => 'thisisnotregdyet.com',
+        'Available' => 'true',
+        'ErrorNo' => '',
+        'Description' => '',
+      ),
+    );
+    
+    $this->assertEqual($actual, $desired, t('Testing check_domains on an available domain name'));
+  }
+}

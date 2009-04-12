@@ -30,7 +30,18 @@ function registrar_api_help($path, $arg) {
 function registrar_api_init() {
   module_load_include('inc', 'registrar_api');
   module_load_include('inc', 'registrar_api', 'registrar_api.node');
-  module_load_include('inc', 'registrar_api', 'includes/namecheap');
+
+  // Load all inc files in the includes folder
+  $path = drupal_get_path('module', 'registrar_api') . '/includes/';
+  $registrar_list = array();
+  foreach (scandir($path) as $file) {
+    if (substr($file, strlen($file) - 4) == '.inc') {
+      $registrar = substr($file, 0, strlen($file) - 4);
+      $registrar_list[$registrar] = $registrar;
+      module_load_include('inc', 'registrar_api', "includes/$registrar");
+    }
+  }
+  variable_set('registrar_api_registrars', $registrar_list);
 }
 
 /**
@@ -70,7 +81,7 @@ function registrar_api_menu() {
   );
 
   $items['admin/settings/registrar_api'] = array(
-    'title' => 'Registrar API settings',
+    'title' => 'Registrar API Settings',
     'description' => 'Manage the registrar API settings',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('registrar_api_admin'),
@@ -91,10 +102,35 @@ function registrar_api_menu() {
 
 function registrar_api_test() {
   // Testing function
+    $actual = namecheap_check_domains('thisisnotregdyet.com');
+    $desired = array(
+      'thisisnotregdyet.com' => array(
+        'Domain' => 'thisisnotregdyet.com',
+        'Available' => 'true',
+        'ErrorNo' => '',
+        'Description' => '',
+      ),
+    );
+  
+  if ($actual == $desired) {
+    print "EQUAL!";
+  }
+  print_r($actual);
+  print_r($desired);
+  return "here";
 }
 
 function registrar_api_admin() {
-  $form = namecheap_admin_form();
+  $form = array();
+  $registrars = variable_get('registrar_api_registrars', array());
+  $form['registrar_api']['registrar_api_registrar'] = array(
+    '#type' => 'select',
+    '#title' => t('Select the registrar API to use'),
+    '#default_value' => variable_get('registrar_api', ''),
+    '#options' => $registrars,
+  );
+
+  $form += namecheap_admin_form();
   return system_settings_form($form);
 }
 

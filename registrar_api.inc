@@ -19,8 +19,8 @@
  *     )
  *   )
  */
-function registrar_api_domains_check($domain_list) {
-  return namecheap_domains_check(implode(", ", $domain_list));
+function registrar_api_check_domains($domain_list) {
+  return _registrar_api_method('check_domains', implode(", ", $domain_list));
 }
 
 /**
@@ -31,8 +31,8 @@ function registrar_api_domains_check($domain_list) {
  *
  * @return TRUE if domain is available, FALSE otherwise
  */
-function registrar_api_domain_check($domain) {
-  $domain = registrar_api_domains_check(array($domain));
+function registrar_api_check_domain($domain) {
+  $domain = registrar_api_check_domains(array($domain));
   return $domain['Available'];
 }
 
@@ -56,17 +56,17 @@ function registrar_api_domain_check($domain) {
  *
  * return array containing the registered domain information
  */
-function registrar_api_domains_create($domain_name, $years, $registrant, $tech, $admin, $auxbilling, $nameservers = NULL) {
+function registrar_api_create_domain($domain_name, $years, $registrant,
+  $tech, $admin, $auxbilling, $nameservers = NULL) {
 
   $contact = _registrar_api_convert_contacts(
     $registrant, $tech, $admin, $auxbilling);
 
-  return namecheap_domains_create(
+  return _registrar_api_method('create_domain',
     $domain_name, $years, $contact['registrant'], $contact['tech'],
     $contact['admin'], $contact['auxbilling'], $nameservers
   );
 }
-
 
 /**
  * Check the availability status on the specified domain.
@@ -79,8 +79,8 @@ function registrar_api_domains_create($domain_name, $years, $registrant, $tech, 
  *
  * @return array containing renewal information
  */
-function registrar_api_domains_renew($domain, $years) {
-  return namecheap_domains_renew($domain, $years);
+function registrar_api_renew_domain($domain, $years) {
+  return _registrar_api_method('renew_domain', $domain, $years);
 }
 
 /**
@@ -99,12 +99,12 @@ function registrar_api_domains_renew($domain, $years) {
  *
  * @return none
  */
-function registrar_api_domains_setcontacts($domain, $years, $registrant,
+function registrar_api_set_contacts($domain, $years, $registrant,
   $tech, $admin, $auxbilling) {
 
   $contact = _registrar_api_convert_contacts(
     $registrant, $tech, $admin, $auxbilling);
-  namecheap_domains_setcontacts($domain, $contact['registrant'],
+  _registrar_api_method('set_contacts', $domain, $contact['registrant'],
     $contact['tech'], $contact['admin'], $contact['auxbilling']);
 }
 
@@ -114,14 +114,25 @@ function registrar_api_domains_setcontacts($domain, $years, $registrant,
  *
  * @return array containing the domain contact information
  */
-function registrar_api_domains_getcontacts($domain) {
-  $contacts = namecheap_domains_getcontacts($domain);
+function registrar_api_get_contacts($domain) {
+  $contacts = _registrar_api_method('get_contacts', $domain);
   return _registrar_api_convert_contacts_reverse(
     $contacts['Registrant'], $contacts['Tech'],
     $contacts['Admin'], $contacts['AuxBilling']);
 }
 
 /**** Helper functions ****/
+
+function _registrar_api_method() {
+  $args = func_get_args();
+  $method = array_shift($args);
+  
+  $registrar = variable_get('registrar_api_registrar', '');
+  $method = $registrar . '_' . $method;
+  
+  return call_user_func_array($method, $args);
+}
+
 function _registrar_api_convert_contacts($registrant, $tech, $admin,
   $auxbilling) {
 

@@ -67,9 +67,8 @@ function namecheap_admin_form() {
  *   )
  * )
  */
-function namecheap_domains_check($domain_list) {
+function namecheap_check_domains($domain_list) {
   // TODO: Retry on failed attempts
-
   $request = _namecheap_init_request('namecheap.domains.check');
   $request['DomainList'] = $domain_list;
   $response = _namecheap_request($request);
@@ -86,7 +85,7 @@ function namecheap_domains_check($domain_list) {
   return ($domains);
 }
 
-function namecheap_domains_create($domain_name, $years, $registrant, $tech, $admin, $auxbilling, $nameservers = NULL) {
+function namecheap_create_domain($domain_name, $years, $registrant, $tech, $admin, $auxbilling, $nameservers = NULL) {
   // TODO: Add promotion code, and extended attributes for .us, .ca, etc.
   // TODO: Test error handling (already registered domain, 0 years,
   // nameservers, etc.)
@@ -127,7 +126,7 @@ function namecheap_domains_create($domain_name, $years, $registrant, $tech, $adm
   return $domain[0];
 }
 
-function namecheap_domains_getcontacts($domain_name) {
+function namecheap_get_contacts($domain_name) {
   // TODO: Handle requests when the domain isn't in this users account
   // Test this with all 4 different contact types have different data
 
@@ -206,7 +205,7 @@ function namecheap_domains_reactivate() {
   /* Placeholder */
 }
 
-function namecheap_domains_renew($domain_name, $years) {
+function namecheap_renew_domain($domain_name, $years) {
   // TODO: Add promotion code field
   // <Error Number="1">Unknown</Error>
   $request = _namecheap_init_request('namecheap.domains.renew');
@@ -229,7 +228,7 @@ function namecheap_domains_renew($domain_name, $years) {
 
 }
 
-function namecheap_domains_setcontacts($domain_name, $registrant, $tech, $admin, $auxbilling) {
+function namecheap_set_contacts($domain_name, $registrant, $tech, $admin, $auxbilling) {
   // TODO: Implement extended attributes required for some cctlds
 
   $request = _namecheap_init_request('namecheap.domains.setcontacts');
@@ -284,7 +283,6 @@ function _namecheap_init_request($command, $username = NULL) {
 
 function _namecheap_request($request) {
   // TODO: Handle request timeouts and other failures
-
   $request_arr = array();
   foreach ($request as $field => $value) {
     $request_arr[] .= urlencode($field) . "=" . urlencode($value);

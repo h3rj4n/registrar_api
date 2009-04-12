@@ -59,7 +59,7 @@ function registrar_api_form(&$node, $form_state) {
  * Implementation of hook_insert().
  */
 function registrar_api_insert($node) {
-  $status = registrar_api_domains_create($node->title, $node->years, $node->registrar_api_registrant, $node->registrar_api_admin, $node->registrar_api_tech, $node->registrar_api_aux_billing);
+  $status = registrar_api_create_domain($node->title, $node->years, $node->registrar_api_registrant, $node->registrar_api_admin, $node->registrar_api_tech, $node->registrar_api_aux_billing);
 
   $set_str = _registrar_api_get_set_str($node);
   db_query("INSERT INTO {registrar_api_node} SET $set_str, nid = %d",
@@ -72,7 +72,7 @@ function registrar_api_insert($node) {
 function registrar_api_update($node) {
   if ($node->op == "Sync") {
     // Get the contact info from the registrar
-    $contacts = registrar_api_domains_getcontacts($node->title);
+    $contacts = registrar_api_get_contacts($node->title);
     $set_str = _registrar_api_get_set_str(array(
       'registrar_api_registrant' => $contacts['registrant'],
       'registrar_api_tech' => $contacts['tech'],
@@ -83,11 +83,11 @@ function registrar_api_update($node) {
   else {
     if ($node->op == "Renew") {
       // Renew the domain
-      registrar_api_domains_renew($node->title, $node->years);
+      registrar_api_renew_domain($node->title, $node->years);
     }
 
     // Update the contact information on the registrar
-    registrar_api_domains_setcontacts(
+    registrar_api_set_contacts(
       $node->title, $node->years,
       $node->registrar_api_registrant,
       $node->registrar_api_admin,
@@ -116,7 +116,7 @@ function registrar_api_validate($node, &$form) {
 
   // Only validate on create
   if (strpos(request_uri(), '/node/add/') !== FALSE) {
-    if (!registrar_api_domain_check($node->title)) {
+    if (!registrar_api_check_domain($node->title)) {
       form_set_error('title', t('The specified domain name is not available.'));
     }
   }
