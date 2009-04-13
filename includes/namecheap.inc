@@ -44,9 +44,12 @@ function namecheap_admin_form() {
 /* Domain API Functions */
 
 /**
- * Input: $domain_list = "domain1.com,availabledomain.com,err.tld"
- * Output:
- * Array (
+ * @param: $domain_list
+ *   Comma separated list of domains to check for the availability on. i.e.:
+ *   "domain1.com,availabledomain.com,err.tld"
+ *
+ * @return array of domain availability status'
+ *   Array (
  *   [domain1.com] => Array (
  *     [Domain] => domain1.com
  *     [Available] => false
@@ -75,6 +78,7 @@ function namecheap_check_domains($domain_list) {
 
   $sxml = new SimpleXMLElement($response);
   $attributes = array('Domain', 'Available', 'ErrorNo', 'Description');
+  _namecheap_validate_response($sxml);
   $domains = _namecheap_xmlattr2array(
     $response,
     $sxml->CommandResponse->DomainCheckResult,
@@ -82,13 +86,26 @@ function namecheap_check_domains($domain_list) {
     'Domain'
   );
 
+  foreach ($domains as $domain) {
+    if ($domain['Available'] == 'error') {
+      $msg = t('Error checking domain availability on ') . $domain['Domain'];
+      drupal_set_message($msg, 'error');
+      watchdog('registrar_api', 'Error checking domain availability on %domain. Error #: %errornum, Error Msg: %message', array('%domain' => $domain['Domain'], '%errornum' => $domain['ErrorNo'], '%message' => $domain['Description']), WATCHDOG_ERROR);
+    }
+  }
+
   return ($domains);
 }
 
+/**
+ *
+ * Ways to trigger errors:
+ * $domain = _ (500)
+ * $domain = domain_with_underscores.com  (14)
+ *
+ */
 function namecheap_create_domain($domain_name, $years, $registrant, $tech, $admin, $auxbilling, $nameservers = NULL) {
   // TODO: Add promotion code, and extended attributes for .us, .ca, etc.
-  // TODO: Test error handling (already registered domain, 0 years,
-  // nameservers, etc.)
 
   $request = _namecheap_init_request('namecheap.domains.create');
   $request['DomainName'] = $domain_name;
@@ -114,7 +131,7 @@ function namecheap_create_domain($domain_name, $years, $registrant, $tech, $admi
 
   $response = _namecheap_request($request);
   $sxml = new SimpleXMLElement($response);
-
+  _namecheap_validate_response($sxml);
   $attributes = array('Domain', 'DomainID', 'Registered', 'OrderId',
                       'TransactionId', 'ChargedAmount');
   $domain = _namecheap_xmlattr2array(
@@ -128,7 +145,6 @@ function namecheap_create_domain($domain_name, $years, $registrant, $tech, $admi
 
 function namecheap_get_contacts($domain_name) {
   // TODO: Handle requests when the domain isn't in this users account
-  // Test this with all 4 different contact types have different data
 
   $request = _namecheap_init_request('namecheap.domains.getContacts');
   $request['DomainName'] = $domain_name;
@@ -205,14 +221,17 @@ function namecheap_domains_reactivate() {
   /* Placeholder */
 }
 
+/**
+ * At the time of writing this, the renew functionality in the API sandbox
+ * did not work
+ */
 function namecheap_renew_domain($domain_name, $years) {
   // TODO: Add promotion code field
   // <Error Number="1">Unknown</Error>
   $request = _namecheap_init_request('namecheap.domains.renew');
   $request['DomainName'] = $domain_name;
   $request['Years'] = $years;
-  dsm($domain_name);
-  dsm($years);
+
   $response = _namecheap_request($request);
 
   $sxml = new SimpleXMLElement($response);
@@ -311,6 +330,12 @@ function _namecheap_request($request) {
 function _namecheap_xmlattr2array($response, $sxml_obj, $attributes, $index = NULL) {
   $data = array();
 
+  if (!$sxml_obj) {
+    // On some errors the CommandResponse paramater won't be set
+    watchdog('registrar_api', 'Invalid CommandResponse passed to _namecheap_xmlattr2array', array(), WATCHDOG_ERROR);
+    return $data;
+  }
+  
   foreach ($sxml_obj as $xrecord) {
     $record = array();
     foreach ($attributes as $attribute) {
@@ -326,3 +351,41 @@ function _namecheap_xmlattr2array($response, $sxml_obj, $attributes, $index = NU
 
   return ($data);
 }
+
+/**
+ * @return false if there is an error status, true otherwise
+ */
+function _namecheap_validate_response($sxml) {
+  // Is the status "ERROR"?
+  $status = (string) $sxml->ApiResponse['Status'];
+  $error = $status != "ERROR";
+  
+  $command = (string) $sxml->RequestedCommand;
+  foreach ($sxml->Errors as $error) {
+    if (!((string) $error->Error)) {
+      continue;
+    }
+    $errnum = (string) $error->Error['Number'];
+    $errmsg = (string) $error->Error;
+    $msg = t('Error in namecheap API: %command - Error #: %errnum, Error Msg: %errmsg', array('%command' => $command, '%errnum' => $errnum, '%errmsg' => $errmsg));
+    drupal_set_message($msg, 'error');
+    watchdog('registrar_api', $msg, array(), WATCHDOG_ERROR);
+  }
+  return $error;
+}
+
+/**
+ * Known API Errors (these don't seem to be recorded on their wiki anywhere)
+ *
+ *   1 - Unknown
+ *   2 - Parameter <param> is Missing
+ *
+ *  14 - The domain name, <domain.tld> is invalid.
+ * 500 - An unhandled exception occured. Please try again.
+ */
+
+/**
+ * Known API Status's
+ *   OK
+ *   ERROR
+ */

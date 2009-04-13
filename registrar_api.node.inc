@@ -131,6 +131,7 @@ function registrar_api_form_alter(&$form, $form_state, $form_id) {
     // Move menu to the bottom
     $form['menu']['#weight'] = 5;
     // We need to do something hacky if CCK is being used.
+
     if (module_exists('content')) {
       $extra = variable_get('content_extra_weights_registrar_domain', array());
       $extra['menu'] = 5;

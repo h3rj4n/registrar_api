@@ -133,6 +133,12 @@ function _registrar_api_method() {
   return call_user_func_array($method, $args);
 }
 
+/**
+ * Converts the keys in each contact array to it's CamelCase equivelant.
+ * i.e. first_name => FirstName
+ *
+ * This is the format that namecheap needs the data to be in.
+ */
 function _registrar_api_convert_contacts($registrant, $tech, $admin,
   $auxbilling) {
 

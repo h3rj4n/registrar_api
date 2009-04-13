@@ -1,0 +1,20 @@
+// $Id$
+
+Rough notes for remaining todo items:
+1.0 TODOs:
+ * Easy way to copy registrar contact information to all 4 groups
+ * Allow admins to "hide" certain contact types from the end user
+   (i.e. you might not want an end user to be able to set the admin and tech
+   contact details).
+ * Allow admins to set global details for certain contact types
+ * Add support for extended domain attributes
+ * More validation on input formats
+ * Complete simpletests for the Registrar API functionality
+
+Other TODOs:
+ * Add support for setting nameservers on domain create
+ * Add support for bringing in existing namecheap domains to drupal
+ * Sync domains from the nameserver back into drupal
+ * Integration with Aegir/Ubercart/Others?
+ * Each registrar API should probably be implemented as a module,
+   instead of just a .inc

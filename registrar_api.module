@@ -89,37 +89,16 @@ function registrar_api_menu() {
     'type' => MENU_NORMAL_ITEM,
   );
 
-  $items['admin/content/manage_domains'] = array(
-    'title' => 'Manage Domains',
-    'description' => 'Manage Domain Names',
-    'page callback' => 'registrar_api_manage_domains',
-    'access arguments' => array('register domains'),
-    'type' => MENU_NORMAL_ITEM,
-  );
-
   return $items;
 }
 
 function registrar_api_test() {
   // Testing function
-    $actual = namecheap_check_domains('thisisnotregdyet.com');
-    $desired = array(
-      'thisisnotregdyet.com' => array(
-        'Domain' => 'thisisnotregdyet.com',
-        'Available' => 'true',
-        'ErrorNo' => '',
-        'Description' => '',
-      ),
-    );
-  
-  if ($actual == $desired) {
-    print "EQUAL!";
-  }
-  print_r($actual);
-  print_r($desired);
-  return "here";
 }
 
+/**
+ * Callback function for the registrar_api admin settings form
+ */
 function registrar_api_admin() {
   $form = array();
   $registrars = variable_get('registrar_api_registrars', array());
@@ -130,7 +109,14 @@ function registrar_api_admin() {
     '#options' => $registrars,
   );
 
-  $form += namecheap_admin_form();
+  // Load each registrars admin forms
+  foreach ($registrars as $registrar) {
+    $method = $registrar . '_admin_form';
+    if (function_exists($method)) {
+      $form += $$method();
+    }
+  }
+  
   return system_settings_form($form);
 }
 
@@ -178,8 +164,6 @@ function registrar_api_user($op, &$edit, &$account, $category = NULL) {
       break;
   }
 }
-
-/* Functions used by hook_user() */
 
 /**
  * Adds the contact forms to the user account form
@@ -261,6 +245,42 @@ function _registrar_api_contacts($contacts, $type) {
 
 /**** Private helper function ****/
 
+/**
+ * This function builds the db query set string for the 60 odd values that
+ * need to be saved in the four different contact types.
+ */
+function _registrar_api_get_set_str($values) {
+  // Build the set query
+  $fields = array('first_name', 'last_name', 'organization_name', 'address1',
+                  'address2', 'job_title', 'city', 'state_province',
+                  'state_province_choice', 'postal_code', 'country', 'phone',
+                  'phone_ext', 'fax', 'email_address');
+
+  $set_arr = array();
+  foreach ($fields as $field) {
+    foreach (array('registrant', 'tech', 'admin', 'aux_billing') as $type) {
+      $ftype = "registrar_api_" . $type;
+      if (is_array($values)) {
+        $set_arr[] = $type . '_' . $field . " = '" .
+          db_escape_string($values[$ftype][$field]) . "'";
+      }
+      elseif (is_object($values)) {
+        $vftype = $values->$ftype;
+        $set_arr[] = $type . '_' . $field . " = '" .
+          db_escape_string($vftype[$field]) . "'";
+      }
+      else {
+        drupal_set_message("Error in values type in _registrar_api_get_set_str", 'error');
+        return;
+      }
+    }
+  }
+  return implode(", ", $set_arr);
+}
+
+/**
+ * Returns the contact form
+ */
 function _registrar_api_get_form($type, $id) {
   if ($type == "user") {
     $contacts = registrar_api_get_user_contacts($id);
@@ -423,35 +443,9 @@ function _registrar_api_get_form($type, $id) {
   return $form;
 }
 
-function _registrar_api_get_set_str($values) {
-  // Build the set query
-  $fields = array('first_name', 'last_name', 'organization_name', 'address1',
-                  'address2', 'job_title', 'city', 'state_province',
-                  'state_province_choice', 'postal_code', 'country', 'phone',
-                  'phone_ext', 'fax', 'email_address');
-
-  $set_arr = array();
-  foreach ($fields as $field) {
-    foreach (array('registrant', 'tech', 'admin', 'aux_billing') as $type) {
-      $ftype = "registrar_api_" . $type;
-      if (is_array($values)) {
-        $set_arr[] = $type . '_' . $field . " = '" .
-          db_escape_string($values[$ftype][$field]) . "'";
-      }
-      elseif (is_object($values)) {
-        $vftype = $values->$ftype;
-        $set_arr[] = $type . '_' . $field . " = '" .
-          db_escape_string($vftype[$field]) . "'";
-      }
-      else {
-        drupal_set_message("Error in values type in _registrar_api_get_set_str", 'error');
-        return;
-      }
-    }
-  }
-  return implode(", ", $set_arr);
-}
-
+/**
+ * Returns an array of (country code, country) pairs.
+ */
 function _registrar_api_country_codes() {
   return array(
     'AF' => t('Afghanistan'),
