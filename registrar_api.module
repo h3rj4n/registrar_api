@@ -13,14 +13,11 @@
 function registrar_api_help($path, $arg) {
   switch ($path) {
     case 'admin/modules#name':
-      $output = t('Registrar API');
-      break;
+      return t('Registrar API');
     case 'admin/modules#description':
-      $output = t("Connects to various domain registrar API's to allow domain registration and management through Drupal");
-      break;
+      return t("Connects to various domain registrar API's to allow domain registration and management through Drupal");
     case 'admin/help#registrar_api':
-      $output = '<p>' . t("Connects to various domain registrar API's to allow domain registration and management through Drupal") . '</p>';
-      break;
+      return '<p>' . t("Connects to various domain registrar API's to allow domain registration and management through Drupal") . '</p>';
   }
 }
 
