@@ -312,7 +312,6 @@ function _namecheap_request($request) {
   $response = stream_get_contents($f);
   fclose($f);
 
-  dsm($response);
   return $response;
 }
 
@@ -335,7 +334,7 @@ function _namecheap_xmlattr2array($response, $sxml_obj, $attributes, $index = NU
     watchdog('registrar_api', 'Invalid CommandResponse passed to _namecheap_xmlattr2array', array(), WATCHDOG_ERROR);
     return $data;
   }
-  
+
   foreach ($sxml_obj as $xrecord) {
     $record = array();
     foreach ($attributes as $attribute) {
@@ -359,7 +358,7 @@ function _namecheap_validate_response($sxml) {
   // Is the status "ERROR"?
   $status = (string) $sxml->ApiResponse['Status'];
   $error = $status != "ERROR";
-  
+
   $command = (string) $sxml->RequestedCommand;
   foreach ($sxml->Errors as $error) {
     if (!((string) $error->Error)) {

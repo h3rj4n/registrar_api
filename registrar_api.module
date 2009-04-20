@@ -32,8 +32,8 @@ function registrar_api_init() {
   $path = drupal_get_path('module', 'registrar_api') . '/includes/';
   $registrar_list = array();
   foreach (scandir($path) as $file) {
-    if (substr($file, strlen($file) - 4) == '.inc') {
-      $registrar = substr($file, 0, strlen($file) - 4);
+    if (drupal_substr($file, drupal_strlen($file) - 4) == '.inc') {
+      $registrar = drupal_substr($file, 0, drupal_strlen($file) - 4);
       $registrar_list[$registrar] = $registrar;
       module_load_include('inc', 'registrar_api', "includes/$registrar");
     }
@@ -113,7 +113,7 @@ function registrar_api_admin() {
       $form += $$method();
     }
   }
-  
+
   return system_settings_form($form);
 }
 
@@ -433,7 +433,7 @@ function _registrar_api_get_form($type, $id) {
       );
       if ($values['#type'] == 'select') {
         $form[$rtype][$field]['#options'] = $values['#options'];
-      }      
+      }
     }
   }
 

@@ -6,6 +6,10 @@
  *   simpletest tests for the registrar API
  */
 
+define('NAMECHEAP_TEST_URL', 'https://api.sandbox.namecheap.com/xml.response');
+define('NAMECHEAP_TEST_KEY', 'e0a92fa3f3c245cb89f9476c0789cf70');
+define('NAMECHEAP_TEST_USER', 'hadsie');
+
 class RegistrarAPITestCase extends DrupalWebTestCase {
 
   /**
@@ -18,7 +22,7 @@ class RegistrarAPITestCase extends DrupalWebTestCase {
       'group' => t('Registrar API'),
     );
   }
-  
+
   /**
    * Override the namecheap api settings so as to not accidentally run
    * tests on a production environment
@@ -30,10 +34,9 @@ class RegistrarAPITestCase extends DrupalWebTestCase {
     $this->temp_api_key = variable_get('namecheap_api_key', '');
     $this->temp_api_user = variable_get('namecheap_api_user', '');
 
-    variable_set('namecheap_uri',
-                 'https://api.sandbox.namecheap.com/xml.response');
-    variable_set('namecheap_api_key', 'e0a92fa3f3c245cb89f9476c0789cf70');
-    variable_set('namecheap_api_user', 'hadsie');
+    variable_set('namecheap_uri', NAMECHEAP_TEST_URL);
+    variable_set('namecheap_api_key', NAMECHEAP_TEST_KEY);
+    variable_set('namecheap_api_user', NAMECHEAP_TEST_USER);
   }
 
   function tearDown() {

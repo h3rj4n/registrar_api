@@ -32,8 +32,11 @@ function registrar_api_check_domains($domain_list) {
  * @return TRUE if domain is available, FALSE otherwise
  */
 function registrar_api_check_domain($domain) {
-  $domain = registrar_api_check_domains(array($domain));
-  return $domain['Available'];
+  $domain_results = registrar_api_check_domains(array($domain));
+  if ($domain_results[$domain]['Available'] == "true") {
+      return TRUE;
+  }
+  return FALSE;
 }
 
 /**
@@ -126,10 +129,10 @@ function registrar_api_get_contacts($domain) {
 function _registrar_api_method() {
   $args = func_get_args();
   $method = array_shift($args);
-  
+
   $registrar = variable_get('registrar_api_registrar', '');
   $method = $registrar . '_' . $method;
-  
+
   return call_user_func_array($method, $args);
 }
 

@@ -51,7 +51,7 @@ function registrar_api_form(&$node, $form_state) {
     global $user;
     $form += _registrar_api_get_form("user", $user->uid);
   }
-  
+
   return $form;
 }
 
