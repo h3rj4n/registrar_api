@@ -7,8 +7,8 @@
  */
 
 define('NAMECHEAP_TEST_URL', 'https://api.sandbox.namecheap.com/xml.response');
-define('NAMECHEAP_TEST_KEY', 'e0a92fa3f3c245cb89f9476c0789cf70');
-define('NAMECHEAP_TEST_USER', 'hadsie');
+define('NAMECHEAP_TEST_KEY', '');
+define('NAMECHEAP_TEST_USER', '');
 
 class RegistrarAPITestCase extends DrupalWebTestCase {
 
