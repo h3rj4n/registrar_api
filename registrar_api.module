@@ -112,7 +112,6 @@ function registrar_api_admin() {
     if (function_exists($method)) {
       $subform = call_user_func_array($method, array());
       $form = array_merge_recursive($form, $subform);
-      //$form += $$method();
     }
   }
 
