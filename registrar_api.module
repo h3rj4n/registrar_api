@@ -157,8 +157,9 @@ function registrar_api_user($op, &$edit, &$account, $category = NULL) {
       $account->registrar_contacts = registrar_api_get_user_contacts($user->uid);
       break;
     case 'update':
-    case 'submit':
       registrar_api_user_update($edit, $account, $category);
+      break;
+    case 'submit':
       break;
   }
 }
@@ -246,33 +247,30 @@ function _registrar_api_contacts($contacts, $type) {
 /**
  * This function builds the db query set string for the 60 odd values that
  * need to be saved in the four different contact types.
+ *
+ * @param $values - An object or array containing the fields and values to set.
+ * @return an SQL SET query
  */
 function _registrar_api_get_set_str($values) {
-  // Build the set query
-  $fields = array('first_name', 'last_name', 'organization_name', 'address1',
-                  'address2', 'job_title', 'city', 'state_province',
-                  'state_province_choice', 'postal_code', 'country', 'phone',
-                  'phone_ext', 'fax', 'email_address');
+  $schema = drupal_get_schema('registrar_api_node');
+  
+  $values = is_object($values) ? (array)$values : $values;
 
   $set_arr = array();
-  foreach ($fields as $field) {
-    foreach (array('registrant', 'tech', 'admin', 'aux_billing') as $type) {
-      $ftype = "registrar_api_" . $type;
-      if (is_array($values)) {
-        $set_arr[] = $type . '_' . $field . " = '" .
-          db_escape_string($values[$ftype][$field]) . "'";
+  foreach (array('registrant', 'tech', 'admin', 'aux_billing') as $type) {
+    $fields = $values['registrar_api_' . $type];
+    foreach ($fields as $field => $value) {
+      $field_name = $type . '_' . $field;
+      // Ensure that the specified field actually exists in the schema.
+      if (!in_array($field_name, array_keys($schema['fields']))) {
+        drupal_set_message(t('Error: field %field not in schema', array('%field' => $field_name), 'error'));
+        // Skip this field and move along
+        continue;
       }
-      elseif (is_object($values)) {
-        $vftype = $values->$ftype;
-        $set_arr[] = $type . '_' . $field . " = '" .
-          db_escape_string($vftype[$field]) . "'";
-      }
-      else {
-        drupal_set_message("Error in values type in _registrar_api_get_set_str", 'error');
-        return;
-      }
+      $set_arr[] = $field_name . " = '" . db_escape_string($value) . "'";
     }
   }
+
   return implode(", ", $set_arr);
 }
 
