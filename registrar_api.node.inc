@@ -90,8 +90,8 @@ function registrar_api_update($node) {
     registrar_api_set_contacts(
       $node->title, $node->years,
       $node->registrar_api_registrant,
-      $node->registrar_api_admin,
       $node->registrar_api_tech,
+      $node->registrar_api_admin,
       $node->registrar_api_aux_billing
     );
 
