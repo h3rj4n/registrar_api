@@ -162,7 +162,7 @@ function _registrar_api_convert_contacts($registrant, $tech, $admin,
 }
 
 function _registrar_api_convert_contacts_reverse(
-  $registrant, $tech, $admin, $auxbilling) {
+  $registrant, $tech, $admin, $aux_billing) {
   // Convert the contact details' keys from CamelCase to lower with _'s
   $field_map = array(
     'OrganizationName' => 'organization_name',
@@ -182,7 +182,7 @@ function _registrar_api_convert_contacts_reverse(
     'PhoneExt' => 'phone_ext'
   );
   $contact_copy = array('registrant' => array(), 'tech' => array(),
-                        'admin' => array(), 'auxbilling' => array());
+                        'admin' => array(), 'aux_billing' => array());
   foreach ($contact_copy as $type => $values) {
     foreach ($$type as $key => $value) {
       $newkey = $field_map[$key];
