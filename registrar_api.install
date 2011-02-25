@@ -1,5 +1,4 @@
 <?php
-// $Id$
 /**
  * @file
  * Contains install and update functions for the registrar_api.

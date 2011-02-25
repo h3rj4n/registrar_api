@@ -1,4 +1,3 @@
-// $Id$
 
 Rough notes for remaining todo items:
 1.0 TODOs:

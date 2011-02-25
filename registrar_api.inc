@@ -1,5 +1,4 @@
 <?php
-// $Id$
 /**
  * @file
  * Provides all of the Registrar API calls.
