@@ -10,9 +10,9 @@
  */
 function registrar_api_node_info() {
   return array(
-    'registrar_contact' => array(
+    'registrar_api_contact' => array(
       'name' => t('Contact Handle'),
-      'module' => 'registrar_contact',
+      'module' => 'registrar_api_contact',
       'description' => 'A contact handle representing a contact',
       'has_body' => FALSE,
     ),
@@ -29,7 +29,7 @@ function registrar_api_node_info() {
 /**
  * Implementation of hook_form() for the contact content type.
  */
-function registrar_contact_form(&$node, $form_state) {
+function registrar_api_contact_form(&$node, $form_state) {
   $type = node_get_types('type', $node);
 
   $form['title'] = array(
@@ -209,6 +209,9 @@ function registrar_contact_form(&$node, $form_state) {
   return $form;
 }
 
+/**
+ * Implementation of hook_form() for the domain content type.
+ */
 function registrar_api_domain_form(&$node, $form_state) {
 
   $type = node_get_types('type', $node);
