@@ -122,8 +122,6 @@ function registrar_api_admin_form($arg) {
 
   $form = array();
   $registrars = registrar_api_get_registrars();
-  dsm($registrars);
-  dsm($arg);
 
   foreach ($registrars as $k => $v) {
     $registrars_list[$k] = $v['name'];
