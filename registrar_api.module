@@ -144,7 +144,7 @@ function registrar_api_admin_form($arg) {
  */
 function registrar_api_get_registrars() {
 
-  return module_invoke_all('get_registrar_info');
+  return module_invoke_all('registrar_info');
 }
 
 /**

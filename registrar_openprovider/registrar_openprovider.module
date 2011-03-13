@@ -1,6 +1,6 @@
 <?php
 
-function registrar_openprovider_get_registrar_info() {
+function registrar_openprovider_registrar_info() {
 
   return array(
     'registrar_openprovider' => array(

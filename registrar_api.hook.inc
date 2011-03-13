@@ -16,7 +16,7 @@ function hook_admin_form() {}
 /**
  *  Return an array containing some details about this registrar.
  */
-function hook_get_registrar_info() {}
+function hook_registrar_info() {}
 
 /**
  * @see registrar_api_check_domains()

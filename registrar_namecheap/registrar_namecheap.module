@@ -5,7 +5,7 @@
  * Namecheap API utility functions.
  */
 
-function registrar_namecheap_get_registrar_info() {
+function registrar_namecheap_registrar_info() {
 
   return array(
     'registrar_namecheap' => array(
