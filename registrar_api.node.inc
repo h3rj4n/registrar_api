@@ -213,7 +213,6 @@ function registrar_api_contact_form(&$node, $form_state) {
  * Implementation of hook_form() for the domain content type.
  */
 function registrar_api_domain_form(&$node, $form_state) {
-
   $type = node_get_types('type', $node);
 
   /* DB schema fields */

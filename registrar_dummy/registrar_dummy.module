@@ -1,7 +1,6 @@
 <?php
 
 function registrar_dummy_registrar_info() {
-
   return array(
     'registrar_dummy' => array(
       'name' => 'Dummy',
@@ -70,7 +69,6 @@ function registrar_dummy_check_domains($domain_list) {
  * @see registrar_api_domains_getlist()
  */
 function registrar_dummy_domains_getlist() {
-
   $domains = array(
     'domaintest.com' => array(
       'ID' => 1836,

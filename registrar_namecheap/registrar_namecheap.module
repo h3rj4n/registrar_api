@@ -6,7 +6,6 @@
  */
 
 function registrar_namecheap_registrar_info() {
-
   return array(
     'registrar_namecheap' => array(
       'name' => 'Namecheap',

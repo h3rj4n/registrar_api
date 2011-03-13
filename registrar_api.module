@@ -119,7 +119,6 @@ function registrar_api_user($op, &$edit, &$account, $category = NULL) {
  * Callback function for the registrar_api admin settings form
  */
 function registrar_api_admin_form($arg) {
-
   $form = array();
   $registrars = registrar_api_get_registrars();
 
@@ -141,7 +140,6 @@ function registrar_api_admin_form($arg) {
  * Provide a list of all available registrars
  */
 function registrar_api_get_registrars() {
-
   return module_invoke_all('registrar_info');
 }
 
@@ -494,10 +492,7 @@ function _registrar_api_method() {
  *
  * This is the format that namecheap needs the data to be in.
  */
-function _registrar_api_convert_contacts($registrant, $tech, $admin,
-  $auxbilling
-) {
-
+function _registrar_api_convert_contacts($registrant, $tech, $admin, $auxbilling) {
   // Convert the contact details' keys to CamelCase
   $contact_copy = array(
     'registrant' => array(), 'tech' => array(),

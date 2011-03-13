@@ -1,7 +1,6 @@
 <?php
 
 function registrar_openprovider_registrar_info() {
-
   return array(
     'registrar_openprovider' => array(
       'name' => 'OpenProvider',
@@ -98,7 +97,6 @@ function registrar_openprovider_check_domains($domain_names) {
  * @see registrar_api_domains_getlist()
  */
 function registrar_openprovider_domains_getlist() {
-
   registrar_openprovider_include();
   $request = _registrar_openprovider_new_request('searchDomainRequest');
   $args_data = array();

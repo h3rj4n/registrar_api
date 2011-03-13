@@ -81,7 +81,6 @@ function registrar_api_domains_getlist() {
  * return array containing the registered domain information
  */
 function registrar_api_create_domain($domain_name, $years, $registrant, $tech, $admin, $auxbilling, $nameservers = NULL) {
-
   $contact = _registrar_api_convert_contacts(
     $registrant, $tech, $admin, $auxbilling
   );
