@@ -65,7 +65,7 @@ function registrar_api_menu() {
     'access arguments' => array('access administration pages'),
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
-  $registrars = registrar_api_get_registars();
+  $registrars = registrar_api_get_registrars();
   foreach ($registrars as $rname => $v) {
     $items['admin/settings/registrar_api/'. $rname] = array(
       'title' => $v['name'],
@@ -121,7 +121,7 @@ function registrar_api_user($op, &$edit, &$account, $category = NULL) {
 function registrar_api_admin_form($arg) {
 
   $form = array();
-  $registrars = registrar_api_get_registars();
+  $registrars = registrar_api_get_registrars();
   dsm($registrars);
   dsm($arg);
 
@@ -142,7 +142,7 @@ function registrar_api_admin_form($arg) {
 /**
  * Provide a list of all available registrars
  */
-function registrar_api_get_registars() {
+function registrar_api_get_registrars() {
 
   return module_invoke_all('get_registrar_info');
 }
