@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 define('NAMECHEAP_TEST_URL', 'https://api.sandbox.namecheap.com/xml.response');
 define('NAMECHEAP_TEST_KEY', '');
@@ -45,7 +44,7 @@ class NamecheapAPITestCase extends RegistrarAPITestCase {
         'Available' => 'false',
         'ErrorNo' => '',
         'Description' => '',
-      )
+      ),
     );
 
     $this->assertEqual($actual, $desired, t('Testing check_domains on a registered domain name'));
@@ -65,7 +64,7 @@ class NamecheapAPITestCase extends RegistrarAPITestCase {
   }
 
   function testNamecheapAPICreateDomain() {
-    $domain = $this->randomDomainName();
+    $domain   = $this->randomDomainName();
     $contacts = $this->getContacts();
     $contacts = _registrar_api_convert_contacts($contacts['registrant'], $contacts['tech'], $contacts['admin'], $contacts['aux_billing']);
 
@@ -73,7 +72,8 @@ class NamecheapAPITestCase extends RegistrarAPITestCase {
 
     $desired = array(
       'Domain' => $domain,
-      'DomainID' => $actual['DomainID'],  // No way to guess some of these.
+      // No way to guess some of these.
+      'DomainID' => $actual['DomainID'],
       'Registered' => 'true',
       'OrderId' => $actual['OrderID'],
       'TransactionId' => $actual['TransactionID'],
@@ -83,3 +83,4 @@ class NamecheapAPITestCase extends RegistrarAPITestCase {
     $this->assertEqual($actual, $desired, t('Testing domain creation on %domain', array('%domain' => $domain)));
   }
 }
+

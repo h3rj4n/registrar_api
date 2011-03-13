@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 /**
  * @file
@@ -10,252 +9,254 @@
  * Implementation of hook_node_info().
  */
 function registrar_api_node_info() {
-	return array(
-		'registrar_contact' => array(
-			'name'		=> t('Contact Handle'),
-			'module'	=> 'registrar_contact',
-			'description'	=> 'A contact handle representing a contact',
-			'has_body'	=> FALSE,
-		),
-		'registrar_api_domain' => array(
-			'name'		=> t('Domain'),
-			'module'	=> 'registrar_api_domain',
-			'description'	=> 'A domain name',
-			'title_label'	=> t('Domain'),
-			'has_body'	=> FALSE,
-		),
-	);
+  return array(
+    'registrar_contact' => array(
+      'name' => t('Contact Handle'),
+      'module' => 'registrar_contact',
+      'description' => 'A contact handle representing a contact',
+      'has_body' => FALSE,
+    ),
+    'registrar_api_domain' => array(
+      'name' => t('Domain'),
+      'module' => 'registrar_api_domain',
+      'description' => 'A domain name',
+      'title_label' => t('Domain'),
+      'has_body' => FALSE,
+    ),
+  );
 }
 
 /**
  * Implementation of hook_form() for the contact content type.
  */
 function registrar_contact_form(&$node, $form_state) {
-	$type = node_get_types('type', $node);
+  $type = node_get_types('type', $node);
 
-	$form['title'] = array(
-		'#type'			=> 'textfield',
-		'#title'		=> check_plain($type->title_label),
-		'#required'		=> TRUE,
-		'#default_value'	=> $node->title,
-		'#size'			=> 20,
-	);
+  $form['title'] = array(
+    '#type' => 'textfield',
+    '#title' => check_plain($type->title_label),
+    '#required' => TRUE,
+    '#default_value' => $node->title,
+    '#size' => 20,
+  );
 
-	/* DB schema fields */
-	$form['uid'] = array(
-		'#type'			=> 'textfield',
-		'#title'		=> t('Users table uid'),
-		'#required'		=> TRUE,
-		'#default_value'	=> $node->uid,
-	);
-	$form['company_name'] = array(
-		'#type'			=> 'textfield',
-		'#title'		=> t('Company Name'),
-		'#required'		=> TRUE,
-		'#size'			=> 60,
-		'#maxlength'		=> 60,
-		'#autocomplete_path'	=> 'registrar/company/autocomplete',
-		'#default_value'	=> $node->company_name,
-	);
-	$form['initials'] = array(
-		'#type'			=> 'textfield',
-		'#title'		=> t('Initials'),
-		'#required'		=> TRUE,
-		'#size'			=> 60,
-		'#maxlength'		=> 60,
-		'#default_value'	=> $node->initials,
-	);
-	$form['firstname'] = array(
-		'#type'			=> 'textfield',
-		'#title'		=> t('Firstname'),
-		'#required'		=> TRUE,
-		'#size'			=> 60,
-		'#maxlength'		=> 60,
-		'#default_value'	=> $node->firstname,
-	);
-	$form['nameprefix'] = array(
-		'#type'			=> 'textfield',
-		'#title'		=> t('Name Prefix'),
-		'#required'		=> FALSE,
-		'#size'			=> 10,
-		'#maxlength'		=> 10,
-		'#default_value'	=> $node->nameprefix,
-	);
-	$form['lastname'] = array(
-		'#type'			=> 'textfield',
-		'#title'		=> t('Lastname'),
-		'#required'		=> TRUE,
-		'#size'			=> 60,
-		'#maxlength'		=> 60,
-		'#default_value'	=> $node->lastname,
-	);
-	$form['gender'] = array(
-		'#type'			=> 'select',
-		'#title'		=> t('Gender'),
-		'#required'		=> TRUE,
-		'#maxlength'		=> 8,
-		'#default_value'	=> $node->gender,
-		'#options'		=> array(
-						'M' => t("Male"),
-						'F' => t("Female"),
-					),
-	);
-	$form['street'] = array(
-		'#type'			=> 'textfield',
-		'#title'		=> t('Street'),
-		'#required'		=> TRUE,
-		'#size'			=> 60,
-		'#maxlength'		=> 60,
-		'#default_value'	=> $node->street,
-	);
-	$form['housenumber'] = array(
-		'#type'			=> 'textfield',
-		'#title'		=> t('Housenumber'),
-		'#required'		=> TRUE,
-		'#default_value'	=> $node->housenumber,
-	);
-	$form['housesuffix'] = array(
-		'#type'			=> 'textfield',
-		'#title'		=> t('Housesuffix'),
-		'#required'		=> FALSE,
-		'#size'			=> 30,
-		'#maxlength'		=> 30,
-		'#default_value'	=> $node->housesuffix,
-	);
-	$form['zipcode'] = array(
-		'#type'			=> 'textfield',
-		'#title'		=> t('Zipcode'),
-		'#required'		=> TRUE,
-		'#size'			=> 15,
-		'#maxlength'		=> 15,
-		'#default_value'	=> $node->zipcode,
-	);
-	$form['city'] = array(
-		'#type'			=> 'textfield',
-		'#title'		=> t('City'),
-		'#required'		=> TRUE,
-		'#size'			=> 60,
-		'#maxlength'		=> 200,
-		'#default_value'	=> $node->city,
-	);
-	$form['state'] = array(
-		'#type'			=> 'textfield',
-		'#title'		=> t('State'),
-		'#required'		=> TRUE,
-		'#size'			=> 60,
-		'#maxlength'		=> 200,
-		'#default_value'	=> $node->state,
-	);
-	$form['country'] = array(
-		'#type'			=> 'select',
-		'#title'		=> t('Country'),
-		'#required'		=> TRUE,
-		'#maxlength'		=> 2,
-		'#default_value'	=> $node->country,
-		'#options'		=> _registrar_api_country_codes(),
-	);
-	$form['phone_countrycode'] = array(
-		'#type'			=> 'textfield',
-		'#title'		=> t('Telephone Country code'),
-		'#required'		=> TRUE,
-		'#default_value'	=> $node->phone_countrycode,
-	);
-	$form['phone_areacode'] = array(
-		'#type'			=> 'textfield',
-		'#title'		=> t('Telephone Area code'),
-		'#required'		=> TRUE,
-		'#size'			=> 10,
-		'#maxlength'		=> 10,
-		'#default_value'	=> $node->phone_areacode,
-	);
-	$form['phone_subscribernumber'] = array(
-		'#type'			=> 'textfield',
-		'#title'		=> t('Telephone Subscriber code'),
-		'#required'		=> TRUE,
-		'#size'			=> 20,
-		'#maxlength'		=> 20,
-		'#default_value'	=> $node->phone_subscribernumber,
-	);
-	$form['fax_countrycode'] = array(
-		'#type'			=> 'textfield',
-		'#title'		=> t('Fax Country code'),
-		'#required'		=> FALSE,
-		'#default_value'	=> $node->fax_countrycode,
-	);
-	$form['fax_areacode'] = array(
-		'#type'			=> 'textfield',
-		'#title'		=> t('Fax Area code'),
-		'#required'		=> FALSE,
-		'#size'			=> 10,
-		'#maxlength'		=> 10,
-		'#default_value'	=> $node->fax_areacode,
-	);
-	$form['fax_subscribernumber'] = array(
-		'#type'			=> 'textfield',
-		'#title'		=> t('Fax Subscriber code'),
-		'#required'		=> FALSE,
-		'#size'			=> 20,
-		'#maxlength'		=> 20,
-		'#default_value'	=> $node->fax_subscribernumber,
-	);
-	$form['email'] = array(
-		'#type'			=> 'textfield',
-		'#title'		=> t('Email address'),
-		'#required'		=> TRUE,
-		'#size'			=> 60,
-		'#maxlength'		=> 255,
-		'#default_value'	=> $node->email,
-	);
-	return $form;
+  /* DB schema fields */
+
+  $form['uid'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Users table uid'),
+    '#required' => TRUE,
+    '#default_value' => $node->uid,
+  );
+  $form['company_name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Company Name'),
+    '#required' => TRUE,
+    '#size' => 60,
+    '#maxlength' => 60,
+    '#autocomplete_path' => 'registrar/company/autocomplete',
+    '#default_value' => $node->company_name,
+  );
+  $form['initials'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Initials'),
+    '#required' => TRUE,
+    '#size' => 60,
+    '#maxlength' => 60,
+    '#default_value' => $node->initials,
+  );
+  $form['firstname'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Firstname'),
+    '#required' => TRUE,
+    '#size' => 60,
+    '#maxlength' => 60,
+    '#default_value' => $node->firstname,
+  );
+  $form['nameprefix'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Name Prefix'),
+    '#required' => FALSE,
+    '#size' => 10,
+    '#maxlength' => 10,
+    '#default_value' => $node->nameprefix,
+  );
+  $form['lastname'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Lastname'),
+    '#required' => TRUE,
+    '#size' => 60,
+    '#maxlength' => 60,
+    '#default_value' => $node->lastname,
+  );
+  $form['gender'] = array(
+    '#type' => 'select',
+    '#title' => t('Gender'),
+    '#required' => TRUE,
+    '#maxlength' => 8,
+    '#default_value' => $node->gender,
+    '#options' => array(
+      'M' => t("Male"),
+      'F' => t("Female"),
+    ),
+  );
+  $form['street'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Street'),
+    '#required' => TRUE,
+    '#size' => 60,
+    '#maxlength' => 60,
+    '#default_value' => $node->street,
+  );
+  $form['housenumber'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Housenumber'),
+    '#required' => TRUE,
+    '#default_value' => $node->housenumber,
+  );
+  $form['housesuffix'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Housesuffix'),
+    '#required' => FALSE,
+    '#size' => 30,
+    '#maxlength' => 30,
+    '#default_value' => $node->housesuffix,
+  );
+  $form['zipcode'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Zipcode'),
+    '#required' => TRUE,
+    '#size' => 15,
+    '#maxlength' => 15,
+    '#default_value' => $node->zipcode,
+  );
+  $form['city'] = array(
+    '#type' => 'textfield',
+    '#title' => t('City'),
+    '#required' => TRUE,
+    '#size' => 60,
+    '#maxlength' => 200,
+    '#default_value' => $node->city,
+  );
+  $form['state'] = array(
+    '#type' => 'textfield',
+    '#title' => t('State'),
+    '#required' => TRUE,
+    '#size' => 60,
+    '#maxlength' => 200,
+    '#default_value' => $node->state,
+  );
+  $form['country'] = array(
+    '#type' => 'select',
+    '#title' => t('Country'),
+    '#required' => TRUE,
+    '#maxlength' => 2,
+    '#default_value' => $node->country,
+    '#options' => _registrar_api_country_codes(),
+  );
+  $form['phone_countrycode'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Telephone Country code'),
+    '#required' => TRUE,
+    '#default_value' => $node->phone_countrycode,
+  );
+  $form['phone_areacode'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Telephone Area code'),
+    '#required' => TRUE,
+    '#size' => 10,
+    '#maxlength' => 10,
+    '#default_value' => $node->phone_areacode,
+  );
+  $form['phone_subscribernumber'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Telephone Subscriber code'),
+    '#required' => TRUE,
+    '#size' => 20,
+    '#maxlength' => 20,
+    '#default_value' => $node->phone_subscribernumber,
+  );
+  $form['fax_countrycode'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Fax Country code'),
+    '#required' => FALSE,
+    '#default_value' => $node->fax_countrycode,
+  );
+  $form['fax_areacode'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Fax Area code'),
+    '#required' => FALSE,
+    '#size' => 10,
+    '#maxlength' => 10,
+    '#default_value' => $node->fax_areacode,
+  );
+  $form['fax_subscribernumber'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Fax Subscriber code'),
+    '#required' => FALSE,
+    '#size' => 20,
+    '#maxlength' => 20,
+    '#default_value' => $node->fax_subscribernumber,
+  );
+  $form['email'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Email address'),
+    '#required' => TRUE,
+    '#size' => 60,
+    '#maxlength' => 255,
+    '#default_value' => $node->email,
+  );
+  return $form;
 }
 
 function registrar_api_domain_form(&$node, $form_state) {
 
-	$type = node_get_types('type', $node);
+  $type = node_get_types('type', $node);
 
-	/* DB schema fields */
-        $form['title'] = array(
-                '#type'                 => 'textfield',
-                '#title'                => check_plain($type->title_label),
-                '#required'             => TRUE,
-                '#default_value'        => $node->title,
-                '#size'                 => 20,
-        );
+  /* DB schema fields */
 
-	$form['tld'] = array(
-		'#type'			=> 'textfield',
-		'#title'		=> t('Top level domain'),
-		'#required'		=> TRUE,
-		'#default_value'	=> $node->tld,
-	);
-	$form['registrar_handle'] = array(
-		'#type'			=> 'textfield',
-		'#title'		=> t('Registrar handle'),
-		'#required'		=> TRUE,
-		'#size'			=> 60,
-		'#autocomplete_path'	=> 'registrar/handle/autocomplete',
-		'#maxlength'		=> 60,
-		'#default_value'	=> $node->registrar_handle,
-	);
-	$form['adm_handle'] = array(
-		'#type'			=> 'textfield',
-		'#title'		=> t('Administrative handle'),
-		'#required'		=> TRUE,
-		'#size'			=> 60,
-		'#autocomplete_path'	=> 'registrar/handle/autocomplete',
-		'#maxlength'		=> 60,
-		'#default_value'	=> $node->adm_handle,
-	);
-	$form['tech_handle'] = array(
-		'#type'			=> 'textfield',
-		'#title'		=> t('Technical handle'),
-		'#required'		=> TRUE,
-		'#size'			=> 60,
-		'#autocomplete_path'	=> 'registrar/handle/autocomplete',
-		'#maxlength'		=> 60,
-		'#default_value'	=> $node->tech_handle,
-	);
-	return $form;
+  $form['title'] = array(
+    '#type' => 'textfield',
+    '#title' => check_plain($type->title_label),
+    '#required' => TRUE,
+    '#default_value' => $node->title,
+    '#size' => 20,
+  );
+
+  $form['tld'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Top level domain'),
+    '#required' => TRUE,
+    '#default_value' => $node->tld,
+  );
+  $form['registrar_handle'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Registrar handle'),
+    '#required' => TRUE,
+    '#size' => 60,
+    '#autocomplete_path' => 'registrar/handle/autocomplete',
+    '#maxlength' => 60,
+    '#default_value' => $node->registrar_handle,
+  );
+  $form['adm_handle'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Administrative handle'),
+    '#required' => TRUE,
+    '#size' => 60,
+    '#autocomplete_path' => 'registrar/handle/autocomplete',
+    '#maxlength' => 60,
+    '#default_value' => $node->adm_handle,
+  );
+  $form['tech_handle'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Technical handle'),
+    '#required' => TRUE,
+    '#size' => 60,
+    '#autocomplete_path' => 'registrar/handle/autocomplete',
+    '#maxlength' => 60,
+    '#default_value' => $node->tech_handle,
+  );
+  return $form;
 }
 
 /**
@@ -265,36 +266,37 @@ function registrar_api_domain_form(&$node, $form_state) {
  * A domain needs those three handles, otherwise we can't register them
  */
 function registrar_api_domain_validate($node, &$form) {
-	// Check if the registrar handle exists
-	$result = db_query("SELECT COUNT(contact.cid) FROM {registrar_api_contact} contact LEFT JOIN {node} node on ( node.nid = contact.nid ) WHERE node.title='%s'", $form['registrar_handle']['#value']);
-	if (db_result($result) != 1) {
-		form_set_error('registrar_handle', t('Registrar handle does not exist'));
-	}
-	// Check if the administrative handle exists
-	$result = db_query("SELECT COUNT(contact.cid) FROM {registrar_api_contact} contact LEFT JOIN {node} node on ( node.nid = contact.nid ) WHERE node.title='%s'", $form['adm_handle']['#value']);
-	if (db_result($result) != 1) {
-		form_set_error('adm_handle', t('Administrative handle does not exist'));
-	}
-	// Check if the technical handle exists
-	$result = db_query("SELECT COUNT(contact.cid) FROM {registrar_api_contact} contact LEFT JOIN {node} node on ( node.nid = contact.nid ) WHERE node.title='%s'", $form['tech_handle']['#value']);
-	if (db_result($result) != 1) {
-		form_set_error('tech_handle', t('Technical handle does not exist'));
-	}
+  // Check if the registrar handle exists
+  $result = db_query("SELECT COUNT(contact.cid) FROM {registrar_api_contact} contact LEFT JOIN {node} node on ( node.nid = contact.nid ) WHERE node.title='%s'", $form['registrar_handle']['#value']);
+  if (db_result($result) != 1) {
+    form_set_error('registrar_handle', t('Registrar handle does not exist'));
+  }
+  // Check if the administrative handle exists
+  $result = db_query("SELECT COUNT(contact.cid) FROM {registrar_api_contact} contact LEFT JOIN {node} node on ( node.nid = contact.nid ) WHERE node.title='%s'", $form['adm_handle']['#value']);
+  if (db_result($result) != 1) {
+    form_set_error('adm_handle', t('Administrative handle does not exist'));
+  }
+  // Check if the technical handle exists
+  $result = db_query("SELECT COUNT(contact.cid) FROM {registrar_api_contact} contact LEFT JOIN {node} node on ( node.nid = contact.nid ) WHERE node.title='%s'", $form['tech_handle']['#value']);
+  if (db_result($result) != 1) {
+    form_set_error('tech_handle', t('Technical handle does not exist'));
+  }
 }
 
 /**
  * Implementation of hook_insert().
  */
 function registrar_contact_insert($node) {
-	$set_str = _registrar_api_get_set_str($node);
-	db_query("INSERT INTO {registrar_api_contact} SET $set_str",
-		$node->nid);
-	$cid = db_last_insert_id('registrar_api_contact', 'cid');
-	db_query("INSERT INTO {registrar_api_user_handles} SET cid=%d, uid=%d", $cid, $node->uid);
-} 
+  $set_str = _registrar_api_get_set_str($node);
+  db_query("INSERT INTO {registrar_api_contact} SET $set_str",
+    $node->nid
+  );
+  $cid = db_last_insert_id('registrar_api_contact', 'cid');
+  db_query("INSERT INTO {registrar_api_user_handles} SET cid=%d, uid=%d", $cid, $node->uid);
+}
 
 function registrar_api_domain_insert($node) {
-	db_query("
+  db_query("
 		INSERT INTO {registrar_api_domain} 
 			SET
 				nid='%d', 
@@ -312,8 +314,8 @@ function registrar_api_domain_insert($node) {
  * Implementation of hook_update().
  */
 function registrar_api_domain_update($node) {
-	// TODO: module_invoke_all('update_contact', $node);
-	db_query("
+  // TODO: module_invoke_all('update_contact', $node);
+  db_query("
 	UPDATE {registrar_api_domain} domain
 		SET 
 			registrar_handle=
@@ -330,36 +332,35 @@ function registrar_api_domain_update($node) {
  * Implementation of hook_view().
  */
 function registrar_contact_view($node, $teaser = FALSE, $page = FALSE) {
-	$node->content['Contact'] = array(
-		'#value' 	=> _registrar_api_format_contact_info($node, TRUE),
-		'#weight'	=> 1,
-	);
-	return $node;
+  $node->content['Contact'] = array(
+    '#value' => _registrar_api_format_contact_info($node, TRUE),
+    '#weight' => 1,
+  );
+  return $node;
 }
 
 function registrar_api_domain_view($node, $teaser = FALSE, $page = FALSE) {
-	$node->content['Domain'] = array(
-		'#value'	=> $node->title,
-		'#weight'	=> 1,
-	);
-	return $node;
+  $node->content['Domain'] = array(
+    '#value' => $node->title,
+    '#weight' => 1,
+  );
+  return $node;
 }
-
 
 /**
  * Implementation of hook_load().
  */
 function registrar_contact_load($node) {
-	$contact_data = db_fetch_object(db_query("SELECT * FROM {registrar_api_contact} WHERE nid=%d", $node->nid));
-	return $contact_data; 
+  $contact_data = db_fetch_object(db_query("SELECT * FROM {registrar_api_contact} WHERE nid=%d", $node->nid));
+  return $contact_data;
 }
 
 function registrar_api_domain_load($node) {
-	// Fetch the names iso the id's for the handles
-	// Now we can autocomplete the names iso the id's
-	// @see registrar_api_domain_update
-	// @see registrar_api_domain_insert
-	$domain_data = db_fetch_object(db_query("
+  // Fetch the names iso the id's for the handles
+  // Now we can autocomplete the names iso the id's
+  // @see registrar_api_domain_update
+  // @see registrar_api_domain_insert
+  $domain_data = db_fetch_object(db_query("
 	select  domain.nid, domain.tld,
 		tech_handle.title as tech_handle,
 		adm_handle.title as adm_handle,
@@ -372,7 +373,7 @@ function registrar_api_domain_load($node) {
 			LEFT JOIN ( {registrar_api_contact} as registrar_contact, {node} AS registrar_handle)
 				on (domain.registrar_handle = registrar_contact.cid AND registrar_contact.nid = registrar_handle.nid)
 		WHERE domain.nid=%d", $node->nid));
-	return $domain_data;
+  return $domain_data;
 }
 
 /**
@@ -385,19 +386,20 @@ function registrar_api_domain_load($node) {
  * Implementation of hook_form_alter().
  */
 function registrar_api_form_alter(&$form, $form_state, $form_id) {
-	if ($form_id == 'registrar_contact_node_form' || $form_id == 'registrar_api_domain_node_form') {
-		// Move menu to the bottom
-		$form['menu']['#weight'] = 5;
-		
-		// We need to do something hacky if CCK is being used.
-		if (module_exists('content')) {
-			$extra = variable_get('content_extra_weights_registrar_contact', array());
-			$extra['menu'] = 5;
-			variable_set('content_extra_weights_registrar_contact', $extra);
-		}
+  if ($form_id == 'registrar_contact_node_form' || $form_id == 'registrar_api_domain_node_form') {
+    // Move menu to the bottom
+    $form['menu']['#weight'] = 5;
 
-		// Preview doesn't make sense in this context
-		unset($form['buttons']['preview']);
-		unset($form['buttons']['delete']);
-	}
+    // We need to do something hacky if CCK is being used.
+    if (module_exists('content')) {
+      $extra = variable_get('content_extra_weights_registrar_contact', array());
+      $extra['menu'] = 5;
+      variable_set('content_extra_weights_registrar_contact', $extra);
+    }
+
+    // Preview doesn't make sense in this context
+    unset($form['buttons']['preview']);
+    unset($form['buttons']['delete']);
+  }
 }
+

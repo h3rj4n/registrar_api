@@ -6,14 +6,12 @@
  * This file should not contain any implementation.
  */
 
-
 /**
  * Provide a form structure for registrar specific configuration.
  *
- * @return Form API array 
+ * @return Form API array
  */
-function hook_admin_form() {
-}
+function hook_admin_form() {}
 
 /**
  *  Return an array containing some details about this registrar.
@@ -21,12 +19,14 @@ function hook_admin_form() {
 function hook_get_registrar_info() {}
 
 /**
- * @see registrar_api_check_domains() 
+ * @see registrar_api_check_domains()
  */
 function hook_check_domains($domain_list) {}
 
 function hook_create_domain($domain_name, $years, $registrant, $tech, $admin, $auxbilling, $nameservers = NULL) {}
+
 function hook_get_contacts($domain_name) {}
+
 function hook_set_contacts($domain_name, $registrant, $tech, $admin, $auxbilling) {}
 
 /**
@@ -44,5 +44,5 @@ function hook_set_contacts($domain_name, $registrant, $tech, $admin, $auxbilling
  * )
  *
  */
-function hook_domains_getlist() {
-}
+function hook_domains_getlist() {}
+

@@ -6,7 +6,7 @@ function registrar_openprovider_get_registrar_info() {
     'registrar_openprovider' => array(
       'name' => 'OpenProvider',
       'description' => 'Openprovider domain registrar',
-  )
+    ),
   );
 }
 
@@ -62,8 +62,8 @@ function registrar_openprovider_create_handle($contact) {
     dsm($handle);
   }
   else {
-    echo "Code: " . $reply->getFaultCode() . "\n";
-    echo "Error: " . $reply->getFaultString() . "\n";
+    echo "Code: ". $reply->getFaultCode() ."\n";
+    echo "Error: ". $reply->getFaultString() ."\n";
     echo "\n---------------------------------------\n";
   }
 
@@ -75,7 +75,7 @@ function registrar_openprovider_check_domains($domain_names) {
   $request = _registrar_openprovider_new_request('checkDomainRequest');
 
   $args_data = array(
-    'domains' => array()
+    'domains' => array(),
   );
 
   foreach ($domain_names as $domain) {
@@ -87,7 +87,7 @@ function registrar_openprovider_check_domains($domain_names) {
   $reply = _registrar_openprovider_do_request($request);
   $results = array();
   foreach ($reply->getValue() as $rep) {
-    $results[$rep['domain']] = array('Domain' => $rep['domain'], 'Available' => ($rep['status'] == 'free' ? TRUE : FALSE ));
+    $results[$rep['domain']] = array('Domain' => $rep['domain'], 'Available' => ($rep['status'] == 'free' ? TRUE : FALSE));
   }
   return $results;
 }
@@ -103,18 +103,20 @@ function registrar_openprovider_domains_getlist() {
   $request = _registrar_openprovider_new_request('searchDomainRequest');
   $args_data = array();
   $request->setArgs($args_data);
-  $reply = _registrar_openprovider_do_request($request);
-  $results = array();
+  $reply      = _registrar_openprovider_do_request($request);
+  $results    = array();
   $reply_data = $reply->getValue();
   foreach ($reply_data['results'] as $item) {
     $domain_name = $item['domain']['name'] . $item['domain']['extension'];
     $domains[$domain_name] = array(
       'ID' => $item['id'],
       'Name' => $domain_name,
-      'User' => '', // not implemented
+      // not implemented
+      'User' => '',
       'Created' => $item['activeDate'],
       'Expires' => $item['expirationDate'],
-      'IsExpired' => null, // not implemented
+      // not implemented
+      'IsExpired' => null,
     );
   }
   return $domains;
@@ -122,11 +124,11 @@ function registrar_openprovider_domains_getlist() {
 
 function _registrar_openprovider_do_request($request) {
   // Create a new API connection
-  $api = new OP_API (variable_get('registrar_openprovider_uri', 'https://api.openprovider.eu/'));
+  $api = new OP_API(variable_get('registrar_openprovider_uri', 'https://api.openprovider.eu/'));
   $request->setAuth(array(
-    'username' => variable_get('registrar_openprovider_api_user', ''), 
-    'password' => variable_get('registrar_openprovider_api_password', ''),
-  ));
+      'username' => variable_get('registrar_openprovider_api_user', ''),
+      'password' => variable_get('registrar_openprovider_api_password', ''),
+    ));
   $debug = FALSE;
   if ($debug) {
     $api->setDebug(1);
@@ -140,6 +142,7 @@ function _registrar_openprovider_do_request($request) {
 
   return $reply;
 }
+
 function _registrar_openprovider_new_request($request_name) {
   $request = new OP_Request;
   $request->setCommand($request_name);
@@ -154,32 +157,43 @@ function _registrar_openprovider_node_to_args_data($contact_node) {
   $n = $contact_node;
   // Prepare arguments array
   $args_data = array(
-    'companyName' => $n->company_name, //'Company Ltd',
+    // 'Company Ltd',
+    'companyName' => $n->company_name,
     'name' => array(
-      'initials' => $n->initials, //'J.A.',
-      'firstName' => $n->firstname, //'John',
-      'prefix' => $n->nameprefix, //"",
-      'lastName' => $n->lastname, //'Jones',
-  ),
+      // 'J.A.',
+      'initials' => $n->initials,
+      // 'John',
+      'firstName' => $n->firstname,
+      // "",
+      'prefix' => $n->nameprefix,
+      // 'Jones',
+      'lastName' => $n->lastname,
+    ),
     'vat' => null,
-    'gender' => $n->gender, //'M', 
+    // 'M',
+    'gender' => $n->gender,
     'phone' => array(
-                'countryCode'  => $n->phone_countrycode,
-                'areaCode' => $n->phone_areacode,
-                'subscriberNumber' => $n->phone_subscribernumber,
-  ),
+      'countryCode' => $n->phone_countrycode,
+      'areaCode' => $n->phone_areacode,
+      'subscriberNumber' => $n->phone_subscribernumber,
+    ),
     'address' => array(
-      'street' => $n->street, //'Main Avenue',
-      'number' => $n->housenumber, //'2',
-      'suffix' => $n->housesuffix, //'a',
-      'zipcode' => $n->zipcode, //'8817 AB',
-      'city' => $n->city, //'Rotterdam',
+      // 'Main Avenue',
+      'street' => $n->street,
+      // '2',
+      'number' => $n->housenumber,
+      // 'a',
+      'suffix' => $n->housesuffix,
+      // '8817 AB',
+      'zipcode' => $n->zipcode,
+      // 'Rotterdam',
+      'city' => $n->city,
       'state' => $n->state,
       'country' => $n->country,
-  ),
-
-    'email' => $n->email, // 'not@existing.com',
-  /*
+    ),
+    // 'not@existing.com',
+    'email' => $n->email,
+    /*
   'additionalData' => array(
   'birthDate' => '1958-12-03',
   'companyRegistrationCity' => 'London',
@@ -190,3 +204,4 @@ function _registrar_openprovider_node_to_args_data($contact_node) {
   );
   return $args_data;
 }
+

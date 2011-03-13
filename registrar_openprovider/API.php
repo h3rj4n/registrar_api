@@ -1,52 +1,45 @@
 <?php
 
-class OP_API_Exception extends Exception
-{
-}
+class OP_API_Exception extends Exception {}
 
-class OP_API
-{
+class OP_API {
   protected $url = null;
   protected $error = null;
   protected $timeout = null;
   protected $debug = null;
   static public $encoding = 'UTF-8';
 
-  public function __construct ($url, $timeout = 1000)
-  {
+  public function __construct($url, $timeout = 1000) {
     $this->url = $url;
     $this->timeout = $timeout;
   }
 
-  public function setDebug ($v)
-  {
+  public function setDebug($v) {
     $this->debug = $v;
     return $this;
   }
 
-  private function doDebug ($data, $label = 'OP_API')
-  {
+  private function doDebug($data, $label = 'OP_API') {
     if ($this->debug) {
       debug($data, $label, TRUE);
     }
   }
 
-  public function process (OP_Request $r)
-  {
+  public function process(OP_Request$r) {
     $this->doDebug($r->getRaw());
 
     $msg = $r->getRaw();
     $str = $this->_send($msg);
     if (!$str) {
-      throw new OP_API_Exception ('Bad reply');
+      throw new OP_API_Exception('Bad reply');
     }
     $this->doDebug($str);
 
     return new OP_Reply($str);
   }
 
-  static function encode ($str)
-  {
+  static
+  function encode($str) {
     $ret = @htmlentities($str, null, OP_API::$encoding);
     if (strlen($str) && !strlen($ret)) {
       $str = iconv('ISO-8859-1', 'UTF-8', $str);
@@ -55,23 +48,22 @@ class OP_API
     return $ret;
   }
 
-  static function decode ($str)
-  {
+  static
+  function decode($str) {
     return html_entity_decode($str, null, OP_API::$encoding);
   }
 
-  static function createRequest ($xmlStr = null)
-  {
-    return new OP_Request ($xmlStr);
+  static
+  function createRequest($xmlStr = null) {
+    return new OP_Request($xmlStr);
   }
 
-  static function createReply ($xmlStr = null)
-  {
-    return new OP_Reply ($xmlStr);
+  static
+  function createReply($xmlStr = null) {
+    return new OP_Reply($xmlStr);
   }
 
-  protected function _send ($str)
-  {
+  protected function _send($str) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $this->url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -81,22 +73,22 @@ class OP_API
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $str);
     curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
-    $ret = curl_exec ($ch);
-    $errno = curl_errno($ch);
+    $ret         = curl_exec($ch);
+    $errno       = curl_errno($ch);
     $this->error = $error = curl_error($ch);
-    curl_close ($ch);
+    curl_close($ch);
 
     if ($errno) {
       error_log("CURL error. Code: $errno, Message: $error");
       return false;
-    } else {
+    }
+    else {
       return $ret;
     }
   }
 
   // convert SimpleXML to PhpObj
-  public static function convertXmlToPhpObj ($node)
-  {
+  public static function convertXmlToPhpObj($node) {
     $ret = array();
 
     if (is_object($node) && $node->hasChildNodes()) {
@@ -104,10 +96,12 @@ class OP_API
         $name = self::decode($child->nodeName);
         if ($child->nodeType == XML_TEXT_NODE) {
           $ret = self::decode($child->nodeValue);
-        } else {
+        }
+        else {
           if ('array' === $name) {
             return self::parseArray($child);
-          } else {
+          }
+          else {
             $ret[$name] = self::convertXmlToPhpObj($child);
           }
         }
@@ -117,8 +111,7 @@ class OP_API
   }
 
   // parse array
-  protected static function parseArray ($node)
-  {
+  protected static function parseArray($node) {
     $ret = array();
     foreach ($node->childNodes as $child) {
       $name = self::decode($child->nodeName);
@@ -136,11 +129,12 @@ class OP_API
    * @param array $arr php-structure
    * @param SimpleXMLElement $node parent node where new element to attach
    * @param DOMDocument $dom DOMDocument object
+   *
    * @return SimpleXMLElement
    */
-  public static function convertPhpObjToDom ($arr, $node, $dom)
-  {
+  public static function convertPhpObjToDom($arr, $node, $dom) {
     if (is_array($arr)) {
+
       /**
        * If arr has integer keys, this php-array must be converted in
        * xml-array representation (<array><item>..</item>..</array>)
@@ -157,7 +151,8 @@ class OP_API
           $new = $arrayDom->appendChild($dom->createElement('item'));
           self::convertPhpObjToDom($val, $new, $dom);
         }
-      } else {
+      }
+      else {
         foreach ($arr as $key => $val) {
           $new = $node->appendChild(
             $dom->createElement(self::encode($key))
@@ -165,14 +160,14 @@ class OP_API
           self::convertPhpObjToDom($val, $new, $dom);
         }
       }
-    } else {
+    }
+    else {
       $node->appendChild($dom->createTextNode(self::encode($arr)));
     }
   }
 }
 
-class OP_Request
-{
+class OP_Request {
   protected $cmd = null;
   protected $args = null;
   protected $username = null;
@@ -182,8 +177,7 @@ class OP_Request
   protected $language = null;
   protected $raw = null;
 
-  public function __construct ($str = null)
-  {
+  public function __construct($str = null) {
     if ($str) {
       $this->raw = $str;
       $this->_parseRequest($str);
@@ -198,8 +192,9 @@ class OP_Request
    *
    * @uses OP_Request::__construct()
    */
-  protected function _parseRequest ($str = "")
-  {
+
+
+  protected function _parseRequest($str = "") {
     $dom = new DOMDocument;
     $dom->loadXML($str);
     $arr = OP_API::convertXmlToPhpObj($dom->documentElement);
@@ -207,75 +202,65 @@ class OP_Request
     list($this->cmd, $this->args) = each($arr);
     $this->username = $credentials['username'];
     $this->password = $credentials['password'];
-    $this->token = isset($credentials['token']) ? $credentials['token'] : null;
-    $this->ip = isset($credentials['ip']) ? $credentials['ip'] : null;
+    $this->token    = isset($credentials['token']) ? $credentials['token'] : null;
+    $this->ip       = isset($credentials['ip']) ? $credentials['ip'] : null;
     if (isset($credentials['language'])) {
       $this->language = $credentials['language'];
     }
   }
 
-  public function setCommand ($v)
-  {
+  public function setCommand($v) {
     $this->cmd = $v;
     return $this;
   }
 
-  public function getCommand ()
-  {
+  public function getCommand() {
     return $this->cmd;
   }
 
-  public function setLanguage ($v)
-  {
+  public function setLanguage($v) {
     $this->language = $v;
     return $this;
   }
 
-  public function getLanguage ()
-  {
+  public function getLanguage() {
     return $this->language;
   }
 
-  public function setArgs ($v)
-  {
+  public function setArgs($v) {
     $this->args = $v;
     return $this;
   }
 
-  public function getArgs ()
-  {
+  public function getArgs() {
     return $this->args;
   }
 
-  public function setAuth ($args)
-  {
+  public function setAuth($args) {
     $this->username = isset($args["username"]) ? $args["username"] : null;
     $this->password = isset($args["password"]) ? $args["password"] : null;
-    $this->token = isset($args["token"]) ? $args["token"] : null;
-    $this->ip = isset($args["ip"]) ? $args["ip"] : null;
+    $this->token    = isset($args["token"]) ? $args["token"] : null;
+    $this->ip       = isset($args["ip"]) ? $args["ip"] : null;
     return $this;
   }
 
-  public function getAuth ()
-  {
+  public function getAuth() {
     return array(
       "username" => $this->username,
       "password" => $this->password,
       "token" => $this->token,
-      "ip" => $this->ip
+      "ip" => $this->ip,
     );
   }
 
-  public function getRaw ()
-  {
+  public function getRaw() {
     if (!$this->raw) {
       $this->raw .= $this->_getRequest();
     }
     return $this->raw;
   }
 
-  public function _getRequest ()
-  {
+  public function _getRequest() {
     $dom = new DOMDocument('1.0', OP_API::$encoding);
 
     $credentialsElement = $dom->createElement('credentials');
@@ -318,80 +303,70 @@ class OP_Request
     );
     OP_API::convertPhpObjToDom($this->args, $cmdNode, $dom);
 
-    return $dom->saveXML();    
+    return $dom->saveXML();
   }
 }
 
-class OP_Reply
-{
+class OP_Reply {
   protected $faultCode = 0;
   protected $faultString = null;
   protected $value = array();
   protected $raw = null;
-  public function __construct ($str = null) {
+  public function __construct($str = null) {
     if ($str) {
       $this->raw = $str;
       $this->_parseReply($str);
     }
   }
 
-  protected function _parseReply ($str = "")
-  {
+  protected function _parseReply($str = "") {
     $dom = new DOMDocument;
     $dom->loadXML($str);
-    $arr = OP_API::convertXmlToPhpObj($dom->documentElement);
-    $this->faultCode = (int) $arr['reply']['code'];
+    $arr               = OP_API::convertXmlToPhpObj($dom->documentElement);
+    $this->faultCode   = (int) $arr['reply']['code'];
     $this->faultString = $arr['reply']['desc'];
-    $this->value = $arr['reply']['data'];
+    $this->value       = $arr['reply']['data'];
   }
 
-  public function setFaultCode ($v)
-  {
+  public function setFaultCode($v) {
     $this->faultCode = $v;
     return $this;
   }
 
-  public function setFaultString ($v)
-  {
+  public function setFaultString($v) {
     $this->faultString = $v;
     return $this;
   }
 
-  public function setValue ($v)
-  {
+  public function setValue($v) {
     $this->value = $v;
     return $this;
   }
 
-  public function getValue ()
-  {
+  public function getValue() {
     return $this->value;
   }
 
-  public function getFaultString ()
-  {
+  public function getFaultString() {
     return $this->faultString;
   }
 
-  public function getFaultCode ()
-  {
+  public function getFaultCode() {
     return $this->faultCode;
   }
 
-  public function getRaw ()
-  {
+  public function getRaw() {
     if (!$this->raw) {
-      $this->raw .= $this->_getReply ();
+      $this->raw .= $this->_getReply();
     }
     return $this->raw;
   }
 
-  public function _getReply ()
-  {
-    $dom = new DOMDocument('1.0', OP_API::$encoding);
-    $rootNode = $dom->appendChild($dom->createElement('openXML'));
+  public function _getReply() {
+    $dom       = new DOMDocument('1.0', OP_API::$encoding);
+    $rootNode  = $dom->appendChild($dom->createElement('openXML'));
     $replyNode = $rootNode->appendChild($dom->createElement('reply'));
-    $codeNode = $replyNode->appendChild($dom->createElement('code'));
+    $codeNode  = $replyNode->appendChild($dom->createElement('code'));
     $codeNode->appendChild($dom->createTextNode($this->faultCode));
     $descNode = $replyNode->appendChild($dom->createElement('desc'));
     $descNode->appendChild(
@@ -399,7 +374,7 @@ class OP_Reply
     );
     $dataNode = $replyNode->appendChild($dom->createElement('data'));
     OP_API::convertPhpObjToDom($this->value, $dataNode, $dom);
-    return $dom->saveXML();    
+    return $dom->saveXML();
   }
 }
 

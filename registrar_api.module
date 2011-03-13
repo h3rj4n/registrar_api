@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 /**
  * @file
@@ -11,15 +10,17 @@
  * Implementation of hook_help().
  */
 function registrar_api_help($path, $arg) {
-	switch ($path) {
-		case 'admin/modules#name':
-			return t('Registrar API');
-		case 'admin/modules#description':
-			return t("Connects to various domain registrar API's to allow domain registration and management through Drupal");
-		case 'admin/help#registrar_api':
-			return '<p>' . t("Connects to various domain registrar API's to allow domain registration and management through Drupal") . '</p>';
-	}
-} 
+  switch ($path) {
+    case 'admin/modules#name':
+      return t('Registrar API');
+
+    case 'admin/modules#description':
+      return t("Connects to various domain registrar API's to allow domain registration and management through Drupal");
+
+    case 'admin/help#registrar_api':
+      return '<p>'. t("Connects to various domain registrar API's to allow domain registration and management through Drupal") .'</p>';
+  }
+}
 
 /**
  * Implementation of hook_init().
@@ -33,48 +34,47 @@ function registrar_api_init() {
  * Implementation of hook_menu().
  */
 function registrar_api_menu() {
-	$items['registrar/company/autocomplete'] = array(
-		'title'			=> 'Company name autocomplete',
-		'page callback'		=> 'registrar_api_company_autocomplete',
-		'access arguments'	=> array("create registrar_contact content"),
-		'type'			=> MENU_CALLBACK,
-		'file'			=> 'autocomplete.inc',
-	);
-	$items['registrar/handle/autocomplete'] = array(
-		'title'			=> 'Handle autocomplete',
-		'page callback'		=> 'registrar_api_handle_autocomplete',
-		'access arguments'	=> array("create registrar_contact content"),
-		'type'			=> MENU_CALLBACK,
-		'file'			=> 'autocomplete.inc',
-	);
-	$items['user/%user/registrar_contacts'] = array(
-		'title'			=> t('Registrar Contacts'),
-		'page callback'		=> 'registrar_api_user_page',
-		'page arguments'	=> array(1),
-		'access callback'	=> '_registrar_api_user_tab_access',
-		'access arguments'	=> array(1),
-		'type'			=> MENU_LOCAL_TASK,
-		'weight'		=> 2,
-	);
+  $items['registrar/company/autocomplete'] = array(
+    'title' => 'Company name autocomplete',
+    'page callback' => 'registrar_api_company_autocomplete',
+    'access arguments' => array("create registrar_contact content"),
+    'type' => MENU_CALLBACK,
+    'file' => 'autocomplete.inc',
+  );
+  $items['registrar/handle/autocomplete'] = array(
+    'title' => 'Handle autocomplete',
+    'page callback' => 'registrar_api_handle_autocomplete',
+    'access arguments' => array("create registrar_contact content"),
+    'type' => MENU_CALLBACK,
+    'file' => 'autocomplete.inc',
+  );
+  $items['user/%user/registrar_contacts'] = array(
+    'title' => t('Registrar Contacts'),
+    'page callback' => 'registrar_api_user_page',
+    'page arguments' => array(1),
+    'access callback' => '_registrar_api_user_tab_access',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 2,
+  );
   $items['admin/settings/registrar_api'] = array(
     'title' => 'Registrar API Settings',
     'description' => 'Manage the registrar API settings',
-      'page callback' => 'drupal_get_form',
+    'page callback' => 'drupal_get_form',
     'page arguments' => array('registrar_api_admin_form'),
     'access arguments' => array('access administration pages'),
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
   $registrars = registrar_api_get_registars();
   foreach ($registrars as $rname => $v) {
-    $items['admin/settings/registrar_api/' . $rname] = array(
+    $items['admin/settings/registrar_api/'. $rname] = array(
       'title' => $v['name'],
-      'description' => $v['name'] . 'Manage the registrar API settings',
+      'description' => $v['name'] .'Manage the registrar API settings',
       'page callback' => 'drupal_get_form',
-      'page arguments' => array($rname . '_admin_form'),
+      'page arguments' => array($rname .'_admin_form'),
       'access arguments' => array('access administration pages'),
       'type' => MENU_LOCAL_TASK,
     );
-
   }
   return $items;
 }
@@ -83,37 +83,36 @@ function registrar_api_menu() {
  * Implementation of hook_perm().
  */
 function registrar_api_perm() {
-	return array('create registrar_contact content', 'edit own registrar_contact content', 'manage contacts');
+  return array('create registrar_contact content', 'edit own registrar_contact content', 'manage contacts');
 }
 
 /**
  * Implementation of hook_access().
  */
 function registrar_contact_access($op, $node, $account) {
-	switch ($op) {
-		case 'create':
-			return user_access('create registrar_contact content', $account);
-			break;
-		case 'update':
-			return user_access('edit own registrar_contact content', $account) && ($account->uid == $node->uid) || user_access('manage contacts', $account);
-			break;
-	}
+  switch ($op) {
+    case 'create':
+      return user_access('create registrar_contact content', $account);
+
+    case 'update':
+      return user_access('edit own registrar_contact content', $account) && ($account->uid == $node->uid) || user_access('manage contacts', $account);
+  }
 }
 
 /**
  * Implementation of hook_user().
  */
 function registrar_api_user($op, &$edit, &$account, $category = NULL) {
-	switch ($op) {
-		case 'view':
-			if (!isset($account->content['registrar_api'])) {
-				$account->content['registrar_api'] = array(
-					'#type'		=> 'registrar_api',
-					'#name'		=> 'Registrar contacts',
-				);
-			}	
-			break;
-	}
+  switch ($op) {
+    case 'view':
+      if (!isset($account->content['registrar_api'])) {
+        $account->content['registrar_api'] = array(
+          '#type' => 'registrar_api',
+          '#name' => 'Registrar contacts',
+        );
+      }
+      break;
+  }
 }
 
 /**
@@ -126,7 +125,7 @@ function registrar_api_admin_form($arg) {
   dsm($registrars);
   dsm($arg);
 
-  foreach($registrars as $k => $v) {
+  foreach ($registrars as $k => $v) {
     $registrars_list[$k] = $v['name'];
   }
   $default_registrar = variable_get('registrar_api_default_registrar', '');
@@ -139,18 +138,18 @@ function registrar_api_admin_form($arg) {
 
   return system_settings_form($form);
 }
+
 /**
  * Provide a list of all available registrars
- */ 
+ */
 function registrar_api_get_registars() {
 
   return module_invoke_all('get_registrar_info');
 }
 
-
 /**
  * Split a domain name into it's TLD and name parts.
- *  
+ *
  * @param string $domain_name
  */
 function registrar_api_split_domain_name($domain_name) {
@@ -161,23 +160,22 @@ function registrar_api_split_domain_name($domain_name) {
 }
 
 /**** Pages ****/
-
 function registrar_api_user_page($user) {
-	$result = db_query("
+  $result = db_query("
 		SELECT * FROM {registrar_api_user_handles} handles 
 			LEFT JOIN {registrar_api_contact} contact 
 			ON (handles.cid = contact.cid)
 				LEFT JOIN {node} node 
 					ON (contact.nid = node.nid)
 		WHERE  handles.uid = %d", $user->uid);
-	$data = "";
-	$table_header = array('Handle', 'Contact name', 'Company'); 
-	$table_data = array();
-	while ($contact = db_fetch_object($result)) {
-		$attr = array( 'title' => _registrar_api_format_contact_info($contact));
-		$table_data[] = array(l($contact->title, 'node/' . $contact->nid, array( 'attributes' => $attr) ), _registrar_api_full_contact_name($contact), $contact->company_name );
-	}
-	return theme_table($table_header,$table_data);
+  $data         = "";
+  $table_header = array('Handle', 'Contact name', 'Company');
+  $table_data   = array();
+  while ($contact = db_fetch_object($result)) {
+    $attr = array('title' => _registrar_api_format_contact_info($contact));
+    $table_data[] = array(l($contact->title, 'node/'. $contact->nid, array('attributes' => $attr)), _registrar_api_full_contact_name($contact), $contact->company_name);
+  }
+  return theme_table($table_header, $table_data);
 }
 
 /**** Private helper functions ****/
@@ -186,49 +184,51 @@ function registrar_api_user_page($user) {
  * This function builds the db query set string for the values that need to be saved for a contact.
  *
  * @param $values An obkect or array containing the fields and values to set.
+ *
  * @return an SQL SET string
  */
 function _registrar_api_get_set_str($values) {
-	$schema = drupal_get_schema('registrar_api_contact');
-	
-	$values = is_object($values) ? (array)$values : $values;
+  $schema = drupal_get_schema('registrar_api_contact');
 
-	$set_arr = array();
-	foreach ($values as $field => $value) {
-		if (in_array($field, array_keys($schema['fields']))) {
-			$set_arr[] = $field . "='" . db_escape_string($value) . "'";
-		}
-	}
-	return implode(", ", $set_arr);
+  $values = is_object($values) ? (array)$values : $values;
+
+  $set_arr = array();
+  foreach ($values as $field => $value) {
+    if (in_array($field, array_keys($schema['fields']))) {
+      $set_arr[] = $field ."='". db_escape_string($value) ."'";
+    }
+  }
+  return implode(", ", $set_arr);
 }
 
 /**
  * This function returns a String with the full name of a contact
  */
 function _registrar_api_full_contact_name($contact) {
-	return $contact->lastname . ", " . $contact->nameprefix . " " . $contact->initials . " (" . $contact->firstname . ")";
-}	
+  return $contact->lastname .", ". $contact->nameprefix ." ". $contact->initials ." (". $contact->firstname .")";
+}
 
 function _registrar_api_format_contact_info($contact, $html = FALSE) {
-	$data = _registrar_api_full_contact_name($contact) . ($html ? "<br/>" : "\n");
-	$data .= $contact->company_name . ($html ? "<br/>" : "\n");
-	$data .= $contact->street . " " . $contact->housenumber . " " . $contact->housesuffix . ($html ? "<br/>" : "\n");
-	$data .= $contact->city . ", " . $contact->zipcode;
-	return $data;
+  $data = _registrar_api_full_contact_name($contact) . ($html ? "<br/>" : "\n");
+  $data .= $contact->company_name . ($html ? "<br/>" : "\n");
+  $data .= $contact->street ." ". $contact->housenumber ." ". $contact->housesuffix . ($html ? "<br/>" : "\n");
+  $data .= $contact->city .", ". $contact->zipcode;
+  return $data;
 }
+
 function _registrar_api_user_tab_access($account) {
-	global $user;
+  global $user;
 
-	// You can view your own contacts
-	if ($account->uid == $user->uid) {
-		return TRUE;
-	}
+  // You can view your own contacts
+  if ($account->uid == $user->uid) {
+    return TRUE;
+  }
 
-	// You can view all contacts if you have the administer contact privilege
-	if (user_access('manage contacts')) {
-		return TRUE;
-	}
-	return FALSE;
+  // You can view all contacts if you have the administer contact privilege
+  if (user_access('manage contacts')) {
+    return TRUE;
+  }
+  return FALSE;
 }
 
 /**
@@ -244,7 +244,6 @@ function _registrar_api_country_codes() {
     'AO' => t('Angola'),
     'AI' => t('Anguilla'),
     'AQ' => t('Antarctica'),
-
     'AG' => t('Antigua and Barbuda'),
     'AR' => t('Argentina'),
     'AM' => t('Armenia'),
@@ -254,7 +253,6 @@ function _registrar_api_country_codes() {
     'AZ' => t('Azerbaijan'),
     'BS' => t('Bahamas'),
     'BH' => t('Bahrain'),
-
     'BD' => t('Bangladesh'),
     'BB' => t('Barbados'),
     'BY' => t('Belarus'),
@@ -264,7 +262,6 @@ function _registrar_api_country_codes() {
     'BM' => t('Bermuda'),
     'BT' => t('Bhutan'),
     'BO' => t('Bolivia'),
-
     'BA' => t('Bosnia and Herzegovina'),
     'BW' => t('Botswana'),
     'BV' => t('Bouvet Island'),
@@ -274,7 +271,6 @@ function _registrar_api_country_codes() {
     'BF' => t('Burkina Faso'),
     'BI' => t('Burundi'),
     'KH' => t('Cambodia'),
-
     'CM' => t('Cameroon'),
     'CA' => t('Canada'),
     'CV' => t('Cape Verde'),
@@ -284,7 +280,6 @@ function _registrar_api_country_codes() {
     'CL' => t('Chile'),
     'CN' => t('China'),
     'CX' => t('Christmas Island'),
-
     'CC' => t('Cocos (Keeling) Islands'),
     'CO' => t('Colombia'),
     'KM' => t('Comoros'),
@@ -294,7 +289,6 @@ function _registrar_api_country_codes() {
     'CI' => t('Cote D\'Ivoire'),
     'HR' => t('Croatia (Hrvatska)'),
     'CU' => t('Cuba'),
-
     'CY' => t('Cyprus'),
     'CZ' => t('Czech Republic'),
     'CS' => t('Czechoslovakia'),
@@ -304,7 +298,6 @@ function _registrar_api_country_codes() {
     'DO' => t('Dominican Republic'),
     'TP' => t('East Timor'),
     'EC' => t('Ecuador'),
-
     'EG' => t('Egypt'),
     'SV' => t('El Salvador'),
     'GQ' => t('Equatorial Guinea'),
@@ -314,7 +307,6 @@ function _registrar_api_country_codes() {
     'FK' => t('Falkland Islands'),
     'FO' => t('Faroe Islands'),
     'FJ' => t('Fiji'),
-
     'FI' => t('Finland'),
     'FR' => t('France'),
     'FX' => t('France, Metropolitan'),
@@ -324,7 +316,6 @@ function _registrar_api_country_codes() {
     'GA' => t('Gabon'),
     'GM' => t('Gambia'),
     'GE' => t('Georgia'),
-
     'DE' => t('German'),
     'GH' => t('Ghana'),
     'GI' => t('Gibraltar'),
@@ -334,7 +325,6 @@ function _registrar_api_country_codes() {
     'GD' => t('Grenada'),
     'GP' => t('Guadeloupe'),
     'GU' => t('Guam'),
-
     'GT' => t('Guatemala'),
     'GN' => t('Guinea'),
     'GW' => t('Guinea-Bissau'),
@@ -344,7 +334,6 @@ function _registrar_api_country_codes() {
     'HN' => t('Honduras'),
     'HK' => t('Hong Kong'),
     'HU' => t('Hungary'),
-
     'IS' => t('Iceland'),
     'IN' => t('India'),
     'ID' => t('Indonesia'),
@@ -354,7 +343,6 @@ function _registrar_api_country_codes() {
     'IL' => t('Israel'),
     'IT' => t('Italy'),
     'JM' => t('Jamaica'),
-
     'JP' => t('Japan'),
     'JO' => t('Jordan'),
     'KZ' => t('Kazakhstan'),
@@ -364,7 +352,6 @@ function _registrar_api_country_codes() {
     'KR' => t('Korea (South)'),
     'KW' => t('Kuwait'),
     'KG' => t('Kyrgyzstan'),
-
     'LA' => t('Laos'),
     'LV' => t('Latvia'),
     'LB' => t('Lebanon'),
@@ -374,7 +361,6 @@ function _registrar_api_country_codes() {
     'LI' => t('Liechtenstein'),
     'LT' => t('Lithuania'),
     'LU' => t('Luxembourg'),
-
     'MO' => t('Macau'),
     'MK' => t('Macedonia'),
     'MG' => t('Madagascar'),
@@ -384,7 +370,6 @@ function _registrar_api_country_codes() {
     'ML' => t('Mali'),
     'MT' => t('Malta'),
     'MH' => t('Marshall Islands'),
-
     'MQ' => t('Martinique'),
     'MR' => t('Mauritania'),
     'MU' => t('Mauritius'),
@@ -394,7 +379,6 @@ function _registrar_api_country_codes() {
     'MD' => t('Moldova'),
     'MC' => t('Monaco'),
     'MN' => t('Mongolia'),
-
     'ME' => t('Montenegro'),
     'MS' => t('Montserrat'),
     'MA' => t('Morocco'),
@@ -404,7 +388,6 @@ function _registrar_api_country_codes() {
     'NR' => t('Nauru'),
     'NP' => t('Nepal'),
     'NL' => t('Netherlands'),
-
     'AN' => t('Netherlands Antilles'),
     'NT' => t('Neutral Zone'),
     'NC' => t('New Caledonia'),
@@ -414,7 +397,6 @@ function _registrar_api_country_codes() {
     'NG' => t('Nigeria'),
     'NU' => t('Niue'),
     'NF' => t('Norfolk Island'),
-
     'MP' => t('Northern Mariana Isls'),
     'NO' => t('Norway'),
     'OM' => t('Oman'),
@@ -424,7 +406,6 @@ function _registrar_api_country_codes() {
     'PG' => t('Papua New Guinea'),
     'PY' => t('Paraguay'),
     'PE' => t('Peru'),
-
     'PH' => t('Philippines'),
     'PN' => t('Pitcairn'),
     'PL' => t('Poland'),
@@ -434,7 +415,6 @@ function _registrar_api_country_codes() {
     'RE' => t('Reunion'),
     'RO' => t('Romania'),
     'RU' => t('Russian Federation'),
-
     'RW' => t('Rwanda'),
     'KN' => t('Saint Kitts and Nevis'),
     'LC' => t('Saint Lucia'),
@@ -444,7 +424,6 @@ function _registrar_api_country_codes() {
     'SA' => t('Saudi Arabia'),
     'SN' => t('Senegal'),
     'SC' => t('Seychelles'),
-
     'SL' => t('Sierra Leone'),
     'SG' => t('Singapore'),
     'SK' => t('Slovak Republic'),
@@ -454,7 +433,6 @@ function _registrar_api_country_codes() {
     'ZA' => t('South Africa'),
     'ES' => t('Spain'),
     'LK' => t('Sri Lanka'),
-
     'VC' => t('St Vincent'),
     'SH' => t('St. Helena'),
     'PM' => t('St. Pierre and Miquelon'),
@@ -464,7 +442,6 @@ function _registrar_api_country_codes() {
     'SE' => t('Sweden'),
     'CH' => t('Switzerland'),
     'SY' => t('Syria'),
-
     'TW' => t('Taiwan'),
     'TJ' => t('Tajikistan'),
     'TZ' => t('Tanzania'),
@@ -474,7 +451,6 @@ function _registrar_api_country_codes() {
     'TO' => t('Tonga'),
     'TT' => t('Trinidad and Tobago'),
     'TN' => t('Tunisia'),
-
     'TR' => t('Turkey'),
     'TM' => t('Turkmenistan'),
     'TC' => t('Turks and Caicos Islands'),
@@ -484,7 +460,6 @@ function _registrar_api_country_codes() {
     'AE' => t('United Arab Emirates'),
     'UK' => t('United Kingdom'),
     'US' => t('United States'),
-
     'UY' => t('Uruguay'),
     'UM' => t('US Minor Outlying Isls'),
     'SU' => t('USSR (former)'),
@@ -494,7 +469,6 @@ function _registrar_api_country_codes() {
     'VE' => t('Venezuela'),
     'VN' => t('Viet Nam'),
     'VG' => t('Virgin Islands (British)'),
-
     'VI' => t('Virgin Islands (U.S.)'),
     'WF' => t('Wallis and Futuna Isls'),
     'EH' => t('Western Sahara'),
@@ -506,13 +480,12 @@ function _registrar_api_country_codes() {
   );
 }
 
-
 function _registrar_api_method() {
   $args = func_get_args();
   $method = array_shift($args);
 
   $registrar = variable_get('registrar_api_default_registrar', '');
-  $method = $registrar . '_' . $method;
+  $method = $registrar .'_'. $method;
 
   return call_user_func_array($method, $args);
 }
@@ -524,12 +497,14 @@ function _registrar_api_method() {
  * This is the format that namecheap needs the data to be in.
  */
 function _registrar_api_convert_contacts($registrant, $tech, $admin,
-  $auxbilling) {
+  $auxbilling
+) {
 
   // Convert the contact details' keys to CamelCase
   $contact_copy = array(
     'registrant' => array(), 'tech' => array(),
-    'admin' => array(), 'auxbilling' => array());
+    'admin' => array(), 'auxbilling' => array(),
+  );
 
   foreach ($contact_copy as $type => $values) {
     foreach ($$type as $key => $value) {
@@ -542,8 +517,7 @@ function _registrar_api_convert_contacts($registrant, $tech, $admin,
   return $contact_copy;
 }
 
-function _registrar_api_convert_contacts_reverse(
-  $registrant, $tech, $admin, $aux_billing) {
+function _registrar_api_convert_contacts_reverse($registrant, $tech, $admin, $aux_billing) {
   // Convert the contact details' keys from CamelCase to lower with _'s
   $field_map = array(
     'OrganizationName' => 'organization_name',
@@ -560,10 +534,9 @@ function _registrar_api_convert_contacts_reverse(
     'Phone' => 'phone',
     'Fax' => 'fax',
     'EmailAddress' => 'email_address',
-    'PhoneExt' => 'phone_ext'
+    'PhoneExt' => 'phone_ext',
   );
-  $contact_copy = array('registrant' => array(), 'tech' => array(),
-                        'admin' => array(), 'aux_billing' => array());
+  $contact_copy = array('registrant' => array(), 'tech' => array(), 'admin' => array(), 'aux_billing' => array());
   foreach ($contact_copy as $type => $values) {
     foreach ($$type as $key => $value) {
       $newkey = $field_map[$key];
@@ -573,3 +546,4 @@ function _registrar_api_convert_contacts_reverse(
 
   return $contact_copy;
 }
+

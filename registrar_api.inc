@@ -1,5 +1,5 @@
 <?php
-// $Id$
+
 /**
  * @file
  * Provides all of the Registrar API calls.
@@ -35,7 +35,7 @@ function registrar_api_check_domains($domain_list) {
 function registrar_api_check_domain($domain) {
   $domain_results = registrar_api_check_domains(array($domain));
   if ($domain_results[$domain]['Available'] == "true") {
-      return TRUE;
+    return TRUE;
   }
   return FALSE;
 }
@@ -80,11 +80,11 @@ function registrar_api_domains_getlist() {
  *
  * return array containing the registered domain information
  */
-function registrar_api_create_domain($domain_name, $years, $registrant,
-  $tech, $admin, $auxbilling, $nameservers = NULL) {
+function registrar_api_create_domain($domain_name, $years, $registrant, $tech, $admin, $auxbilling, $nameservers = NULL) {
 
   $contact = _registrar_api_convert_contacts(
-    $registrant, $tech, $admin, $auxbilling);
+    $registrant, $tech, $admin, $auxbilling
+  );
 
   return _registrar_api_method('create_domain',
     $domain_name, $years, $contact['registrant'], $contact['tech'],
@@ -123,18 +123,14 @@ function registrar_api_renew_domain($domain, $years) {
  *
  * @return none
  */
-function registrar_api_set_contacts($domain, $years, $registrant,
-  $tech, $admin, $auxbilling) {
-
-  $contact = _registrar_api_convert_contacts(
-    $registrant, $tech, $admin, $auxbilling);
-  _registrar_api_method('set_contacts', $domain, $contact['registrant'],
-    $contact['tech'], $contact['admin'], $contact['auxbilling']);
+function registrar_api_set_contacts($domain, $years, $registrant, $tech, $admin, $auxbilling) {
+  $contact = _registrar_api_convert_contacts($registrant, $tech, $admin, $auxbilling);
+  _registrar_api_method('set_contacts', $domain, $contact['registrant'], $contact['tech'], $contact['admin'], $contact['auxbilling']);
 }
 
 /**
  * Get the contact information for a domain
- * 
+ *
  * @param $domain
  *   The name of the domain to retrieve the contact information for
  *
@@ -142,8 +138,6 @@ function registrar_api_set_contacts($domain, $years, $registrant,
  */
 function registrar_api_get_contacts($domain) {
   $contacts = _registrar_api_method('get_contacts', $domain);
-  return _registrar_api_convert_contacts_reverse(
-    $contacts['Registrant'], $contacts['Tech'],
-    $contacts['Admin'], $contacts['AuxBilling']);
+  return _registrar_api_convert_contacts_reverse($contacts['Registrant'], $contacts['Tech'], $contacts['Admin'], $contacts['AuxBilling']);
 }
 

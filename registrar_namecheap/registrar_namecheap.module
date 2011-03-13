@@ -1,11 +1,9 @@
 <?php
-// $Id$
 
 /**
  * @file
  * Namecheap API utility functions.
  */
-
 function namecheap_admin_form() {
   $form = array();
 
@@ -44,6 +42,7 @@ function namecheap_admin_form() {
 /* Domain API Functions */
 
 /**
+ *
  * @param: $domain_list
  *   Array of domains to check for the availability on. i.e.:
  *   Array('domain1.com', 'availabledomain.com', 'err.tld')
@@ -112,16 +111,16 @@ function namecheap_create_domain($domain_name, $years, $registrant, $tech, $admi
   $request['Years'] = $years;
 
   foreach ($registrant as $field => $value) {
-    $request['Registrant' . $field] = $value;
+    $request['Registrant'. $field] = $value;
   }
   foreach ($tech as $field => $value) {
-    $request['Tech' . $field] = $value;
+    $request['Tech'. $field] = $value;
   }
   foreach ($admin as $field => $value) {
-    $request['Admin' . $field] = $value;
+    $request['Admin'. $field] = $value;
   }
   foreach ($auxbilling as $field => $value) {
-    $request['AuxBilling' . $field] = $value;
+    $request['AuxBilling'. $field] = $value;
   }
 
   // TODO: Validate nameserver format
@@ -132,8 +131,7 @@ function namecheap_create_domain($domain_name, $years, $registrant, $tech, $admi
   $response = _namecheap_request($request);
   $sxml = new SimpleXMLElement($response);
   _namecheap_validate_response($sxml);
-  $attributes = array('Domain', 'DomainID', 'Registered', 'OrderId',
-                      'TransactionId', 'ChargedAmount');
+  $attributes = array('Domain', 'DomainID', 'Registered', 'OrderId', 'TransactionId', 'ChargedAmount');
   $domain = _namecheap_xmlattr2array(
     $response,
     $sxml->CommandResponse->DomainCreateResult,
@@ -192,9 +190,9 @@ function registrar_namecheap_domains_getlist() {
   $request = _namecheap_init_request('namecheap.domains.getList');
   $response = _namecheap_request($request);
 
-  $sxml = new SimpleXMLElement($response);
+  $sxml       = new SimpleXMLElement($response);
   $attributes = array('ID', 'Name', 'User', 'Created', 'Expires', 'IsExpired');
-  $domains = _namecheap_xmlattr2array(
+  $domains    = _namecheap_xmlattr2array(
     $response,
     $sxml->CommandResponse->DomainGetListResult->Domain,
     $attributes,
@@ -226,8 +224,7 @@ function namecheap_renew_domain($domain_name, $years) {
   $response = _namecheap_request($request);
 
   $sxml = new SimpleXMLElement($response);
-  $attributes = array('DomainName',  'DomainID',  'Renew', 'OrderID',
-                      'TransactionID', 'ChargedAmount');
+  $attributes = array('DomainName', 'DomainID', 'Renew', 'OrderID', 'TransactionID', 'ChargedAmount');
   $domain = _namecheap_xmlattr2array(
     $response,
     $sxml->CommandResponse->DomainRenewResult,
@@ -235,7 +232,6 @@ function namecheap_renew_domain($domain_name, $years) {
   );
 
   return ($domain[0]);
-
 }
 
 function namecheap_set_contacts($domain_name, $registrant, $tech, $admin, $auxbilling) {
@@ -245,16 +241,16 @@ function namecheap_set_contacts($domain_name, $registrant, $tech, $admin, $auxbi
   $request['DomainName'] = $domain_name;
 
   foreach ($registrant as $field => $value) {
-    $request['Registrant' . $field] = $value;
+    $request['Registrant'. $field] = $value;
   }
   foreach ($tech as $field => $value) {
-    $request['Tech' . $field] = $value;
+    $request['Tech'. $field] = $value;
   }
   foreach ($admin as $field => $value) {
-    $request['Admin' . $field] = $value;
+    $request['Admin'. $field] = $value;
   }
   foreach ($auxbilling as $field => $value) {
-    $request['AuxBilling' . $field] = $value;
+    $request['AuxBilling'. $field] = $value;
   }
 
   $response = _namecheap_request($request);
@@ -274,9 +270,7 @@ function namecheap_domains_setregistrarlock() {
   /* Placeholder */
 }
 
-
 /**** Utility Functions ****/
-
 function _namecheap_init_request($command, $username = NULL) {
   if (!$username) {
     $username = variable_get('namecheap_api_user', '');
@@ -295,9 +289,9 @@ function _namecheap_request($request) {
   // TODO: Handle request timeouts and other failures
   $request_arr = array();
   foreach ($request as $field => $value) {
-    $request_arr[] .= urlencode($field) . "=" . urlencode($value);
+    $request_arr[] .= urlencode($field) ."=". urlencode($value);
   }
-  $request_str = variable_get('namecheap_uri', '') . "?" . implode("&", $request_arr);
+  $request_str = variable_get('namecheap_uri', '') ."?". implode("&", $request_arr);
 
   $f = @fopen($request_str, "r");
   $response = stream_get_contents($f);
@@ -343,6 +337,7 @@ function _namecheap_xmlattr2array($response, $sxml_obj, $attributes, $index = NU
 }
 
 /**
+ *
  * @return false if there is an error status, true otherwise
  */
 function _namecheap_validate_response($sxml) {
@@ -357,7 +352,7 @@ function _namecheap_validate_response($sxml) {
     }
     $errnum = (string) $error->Error['Number'];
     $errmsg = (string) $error->Error;
-    $msg = t('Error in namecheap API: %command - Error #: %errnum, Error Msg: %errmsg', array('%command' => $command, '%errnum' => $errnum, '%errmsg' => $errmsg));
+    $msg    = t('Error in namecheap API: %command - Error #: %errnum, Error Msg: %errmsg', array('%command' => $command, '%errnum' => $errnum, '%errmsg' => $errmsg));
     drupal_set_message($msg, 'error');
     watchdog('registrar_api', $msg, array(), WATCHDOG_ERROR);
   }
@@ -379,3 +374,4 @@ function _namecheap_validate_response($sxml) {
  *   OK
  *   ERROR
  */
+

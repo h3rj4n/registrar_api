@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 /**
  * @file
@@ -33,8 +32,8 @@ class DummyRegistrarAPITestCase extends RegistrarAPITestCase {
   function testCheckDomains() {
     // Test an a registered name
     $to_check = array('example.com', 'example-non-existant.com', 'drupal.org');
-    $actual = registrar_api_check_domains($to_check);
-    $desired = array(
+    $actual   = registrar_api_check_domains($to_check);
+    $desired  = array(
       'example.com' => array(
         'Domain' => 'example.com',
         'Available' => FALSE,
@@ -46,13 +45,14 @@ class DummyRegistrarAPITestCase extends RegistrarAPITestCase {
       'drupal.org' => array(
         'Domain' => 'drupal.org',
         'Available' => FALSE,
-      ));
+      ),
+    );
 
     $this->assertEqual($actual, $desired, t('Testing check_domains on a registered domain name'));
   }
-/*
+  /*
   function testAPICreateDomain() {
-    $domain = $this->randomDomainName();
+    $domain   = $this->randomDomainName();
     $contacts = $this->getContacts();
     $contacts = _registrar_api_convert_contacts($contacts['registrant'], $contacts['tech'], $contacts['admin'], $contacts['aux_billing']);
 
@@ -60,7 +60,8 @@ class DummyRegistrarAPITestCase extends RegistrarAPITestCase {
 
     $desired = array(
       'Domain' => $domain,
-      'DomainID' => $actual['DomainID'],  // No way to guess some of these.
+      // No way to guess some of these.
+      'DomainID' => $actual['DomainID'],
       'Registered' => 'true',
       'OrderId' => $actual['OrderID'],
       'TransactionId' => $actual['TransactionID'],
@@ -72,3 +73,4 @@ class DummyRegistrarAPITestCase extends RegistrarAPITestCase {
 
  */
 }
+

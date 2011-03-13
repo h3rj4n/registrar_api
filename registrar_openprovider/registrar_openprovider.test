@@ -1,6 +1,4 @@
 <?php
-// $Id$
-
 
 /**
  * @file
@@ -19,7 +17,6 @@ class OpenProviderRegistrarAPITestCase extends RegistrarAPITestCase {
     );
   }
 
-
   /**
    * Set the namecheap api settings
    */
@@ -29,14 +26,14 @@ class OpenProviderRegistrarAPITestCase extends RegistrarAPITestCase {
     variable_set('registrar_openprovider_uri', OPENPROVIDER_TEST_URL);
     variable_set('registrar_openprovider_api_user', OPENPROVIDER_TEST_USER);
     variable_set('registrar_openprovider_api_password', OPENPROVIDER_TEST_KEY);
-    
+
     $this->setDefaultRegistrar('registrar_openprovider');
   }
-  
 
-/*
+
+  /*
   function testOpenProviderAPICreateDomain() {
-    $domain = $this->randomDomainName();
+    $domain   = $this->randomDomainName();
     $contacts = $this->getContacts();
     $contacts = _registrar_api_convert_contacts($contacts['registrant'], $contacts['tech'], $contacts['admin'], $contacts['aux_billing']);
 
@@ -44,7 +41,8 @@ class OpenProviderRegistrarAPITestCase extends RegistrarAPITestCase {
 
     $desired = array(
       'Domain' => $domain,
-      'DomainID' => $actual['DomainID'],  // No way to guess some of these.
+      // No way to guess some of these.
+      'DomainID' => $actual['DomainID'],
       'Registered' => 'true',
       'OrderId' => $actual['OrderID'],
       'TransactionId' => $actual['TransactionID'],
@@ -55,3 +53,4 @@ class OpenProviderRegistrarAPITestCase extends RegistrarAPITestCase {
   }
  */
 }
+
