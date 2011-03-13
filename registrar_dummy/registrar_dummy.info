@@ -1,6 +1,6 @@
 name = Registrar API implementation for Dummy
 description = Connects to the registrar API of Dummy
 package = RegistrarAPI
-depends = registrar_api
+dependencies[] = registrar_api
 core = 6.x
 
