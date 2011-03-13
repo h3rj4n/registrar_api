@@ -100,22 +100,6 @@ function registrar_contact_access($op, $node, $account) {
 }
 
 /**
- * Implementation of hook_user().
- */
-function registrar_api_user($op, &$edit, &$account, $category = NULL) {
-  switch ($op) {
-    case 'view':
-      if (!isset($account->content['registrar_api'])) {
-        $account->content['registrar_api'] = array(
-          '#type' => 'registrar_api',
-          '#name' => 'Registrar contacts',
-        );
-      }
-      break;
-  }
-}
-
-/**
  * Callback function for the registrar_api admin settings form
  */
 function registrar_api_admin_form($arg) {
@@ -160,11 +144,10 @@ function registrar_api_user_page($user) {
   $result = db_query("
 		SELECT * FROM {registrar_api_user_handles} handles 
 			LEFT JOIN {registrar_api_contact} contact 
-			ON (handles.cid = contact.cid)
+			ON (handles.nid = contact.nid)
 				LEFT JOIN {node} node 
 					ON (contact.nid = node.nid)
 		WHERE  handles.uid = %d", $user->uid);
-  $data         = "";
   $table_header = array('Handle', 'Contact name', 'Company');
   $table_data   = array();
   while ($contact = db_fetch_object($result)) {
@@ -177,38 +160,19 @@ function registrar_api_user_page($user) {
 /**** Private helper functions ****/
 
 /**
- * This function builds the db query set string for the values that need to be saved for a contact.
- *
- * @param $values An obkect or array containing the fields and values to set.
- *
- * @return an SQL SET string
+ * This function returns a String with the full name of a contact
+ * //TODO: convert to a theme function
  */
-function _registrar_api_get_set_str($values) {
-  $schema = drupal_get_schema('registrar_api_contact');
-
-  $values = is_object($values) ? (array)$values : $values;
-
-  $set_arr = array();
-  foreach ($values as $field => $value) {
-    if (in_array($field, array_keys($schema['fields']))) {
-      $set_arr[] = $field ."='". db_escape_string($value) ."'";
-    }
-  }
-  return implode(", ", $set_arr);
+function _registrar_api_full_contact_name($contact) {
+  return $contact->lastname .", ". $contact->firstname;
 }
 
 /**
- * This function returns a String with the full name of a contact
+ * //TODO: convert to a theme function
  */
-function _registrar_api_full_contact_name($contact) {
-  return $contact->lastname .", ". $contact->nameprefix ." ". $contact->initials ." (". $contact->firstname .")";
-}
-
 function _registrar_api_format_contact_info($contact, $html = FALSE) {
   $data = _registrar_api_full_contact_name($contact) . ($html ? "<br/>" : "\n");
   $data .= $contact->company_name . ($html ? "<br/>" : "\n");
-  $data .= $contact->street ." ". $contact->housenumber ." ". $contact->housesuffix . ($html ? "<br/>" : "\n");
-  $data .= $contact->city .", ". $contact->zipcode;
   return $data;
 }
 

@@ -46,3 +46,10 @@ function hook_set_contacts($domain_name, $registrant, $tech, $admin, $auxbilling
  */
 function hook_domains_getlist() {}
 
+/**
+ * Alter the default location settings.
+ *
+ * @see _registrar_api_location_settings().
+ */
+function hook_registrar_api_location_settings_alter() {}
+

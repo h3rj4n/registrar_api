@@ -7,6 +7,9 @@
 
 /**
  * Implementation of hook_node_info().
+ *
+ * Note 'module' key isn't actually a real module name but the prefix we want
+ * for the hooks. It has been renamed to 'base' in Drupal 7.
  */
 function registrar_api_node_info() {
   return array(
@@ -27,7 +30,7 @@ function registrar_api_node_info() {
 }
 
 /**
- * Implementation of hook_form() for the contact content type.
+ * Implementation of hook_form() for contact content type.
  */
 function registrar_api_contact_form(&$node, $form_state) {
   $type = node_get_types('type', $node);
@@ -41,12 +44,11 @@ function registrar_api_contact_form(&$node, $form_state) {
   );
 
   /* DB schema fields */
-
   $form['uid'] = array(
     '#type' => 'textfield',
     '#title' => t('Users table uid'),
     '#required' => TRUE,
-    '#default_value' => $node->uid,
+    '#default_value' => isset($node->uid) ? $node->uid : NULL,
   );
   $form['company_name'] = array(
     '#type' => 'textfield',
@@ -55,15 +57,7 @@ function registrar_api_contact_form(&$node, $form_state) {
     '#size' => 60,
     '#maxlength' => 60,
     '#autocomplete_path' => 'registrar/company/autocomplete',
-    '#default_value' => $node->company_name,
-  );
-  $form['initials'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Initials'),
-    '#required' => TRUE,
-    '#size' => 60,
-    '#maxlength' => 60,
-    '#default_value' => $node->initials,
+    '#default_value' => isset($node->company_name) ? $node->company_name : ''
   );
   $form['firstname'] = array(
     '#type' => 'textfield',
@@ -71,15 +65,7 @@ function registrar_api_contact_form(&$node, $form_state) {
     '#required' => TRUE,
     '#size' => 60,
     '#maxlength' => 60,
-    '#default_value' => $node->firstname,
-  );
-  $form['nameprefix'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Name Prefix'),
-    '#required' => FALSE,
-    '#size' => 10,
-    '#maxlength' => 10,
-    '#default_value' => $node->nameprefix,
+    '#default_value' => isset($node->firstname) ? $node->firstname : ''
   );
   $form['lastname'] = array(
     '#type' => 'textfield',
@@ -87,116 +73,7 @@ function registrar_api_contact_form(&$node, $form_state) {
     '#required' => TRUE,
     '#size' => 60,
     '#maxlength' => 60,
-    '#default_value' => $node->lastname,
-  );
-  $form['gender'] = array(
-    '#type' => 'select',
-    '#title' => t('Gender'),
-    '#required' => TRUE,
-    '#maxlength' => 8,
-    '#default_value' => $node->gender,
-    '#options' => array(
-      'M' => t("Male"),
-      'F' => t("Female"),
-    ),
-  );
-  $form['street'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Street'),
-    '#required' => TRUE,
-    '#size' => 60,
-    '#maxlength' => 60,
-    '#default_value' => $node->street,
-  );
-  $form['housenumber'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Housenumber'),
-    '#required' => TRUE,
-    '#default_value' => $node->housenumber,
-  );
-  $form['housesuffix'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Housesuffix'),
-    '#required' => FALSE,
-    '#size' => 30,
-    '#maxlength' => 30,
-    '#default_value' => $node->housesuffix,
-  );
-  $form['zipcode'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Zipcode'),
-    '#required' => TRUE,
-    '#size' => 15,
-    '#maxlength' => 15,
-    '#default_value' => $node->zipcode,
-  );
-  $form['city'] = array(
-    '#type' => 'textfield',
-    '#title' => t('City'),
-    '#required' => TRUE,
-    '#size' => 60,
-    '#maxlength' => 200,
-    '#default_value' => $node->city,
-  );
-  $form['state'] = array(
-    '#type' => 'textfield',
-    '#title' => t('State'),
-    '#required' => TRUE,
-    '#size' => 60,
-    '#maxlength' => 200,
-    '#default_value' => $node->state,
-  );
-  $form['country'] = array(
-    '#type' => 'select',
-    '#title' => t('Country'),
-    '#required' => TRUE,
-    '#maxlength' => 2,
-    '#default_value' => $node->country,
-    '#options' => _registrar_api_country_codes(),
-  );
-  $form['phone_countrycode'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Telephone Country code'),
-    '#required' => TRUE,
-    '#default_value' => $node->phone_countrycode,
-  );
-  $form['phone_areacode'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Telephone Area code'),
-    '#required' => TRUE,
-    '#size' => 10,
-    '#maxlength' => 10,
-    '#default_value' => $node->phone_areacode,
-  );
-  $form['phone_subscribernumber'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Telephone Subscriber code'),
-    '#required' => TRUE,
-    '#size' => 20,
-    '#maxlength' => 20,
-    '#default_value' => $node->phone_subscribernumber,
-  );
-  $form['fax_countrycode'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Fax Country code'),
-    '#required' => FALSE,
-    '#default_value' => $node->fax_countrycode,
-  );
-  $form['fax_areacode'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Fax Area code'),
-    '#required' => FALSE,
-    '#size' => 10,
-    '#maxlength' => 10,
-    '#default_value' => $node->fax_areacode,
-  );
-  $form['fax_subscribernumber'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Fax Subscriber code'),
-    '#required' => FALSE,
-    '#size' => 20,
-    '#maxlength' => 20,
-    '#default_value' => $node->fax_subscribernumber,
+    '#default_value' => isset($node->lastname) ? $node->lastname : ''
   );
   $form['email'] = array(
     '#type' => 'textfield',
@@ -204,8 +81,13 @@ function registrar_api_contact_form(&$node, $form_state) {
     '#required' => TRUE,
     '#size' => 60,
     '#maxlength' => 255,
-    '#default_value' => $node->email,
+    '#default_value' => isset($node->email) ? $node->email : ''
   );
+
+  $settings = _registrar_api_location_settings();
+  $location = isset($node->location) ? $node->location : array();
+  $form['location'] = location_form($settings, $location);
+
   return $form;
 }
 
@@ -216,7 +98,6 @@ function registrar_api_domain_form(&$node, $form_state) {
   $type = node_get_types('type', $node);
 
   /* DB schema fields */
-
   $form['title'] = array(
     '#type' => 'textfield',
     '#title' => check_plain($type->title_label),
@@ -229,7 +110,7 @@ function registrar_api_domain_form(&$node, $form_state) {
     '#type' => 'textfield',
     '#title' => t('Top level domain'),
     '#required' => TRUE,
-    '#default_value' => $node->tld,
+    '#default_value' => isset($node->tld) ? $node->tld : ''
   );
   $form['registrar_handle'] = array(
     '#type' => 'textfield',
@@ -238,7 +119,7 @@ function registrar_api_domain_form(&$node, $form_state) {
     '#size' => 60,
     '#autocomplete_path' => 'registrar/handle/autocomplete',
     '#maxlength' => 60,
-    '#default_value' => $node->registrar_handle,
+    '#default_value' => isset($node->registrar_handle) ? $node->registrar_handle : ''
   );
   $form['adm_handle'] = array(
     '#type' => 'textfield',
@@ -247,7 +128,7 @@ function registrar_api_domain_form(&$node, $form_state) {
     '#size' => 60,
     '#autocomplete_path' => 'registrar/handle/autocomplete',
     '#maxlength' => 60,
-    '#default_value' => $node->adm_handle,
+    '#default_value' => isset($node->adm_handle) ? $node->adm_handle : ''
   );
   $form['tech_handle'] = array(
     '#type' => 'textfield',
@@ -256,9 +137,16 @@ function registrar_api_domain_form(&$node, $form_state) {
     '#size' => 60,
     '#autocomplete_path' => 'registrar/handle/autocomplete',
     '#maxlength' => 60,
-    '#default_value' => $node->tech_handle,
+    '#default_value' => isset($node->tech_handle) ? $node->tech_handle : ''
   );
   return $form;
+}
+
+/**
+ * Implementation of hook_validate().
+ */
+function registrar_api_contact_validate($node, &$form) {
+ // TODO: Validate uid
 }
 
 /**
@@ -268,48 +156,53 @@ function registrar_api_domain_form(&$node, $form_state) {
  * A domain needs those three handles, otherwise we can't register them
  */
 function registrar_api_domain_validate($node, &$form) {
-  // Check if the registrar handle exists
-  $result = db_query("SELECT COUNT(contact.cid) FROM {registrar_api_contact} contact LEFT JOIN {node} node on ( node.nid = contact.nid ) WHERE node.title='%s'", $form['registrar_handle']['#value']);
-  if (db_result($result) != 1) {
-    form_set_error('registrar_handle', t('Registrar handle does not exist'));
-  }
-  // Check if the administrative handle exists
-  $result = db_query("SELECT COUNT(contact.cid) FROM {registrar_api_contact} contact LEFT JOIN {node} node on ( node.nid = contact.nid ) WHERE node.title='%s'", $form['adm_handle']['#value']);
-  if (db_result($result) != 1) {
-    form_set_error('adm_handle', t('Administrative handle does not exist'));
-  }
-  // Check if the technical handle exists
-  $result = db_query("SELECT COUNT(contact.cid) FROM {registrar_api_contact} contact LEFT JOIN {node} node on ( node.nid = contact.nid ) WHERE node.title='%s'", $form['tech_handle']['#value']);
-  if (db_result($result) != 1) {
-    form_set_error('tech_handle', t('Technical handle does not exist'));
+  $ctypes = array(
+    'Registrar'      => 'registrar_handle',
+    'Administrative' => 'adm_handle',
+    'Technical'      => 'tech_handle'
+  );
+  foreach ($ctypes as $name => $ctype) {
+    // Check if the registrar handle exists
+    $result = db_query("SELECT COUNT(contact.nid) FROM {registrar_api_contact} contact LEFT JOIN {node} node on ( node.nid = contact.nid ) WHERE node.title='%s'", $form[$ctype]['#value']);
+    if (db_result($result) != 1) {
+      form_set_error($ctype, t('!name handle does not exist.', array('!name' => $name)));
+    }
   }
 }
 
 /**
  * Implementation of hook_insert().
  */
-function registrar_contact_insert($node) {
-  $set_str = _registrar_api_get_set_str($node);
-  db_query("INSERT INTO {registrar_api_contact} SET $set_str",
-    $node->nid
-  );
-  $cid = db_last_insert_id('registrar_api_contact', 'cid');
-  db_query("INSERT INTO {registrar_api_user_handles} SET cid=%d, uid=%d", $cid, $node->uid);
+function registrar_api_contact_insert($node) {
+  drupal_write_record('registrar_api_contact', $node);
+  drupal_write_record('registrar_api_user_handles', $node);
+  location_save_locations($node->location, array('nid' => $node->nid, 'vid' => $node->vid));
 }
 
-function registrar_api_domain_insert($node) {
-  db_query("
-		INSERT INTO {registrar_api_domain} 
-			SET
-				nid='%d', 
-				tld='%s', 
-				registrar_handle=
-					(SELECT contact.cid FROM {registrar_api_contact} contact LEFT JOIN {node} node on ( node.nid = contact.nid ) WHERE node.title='%s'), 
-				adm_handle=
-					(SELECT contact.cid FROM {registrar_api_contact} contact LEFT JOIN {node} node on ( node.nid = contact.nid ) WHERE node.title='%s'), 
-				tech_handle=
-					(SELECT contact.cid FROM {registrar_api_contact} contact LEFT JOIN {node} node on ( node.nid = contact.nid ) WHERE node.title='%s')
-				", $node->nid, $node->tld, $node->registrar_handle, $node->adm_handle, $node->tech_handle);
+/**
+ * Implementation of hook_insert().
+ *
+ * This function is also called by registrar_api_domain_update().
+ */
+function registrar_api_domain_insert($node, $update = array()) {
+  $record = array(
+    'nid' => $node->nid,
+    'tld' => $node->tld
+  );
+  foreach (array('registrar_handle', 'adm_handle', 'tech_handle') as $ctype) {
+    $contact = db_result(db_query("SELECT contact.nid FROM {registrar_api_contact} contact LEFT JOIN {node} node on ( node.nid = contact.nid ) WHERE node.title='%s'", $node->$ctype));
+    $record[$ctype] = $contact;
+  }
+  drupal_write_record('registrar_api_domain', $record, $update);
+}
+
+/**
+ * Implementation of hook_update().
+ */
+function registrar_api_contact_update($node) {
+  drupal_write_record('registrar_api_contact', $node, 'nid');
+  drupal_write_record('registrar_api_user_handles', $node, 'nid');
+  location_save_locations($node->location, array('nid' => $node->nid, 'vid' => $node->vid));
 }
 
 /**
@@ -317,27 +210,23 @@ function registrar_api_domain_insert($node) {
  */
 function registrar_api_domain_update($node) {
   // TODO: module_invoke_all('update_contact', $node);
-  db_query("
-	UPDATE {registrar_api_domain} domain
-		SET 
-			registrar_handle=
-				(SELECT contact.cid FROM {registrar_api_contact} contact LEFT JOIN {node} node on ( node.nid = contact.nid ) WHERE node.title='%s'),
-			adm_handle=
-				(SELECT contact.cid FROM {registrar_api_contact} contact LEFT JOIN {node} node on ( node.nid = contact.nid ) WHERE node.title='%s'),
-			tech_handle=
-				(SELECT contact.cid FROM {registrar_api_contact} contact LEFT JOIN {node} node on ( node.nid = contact.nid ) WHERE node.title='%s')
-		WHERE domain.nid=%d;
-	", $node->registrar_handle, $node->adm_handle, $node->tech_handle, $node->nid);
+  registrar_api_domain_insert($node, 'nid');
 }
 
 /**
  * Implementation of hook_view().
  */
-function registrar_contact_view($node, $teaser = FALSE, $page = FALSE) {
+function registrar_api_contact_view($node, $teaser = FALSE, $page = FALSE) {
   $node->content['Contact'] = array(
     '#value' => _registrar_api_format_contact_info($node, TRUE),
     '#weight' => 1,
   );
+  $settings = _registrar_api_location_settings();
+  if (isset($settings['display']['teaser']) && isset($settings['display']['full'])) {
+    if (($teaser && $settings['display']['teaser']) || (!$teaser && $settings['display']['full'])) {
+      $node->content['location'] = location_display($settings, $node->location);
+    }
+  }
   return $node;
 }
 
@@ -352,30 +241,34 @@ function registrar_api_domain_view($node, $teaser = FALSE, $page = FALSE) {
 /**
  * Implementation of hook_load().
  */
-function registrar_contact_load($node) {
-  $contact_data = db_fetch_object(db_query("SELECT * FROM {registrar_api_contact} WHERE nid=%d", $node->nid));
-  return $contact_data;
+function registrar_api_contact_load($node) {
+  $contact = db_fetch_object(db_query("SELECT * FROM {registrar_api_contact} WHERE nid = %d", $node->nid));
+  $contact->location = location_load_locations($node->vid);
+  return $contact;
 }
 
+/**
+ * Implementation of hook_load().
+ */
 function registrar_api_domain_load($node) {
   // Fetch the names iso the id's for the handles
   // Now we can autocomplete the names iso the id's
   // @see registrar_api_domain_update
   // @see registrar_api_domain_insert
-  $domain_data = db_fetch_object(db_query("
-	select  domain.nid, domain.tld,
-		tech_handle.title as tech_handle,
-		adm_handle.title as adm_handle,
-		registrar_handle.title as registrar_handle
-		from {registrar_api_domain} as domain
-			LEFT JOIN ( {registrar_api_contact} as domain_contact, {node} AS tech_handle)
-				on (domain.tech_handle = domain_contact.cid AND domain_contact.nid = tech_handle.nid)
-			LEFT JOIN ( {registrar_api_contact} as adm_contact, {node} AS adm_handle)
-				on (domain.adm_handle = adm_contact.cid AND adm_contact.nid = adm_handle.nid)
-			LEFT JOIN ( {registrar_api_contact} as registrar_contact, {node} AS registrar_handle)
-				on (domain.registrar_handle = registrar_contact.cid AND registrar_contact.nid = registrar_handle.nid)
-		WHERE domain.nid=%d", $node->nid));
-  return $domain_data;
+  $query = "
+  SELECT domain.nid, domain.tld, tech_handle.title AS tech_handle,
+    adm_handle.title AS adm_handle,registrar_handle.title as registrar_handle
+  FROM {registrar_api_domain} AS domain
+  LEFT JOIN ({registrar_api_contact} AS domain_contact, {node} AS tech_handle)
+    ON (domain.tech_handle = domain_contact.nid AND domain_contact.nid = tech_handle.nid)
+  LEFT JOIN ( {registrar_api_contact} AS adm_contact, {node} AS adm_handle)
+    ON (domain.adm_handle = adm_contact.nid AND adm_contact.nid = adm_handle.nid)
+  LEFT JOIN ( {registrar_api_contact} AS registrar_contact, {node} AS registrar_handle)
+    ON (domain.registrar_handle = registrar_contact.nid AND registrar_contact.nid = registrar_handle.nid)
+  WHERE domain.nid=%d
+  ";
+  $domain = db_fetch_object(db_query($query, $node->nid));
+  return $domain;
 }
 
 /**
@@ -388,7 +281,7 @@ function registrar_api_domain_load($node) {
  * Implementation of hook_form_alter().
  */
 function registrar_api_form_alter(&$form, $form_state, $form_id) {
-  if ($form_id == 'registrar_contact_node_form' || $form_id == 'registrar_api_domain_node_form') {
+  if ($form_id == 'registrar_api_contact_node_form' || $form_id == 'registrar_api_domain_node_form') {
     // Move menu to the bottom
     $form['menu']['#weight'] = 5;
 
@@ -405,3 +298,100 @@ function registrar_api_form_alter(&$form, $form_state, $form_id) {
   }
 }
 
+/**
+ * Helper to obtain default settings for location form.
+ *
+ * @see hook_registrar_api_location_settings_alter().
+ */
+function _registrar_api_location_settings() {
+  $settings = array(
+    'multiple' => array(
+      'min' => 1,
+      'max' => 1,
+      'add' => 1
+    ),
+    'form' => array(
+      'weight' => 1,
+      'collapsible' => 0,
+      'collapsed' => 0,
+      'fields' => array(
+        'name' => array(
+          'collect' => 0,
+          'default' => NULL,
+          'weight' => 2
+        ),
+        'country' => array(
+          'collect' => 1,
+          'default' => '',
+          'weight' => 4
+        ),
+        'province' => array(
+          'collect' => 2,
+          'default' => NULL,
+          'weight' => 6
+        ),
+        'city' => array(
+          'collect' => 2,
+          'default' => NULL,
+          'weight' => 8
+        ),
+        'street' => array(
+          'collect' => 2,
+          'default' => NULL,
+          'weight' => 10
+        ),
+        'additional' => array(
+          'collect' => 1,
+          'default' => NULL,
+          'weight' => 12
+        ),
+        'postal_code' => array(
+          'collect' => 2,
+          'default' => NULL,
+          'weight' => 14
+        ),
+        'locpick' => array(
+          'collect' => 0,
+          'weight' => 20,
+        ),
+        'phone' => array(
+          'collect' => 2,
+          'default' => NULL,
+          'weight' => 25
+        ),
+        'fax' => array(
+          'collect' => 1,
+          'default' => NULL,
+          'weight' => 30
+        )
+      )
+    ),
+    'display' => array(
+      'weight' => 1,
+      'hide' => array(
+        'country' => 0,
+        'country_name' => 0,
+        'province' => 0,
+        'province_name' => 0,
+        'city' => 0,
+        'name' => 0,
+        'street' => 0,
+        'additional' => 0,
+        'postal_code' => 0,
+        'locpick' => 0,
+        'fax' => 0,
+        'phone' => 0,
+        'map_link' => 0,
+        'coords' => 0,
+      ),
+      'teaser' => 1,
+      'full' => 1,
+    ),
+    'rss' => array(
+      'mode' => FALSE
+    )
+  );
+  drupal_alter('registrar_api_location_settings', $settings);
+
+  return $settings;
+}
