@@ -55,7 +55,6 @@ function registrar_api_menu() {
     'access callback' => '_registrar_api_user_tab_access',
     'access arguments' => array(1),
     'type' => MENU_LOCAL_TASK,
-    'weight' => 2,
   );
   $items['admin/settings/registrar_api'] = array(
     'title' => 'Registrar API Settings',
@@ -63,17 +62,28 @@ function registrar_api_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('registrar_api_admin_form'),
     'access arguments' => array('access administration pages'),
+  );
+  $items['admin/settings/registrar_api/configure'] = array(
+    'title' => 'Global',
     'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  $items['admin/settings/registrar_api/registrars'] = array(
+    'title' => 'Registrars',
+    'description' => 'Manage registrars settings',
+    'access arguments' => array('access administration pages'),
+    'page callback' => 't',
+    'page arguments' => array(''),
+    'type' => MENU_LOCAL_TASK,
   );
   $registrars = registrar_api_get_registrars();
   foreach ($registrars as $rname => $v) {
-    $items['admin/settings/registrar_api/'. $rname] = array(
+    $items['admin/settings/registrar_api/registrars/'. $rname] = array(
       'title' => $v['name'],
       'description' => $v['name'] .'Manage the registrar API settings',
       'page callback' => 'drupal_get_form',
       'page arguments' => array($rname .'_admin_form'),
       'access arguments' => array('access administration pages'),
-      'type' => MENU_LOCAL_TASK,
+      'type' => MENU_LOCAL_TASK
     );
   }
   return $items;
