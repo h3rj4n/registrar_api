@@ -9,7 +9,7 @@ function registrar_dummy_registrar_info() {
   );
 }
 
-function registrar_dummy_admin_form() {
+function registrar_dummy_settings_form() {
   $form = array();
 
   $form['registrar_dummy'] = array(

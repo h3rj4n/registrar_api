@@ -15,7 +15,7 @@ function registrar_namecheap_registrar_info() {
 }
 
 
-function registrar_namecheap_admin_form() {
+function registrar_namecheap_settings_form() {
   $form = array();
 
   $form['registrar_namecheap'] = array(

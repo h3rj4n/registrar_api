@@ -13,7 +13,7 @@ function registrar_openprovider_include() {
   module_load_include('php', 'registrar_openprovider', 'API');
 }
 
-function registrar_openprovider_admin_form() {
+function registrar_openprovider_settings_form() {
   $form = array();
 
   $form['registrar_openprovider'] = array(
