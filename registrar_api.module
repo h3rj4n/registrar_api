@@ -85,7 +85,7 @@ function registrar_api_menu() {
       'page callback' => 'drupal_get_form',
       'page arguments' => array($rname .'_settings_form'),
       'access arguments' => array('access administration pages'),
-      'type' => MENU_LOCAL_TASK
+      'type' => MENU_LOCAL_TASK,
     );
   }
   return $items;
@@ -156,7 +156,7 @@ function registrar_api_settings_form() {
   $form['iana']['tlds'] = array(
     '#type' => 'checkboxes',
     '#options' => $tlds,
-    '#value' => $tlds_enabled
+    '#value' => $tlds_enabled,
   );
 
   $form['registrars'] = array(

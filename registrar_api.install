@@ -34,35 +34,35 @@ function registrar_api_schema() {
         'description' => "The contact's {node}.nid.",
         'type' => 'int',
         'unsigned' => TRUE,
-        'not null' => TRUE
+        'not null' => TRUE,
       ),
       'company_name' => array(
         'description' => 'Company Name.',
         'type' => 'varchar',
         'length' => 60,
         'not null' => TRUE,
-        'default' => ''
+        'default' => '',
       ),
       'firstname' => array(
         'description' => 'Firstname.',
         'type' => 'varchar',
         'length' => '60',
         'not null' => TRUE,
-        'default' => ''
+        'default' => '',
       ),
       'lastname' => array(
         'description' => 'Lastname.',
         'type' => 'varchar',
         'length' => '60',
         'not null' => TRUE,
-        'default' => ''
+        'default' => '',
       ),
       'email' => array(
         'description' => 'Email address.',
         'type' => 'varchar',
         'length' => '255',
         'not null' => TRUE,
-        'default' => ''
+        'default' => '',
       ),
     ),
     'primary key' => array('nid')
@@ -74,12 +74,12 @@ function registrar_api_schema() {
       'nid' => array(
         'description' => 'Contact {node}.nid',
         'type' => 'int',
-        'not null' => TRUE
+        'not null' => TRUE,
       ),
       'uid' => array(
         'description' => 'User {user}.uid',
         'type' => 'int',
-        'not null' => TRUE
+        'not null' => TRUE,
       ),
     ),
     'primary key' => array('nid'),
