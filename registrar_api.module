@@ -198,6 +198,24 @@ function registrar_api_settings_form() {
     $form['registrars']['tld_registrar'][$tld] = $items;
   }
 
+  $form['nameservers'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Default nameservers'),
+    '#description' => t('Select the nameservers to use by default.'),
+    '#collapsible' => TRUE,
+    '#tree' => TRUE,
+  );
+  $nameservers = variable_get('registrar_api_nameservers_default', array());
+  if (!empty($nameservers)) {
+    $form['nameservers']['#collapsed'] = TRUE;
+  }
+  for ($i=0;$i<5;$i++) {
+    $form['nameservers'][$i] = array(
+      '#type' => 'textfield',
+      '#default_value' => isset($nameservers[$i])?$nameservers[$i]:'',
+    );
+  }
+
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Save configuration')
@@ -231,6 +249,23 @@ function theme_registrar_api_settings_form($form) {
 }
 
 /**
+ * Validate callback.
+ */
+function registrar_api_settings_form_validate($form, &$form_state) {
+  $values = &$form_state['values'];
+
+  // Validate nameservers.
+  foreach ($values['nameservers'] as $i => $value) {
+    if ($value == '') {
+      continue;
+    }
+    if (!_registrar_api_check_valid_nameserver($value)) {
+      form_error($form['nameservers'][$i], t('Invalid nameserver.'));
+    }
+  }
+}
+
+/**
  * Submit callback for the settings form when the list of TLDs is not available.
  */
 function registrar_api_settings_initialize_tlds($form, $form_state) {
@@ -249,15 +284,19 @@ function registrar_api_settings_initialize_tlds($form, $form_state) {
  */
 function registrar_api_settings_form_submit($form, $form_state) {
   $values = &$form_state['values'];
-
+  // Enabled IANA TLDs.
   $tlds = variable_get('registrar_api_iana_tlds', array());
   $enabled = array_intersect_assoc($tlds, $values['tlds']);
   variable_set('registrar_api_iana_tlds_enabled', $enabled);
 
-  variable_set('registrar_api_registrar_default', $form_state);
+  // Default and per tld registrars.
+  variable_set('registrar_api_registrar_default', $values['default_registrar']);
   foreach ($values['tld_registrar'] as $tld => $value) {
     variable_set('registrar_api_registrar_'.$tld, $value['registrar']);
   }
+
+  // Default nameservers.
+  variable_set('registrar_api_nameservers_default', $values['nameservers']);
 }
 
 /**
@@ -298,6 +337,26 @@ function registrar_api_user_page($user) {
 }
 
 /**** Private helper functions ****/
+
+/**
+ * Check if a nameserver is a valid hostname.
+ */
+function _registrar_api_check_valid_nameserver($ns) {
+  // IP addresses are fine.
+  // From http://www.blog.highub.com/regular-expression/php-regex-regular-expression/php-regex-validate-ip-address/
+  $pattern = "/^(([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/";
+  if (preg_match($pattern, $ns)) {
+     return TRUE;
+  }
+  
+  // Hostname.
+  // TODO: see RFCs 952 and 1123. Also http://en.wikipedia.org/wiki/Hostname
+  if (drupal_valid_http_host($ns)) {
+    return TRUE;
+  }
+
+  return FALSE;  
+}
 
 /**
  * This function returns a String with the full name of a contact
