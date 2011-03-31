@@ -171,6 +171,9 @@ function registrar_api_settings_form() {
     $options[$k] = $v['name'];
   }
   $default = variable_get('registrar_api_registrar_default', '');
+  if ($default != '') {
+    $form['registrars']['#collapsed'] = TRUE;
+  }
   $form['registrars']['default_registrar'] = array(
     '#type' => 'select',
     '#title' => t('Default'),
