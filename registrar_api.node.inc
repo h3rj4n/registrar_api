@@ -105,40 +105,23 @@ function registrar_api_domain_form(&$node, $form_state) {
     '#default_value' => $node->title,
     '#size' => 20,
   );
-
   $form['tld'] = array(
     '#type' => 'textfield',
     '#title' => t('Top level domain'),
     '#required' => TRUE,
     '#default_value' => isset($node->tld) ? $node->tld : ''
   );
-  $form['registrar_handle'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Registrar handle'),
-    '#required' => TRUE,
-    '#size' => 60,
-    '#autocomplete_path' => 'registrar/handle/autocomplete',
-    '#maxlength' => 60,
-    '#default_value' => isset($node->registrar_handle) ? $node->registrar_handle : ''
+
+  // Contact handlers.
+  $form['handles'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Contacts'),
+    '#collapsible' => TRUE,
+    '#weight' => -10,
   );
-  $form['adm_handle'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Administrative handle'),
-    '#required' => TRUE,
-    '#size' => 60,
-    '#autocomplete_path' => 'registrar/handle/autocomplete',
-    '#maxlength' => 60,
-    '#default_value' => isset($node->adm_handle) ? $node->adm_handle : ''
-  );
-  $form['tech_handle'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Technical handle'),
-    '#required' => TRUE,
-    '#size' => 60,
-    '#autocomplete_path' => 'registrar/handle/autocomplete',
-    '#maxlength' => 60,
-    '#default_value' => isset($node->tech_handle) ? $node->tech_handle : ''
-  );
+  // TODO: Default contacts are known once the tld is set.
+  $form['handles'] += _registrar_api_domain_handles_form($node);
+
   return $form;
 }
 
@@ -146,7 +129,12 @@ function registrar_api_domain_form(&$node, $form_state) {
  * Implementation of hook_validate().
  */
 function registrar_api_contact_validate($node, &$form) {
- // TODO: Validate uid
+  // TODO: Validate uid
+
+  // TODO: Validate contacts.
+  if (!user_access('override default contacts')) {
+     
+  }
 }
 
 /**

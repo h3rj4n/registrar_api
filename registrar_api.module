@@ -83,7 +83,7 @@ function registrar_api_menu() {
       'title' => $v['name'],
       'description' => $v['name'] .'Manage the registrar API settings',
       'page callback' => 'drupal_get_form',
-      'page arguments' => array($rname .'_settings_form'),
+      'page arguments' => array('registrar_api_registrar_settings_form', $rname),
       'access arguments' => array('access administration pages'),
       'type' => MENU_LOCAL_TASK,
     );
@@ -95,7 +95,7 @@ function registrar_api_menu() {
  * Implementation of hook_perm().
  */
 function registrar_api_perm() {
-  return array('create registrar_contact content', 'edit own registrar_contact content', 'manage contacts');
+  return array('create registrar_contact content', 'edit own registrar_contact content', 'manage contacts', 'override default contacts');
 }
 
 /**
@@ -300,6 +300,80 @@ function registrar_api_settings_form_submit($form, $form_state) {
 }
 
 /**
+ * Return the form for admin/settings/registrar_api/registrars/{RNAME}.
+ *
+ * Load the registrar specific form and extend it with items to set
+ * default contacts' handlers.
+ */
+function registrar_api_registrar_settings_form($form_state, $rname) {
+  $form = call_user_func_array($rname.'_settings_form', $form_state);
+  $form['registrar'] = array(
+    '#type' => 'hidden',
+    '#value' => $rname,
+  );
+
+  $form[$rname]['#weight'] = -20;
+  $form['handles'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Default contacts'),
+    '#description' => t('You can specify default contacts for domains registered with this registrar. If a default contact is choosen for any contact type, users without the «override default contacts» permission will not be able to change that contact type on domain creation.'),
+    '#collapsible' => TRUE,
+    '#weight' => -10,
+  );
+  $contacts = (object) array();
+  foreach (array('registrar', 'tech', 'adm') as $ctype) {
+    $ctype = $ctype.'_handle';
+    $variable = 'registrar_api_'.$rname.'_default_'.$ctype;
+    $nid = variable_get($variable, FALSE);
+    if ($nid) {
+      $handle = db_result(db_query("SELECT title FROM {node} n WHERE nid=%d", $nid));
+      $contacts->{$ctype} = $handle;
+    }
+  }
+  $handles = _registrar_api_domain_handles_form($contacts, FALSE);
+  $form['handles'] += $handles;
+  array_unshift($form['#submit'], 'registrar_api_registrar_settings_form_submit');
+  return $form;
+}
+
+/**
+ * Validate callback.
+ */
+function registrar_api_registrar_settings_form_validate($form, &$form_state) {
+  foreach (array('registrar', 'tech', 'adm') as $ctype) {
+    $ctype = $ctype.'_handle';
+    $handle = $form_state['values'][$ctype];
+    if (empty($handle)) {
+      continue;
+    }
+    else {
+      $node = node_load(array('title' => $handle, 'type' => 'registrar_api_contact'));
+      if (!$node) {
+        form_error($form['handles'][$ctype], t('Invalid handle.'));
+      }
+      else {
+        form_set_value($form['handles'][$ctype], $node->nid, $form_state);
+      }
+    }
+  }
+}
+
+/**
+ * Submit callback.
+ */
+function registrar_api_registrar_settings_form_submit($form, &$form_state) {
+  $rname = $form_state['values']['registrar'];
+  unset($form_state['values']['registrar']);
+  foreach (array('registrar', 'tech', 'adm') as $ctype) {
+    $ctype = $ctype.'_handle';
+    $variable = 'registrar_api_'.$rname.'_default_'.$ctype;
+    $handle = $form_state['values'][$ctype];
+    variable_set($variable, $handle);
+    unset($form_state['values'][$ctype]);
+  }
+}
+
+/**
  * Provide a list of all available registrars
  */
 function registrar_api_get_registrars() {
@@ -337,6 +411,43 @@ function registrar_api_user_page($user) {
 }
 
 /**** Private helper functions ****/
+
+/**
+ * Helper function to provide form elements for contact handles.
+ *
+ * The returned set of form elements depends on given parameters.
+ */
+function _registrar_api_domain_handles_form(&$node, $required = TRUE) {
+  $form = array();
+  $form['registrar_handle'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Registrar handle'),
+    '#required' => $required,
+    '#size' => 60,
+    '#autocomplete_path' => 'registrar/handle/autocomplete',
+    '#maxlength' => 60,
+    '#default_value' => isset($node->registrar_handle) ? $node->registrar_handle : ''
+  );
+  $form['adm_handle'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Administrative handle'),
+    '#required' => $required,
+    '#size' => 60,
+    '#autocomplete_path' => 'registrar/handle/autocomplete',
+    '#maxlength' => 60,
+    '#default_value' => isset($node->adm_handle) ? $node->adm_handle : ''
+  );
+  $form['tech_handle'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Technical handle'),
+    '#required' => $required,
+    '#size' => 60,
+    '#autocomplete_path' => 'registrar/handle/autocomplete',
+    '#maxlength' => 60,
+    '#default_value' => isset($node->tech_handle) ? $node->tech_handle : ''
+  );
+  return $form;
+}
 
 /**
  * Check if a nameserver is a valid hostname.
