@@ -6,6 +6,7 @@ TODO:
 
 * Review permissions.
 * Move menu callbacks to registrar_api.admin.inc / registrar_api.pages.inc
+* Themify some functions.
 
 * Smart way to keep test credentials out of git
 * Implement all calls
