@@ -2,55 +2,81 @@
 
 /**
  * @file
- *   simpletest tests for the registrar API
+ *   Simpletest tests for the registrar API
+ *   This file does primarily provide some general code, registrar_dummy.test should implement actual tests of this API.
  */
 
-define('NAMECHEAP_TEST_URL', 'https://api.sandbox.namecheap.com/xml.response');
-define('NAMECHEAP_TEST_KEY', '');
-define('NAMECHEAP_TEST_USER', '');
-
-class RegistrarAPITestCase extends DrupalWebTestCase {
-
-  /**
-   * Implementation of getInfo().
-   */
-  function getInfo() {
-    return array(
-      'name' => t('Registrar API tests'),
-      'description' => t('Registrar API functionality.'),
-      'group' => t('Registrar API'),
-    );
-  }
-
-  /**
-   * Override the namecheap api settings so as to not accidentally run
-   * tests on a production environment
-   */
+/**
+ * Base class for Registrar API test cases
+ */
+abstract class RegistrarAPITestCase extends DrupalWebTestCase {
   function setUp() {
     parent::setUp();
-
-    $this->temp_api_url = variable_get('namecheap_uri', '');
-    $this->temp_api_key = variable_get('namecheap_api_key', '');
-    $this->temp_api_user = variable_get('namecheap_api_user', '');
-
-    variable_set('namecheap_uri', NAMECHEAP_TEST_URL);
-    variable_set('namecheap_api_key', NAMECHEAP_TEST_KEY);
-    variable_set('namecheap_api_user', NAMECHEAP_TEST_USER);
   }
 
   function tearDown() {
-    variable_set('namecheap_uri', $this->temp_api_url);
-    variable_set('namecheap_api_key', $this->temp_api_key);
-    variable_set('namecheap_api_user', $this->temp_api_user);
-
     parent::tearDown();
   }
 
+  /**
+   * Test registrar_api_check_domains through the default registrar.
+   */
+  function testAPICheckDomains() {
+    $randomdomain = $this->randomDomainName();
+    // Test a registered name
+    $actual = registrar_api_check_domains(array('drupal.org', $randomdomain));
+    $desired = array(
+      'drupal.org' => array(
+        'Domain' => 'drupal.org',
+        'Available' => FALSE,
+      ),
+      $randomdomain => array(
+        'Domain' => $randomdomain,
+        'Available' => TRUE,
+        /*
+     'ErrorNo' => '',
+     'Description' => '',
+     */
+      ),
+    );
+
+    $this->assertEqual($actual, $desired, t('Testing check_domains on a registered and free domain name'));
+  }
+
+  /**
+   * Test registrar_api_domains_getlist through the default registrar.
+   */
+  function testAPIDomainsGetlist() {
+    // Test a registered name
+    $actual = registrar_api_domains_getlist();
+    $this->assertTrue(is_array($actual), t('registrar_api_domains_getlist returns an array'));
+
+    // Do some basic check on the returned array formatting.
+    foreach ($actual as $key => $value) {
+      $this->assertEqual($key, $value['Name'], 'Name attribute equal to array key');
+    }
+  }
+
+  /**** Helper fuctions ******/
+
+  /**
+   * Define which registrar implementation is the default
+   *
+   * @param $registrar_module
+   */
+  function setDefaultRegistrar($registrar_module) {
+    variable_set('registrar_api_default_registrar', $registrar_module);
+  }
+
+  /**
+   * Generate a random domainname, hopefully not already registred.
+   *
+   * @return string Generated domain name
+   */
   function randomDomainName() {
-    $exts = array('.com', '.net', '.org');
-    $ext = $exts[mt_rand(0, count($exts) - 1)];
-    $domain = $this->randomName(12, $prefix = 'registrar_api_') . $ext;
-    $domain = str_replace("_", "-", $domain);
+    $exts   = array('.com', '.net', '.org');
+    $ext    = $exts[mt_rand(0, count($exts) - 1)];
+    $domain = $this->randomName(12) . $ext;
     return $domain;
   }
 
@@ -59,74 +85,55 @@ class RegistrarAPITestCase extends DrupalWebTestCase {
     global $db_prefix;
     // Reset the db prefix since simpletest changes this, this obviously
     // won't work for those who actually use a prefix.
-    $tmp = $db_prefix;
+    $tmp       = $db_prefix;
     $db_prefix = '';
-    $contacts = registrar_api_get_user_contacts(1);
+    $contacts  = registrar_api_get_user_contacts(1);
     $db_prefix = $tmp;
     return $contacts;
   }
 }
 
-class NamecheapAPITestCase extends RegistrarAPITestCase {
+class GeneralRegistrarAPITestCase extends RegistrarAPITestCase {
 
   /**
    * Implementation of getInfo().
    */
   function getInfo() {
     return array(
-      'name' => t('Namecheap API tests'),
-      'description' => t('Test Namecheap.com API calls.'),
+      'name' => t('General Registrar API tests'),
+      'description' => t('Registrar API functionality.'),
+      'group' => t('Registrar API'),
+    );
+  }
+
+  // @todo Test setting the default registrar via /admin/settings/registrar_api
+}
+
+class RegistrarAPIUnitTestCase extends DrupalUnitTestCase {
+  function getInfo() {
+
+    return array(
+      'name' => t('Registrar API Unit tests'),
+      'description' => t('Tests for the Registrar API helper code.'),
       'group' => t('Registrar API'),
     );
   }
 
   /**
-   * Test domains_register
+   * Test the workings of registrar_api_split_domain_name()
    */
-  function testNamecheapAPICheckDomains() {
-    // Test an a registered name
-    $actual = namecheap_check_domains('namecheap.com');
-    $desired = array(
-      'namecheap.com' => array(
-        'Domain' => 'namecheap.com',
-        'Available' => 'false',
-        'ErrorNo' => '',
-        'Description' => '',
-      )
+  function testSplitDomainName() {
+    $tests = array(
+      'drupal.org' => array('drupal', 'org'),
+      'example.com' => array('example', 'com'),
+      'example-foo.com' => array('example-foo', 'com'),
+      // Missing dot
+      'examplecom' => array(),
     );
 
-    $this->assertEqual($actual, $desired, t('Testing check_domains on a registered domain name'));
-
-    // Test on an available domain
-    $actual = namecheap_check_domains('thisisnotregdyet.com');
-    $desired = array(
-      'thisisnotregdyet.com' => array(
-        'Domain' => 'thisisnotregdyet.com',
-        'Available' => 'true',
-        'ErrorNo' => '',
-        'Description' => '',
-      ),
-    );
-
-    $this->assertEqual($actual, $desired, t('Testing check_domains on an available domain name'));
-  }
-
-  function testNamecheapAPICreateDomain() {
-    $domain = $this->randomDomainName();
-    $contacts = $this->getContacts();
-    $contacts = _registrar_api_convert_contacts($contacts['registrant'], $contacts['tech'], $contacts['admin'], $contacts['aux_billing']);
-
-    $actual = namecheap_create_domain($domain, 1, $contacts['registrant'], $contacts['tech'], $contacts['admin'], $contacts['auxbilling']);
-
-    $desired = array(
-      'Domain' => $domain,
-      'DomainID' => $actual['DomainID'],  // No way to guess some of these.
-      'Registered' => 'true',
-      'OrderId' => $actual['OrderID'],
-      'TransactionId' => $actual['TransactionID'],
-      'ChargedAmount' => $actual['ChargedAmount'],
-    );
-
-    $this->assertEqual($actual, $desired, t('Testing domain creation on %domain', array('%domain' => $domain)));
+    foreach ($tests as $test => $expected) {
+      $result = registrar_api_split_domain_name($test);
+      $this->assertEqual($result, $expected);
+    }
   }
 }

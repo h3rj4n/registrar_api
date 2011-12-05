@@ -1,4 +1,3 @@
-
 Rough notes for remaining todo items:
 1.0 TODOs:
  * Easy way to copy registrar contact information to all 4 groups
@@ -17,3 +16,22 @@ Other TODOs:
  * Integration with Aegir/Ubercart/Others?
  * Each registrar API should probably be implemented as a module,
    instead of just a .inc
+=======
+Registrar API
+=============
+
+
+TODO:
+
+* Review permissions.
+* Move menu callbacks to registrar_api.admin.inc / registrar_api.pages.inc
+* Themify some functions.
+
+* Smart way to keep test credentials out of git
+* Implement all calls
+* complete test case 
+
+After domain registration is stable:
+* Import/sync options to integrate pre-existing dommains?
+* Look into optional extra services of some api's e.g. SSL certificates
+* Port to D7

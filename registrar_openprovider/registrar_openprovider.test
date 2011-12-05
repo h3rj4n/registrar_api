@@ -1,0 +1,56 @@
+<?php
+
+/**
+ * @file
+ *   simpletest tests for the registrar API - OpenProvider specific
+ */
+class OpenProviderRegistrarAPITestCase extends RegistrarAPITestCase {
+
+  /**
+   * Implementation of getInfo().
+   */
+  function getInfo() {
+    return array(
+      'name' => t('OpenProvider API tests'),
+      'description' => t('Test openprovider.eu API calls.'),
+      'group' => t('Registrar API'),
+    );
+  }
+
+  /**
+   * Set the namecheap api settings
+   */
+  function setUp() {
+    parent::setUp();
+
+    variable_set('registrar_openprovider_uri', OPENPROVIDER_TEST_URL);
+    variable_set('registrar_openprovider_api_user', OPENPROVIDER_TEST_USER);
+    variable_set('registrar_openprovider_api_password', OPENPROVIDER_TEST_KEY);
+
+    $this->setDefaultRegistrar('registrar_openprovider');
+  }
+
+
+  /*
+  function testOpenProviderAPICreateDomain() {
+    $domain   = $this->randomDomainName();
+    $contacts = $this->getContacts();
+    $contacts = _registrar_api_convert_contacts($contacts['registrant'], $contacts['tech'], $contacts['admin'], $contacts['aux_billing']);
+
+    $actual = openprovider_create_domain($domain, 1, $contacts['registrant'], $contacts['tech'], $contacts['admin'], $contacts['auxbilling']);
+
+    $desired = array(
+      'Domain' => $domain,
+      // No way to guess some of these.
+      'DomainID' => $actual['DomainID'],
+      'Registered' => 'true',
+      'OrderId' => $actual['OrderID'],
+      'TransactionId' => $actual['TransactionID'],
+      'ChargedAmount' => $actual['ChargedAmount'],
+    );
+
+    $this->assertEqual($actual, $desired, t('Testing domain creation on %domain', array('%domain' => $domain)));
+  }
+ */
+}
+

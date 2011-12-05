@@ -1,0 +1,205 @@
+<?php
+
+function registrar_openprovider_registrar_info() {
+  return array(
+    'registrar_openprovider' => array(
+      'name' => 'OpenProvider',
+      'description' => 'Openprovider domain registrar',
+    ),
+  );
+}
+
+function registrar_openprovider_include() {
+  module_load_include('php', 'registrar_openprovider', 'API');
+}
+
+function registrar_openprovider_settings_form() {
+  $form = array();
+
+  $form['registrar_openprovider'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('OpenProvider Registrar Settings'),
+  );
+
+  $form['registrar_openprovider']['registrar_openprovider_uri'] = array(
+    '#type' => 'textfield',
+    '#title' => t('OpenProvider Service URL'),
+    '#default_value' => variable_get('registrar_openprovider_uri', 'https://api.openprovider.eu/'),
+    '#description' => t("i.e. https://api.openprovider.eu/"),
+    '#required' => TRUE,
+  );
+
+  $form['registrar_openprovider']['registrar_openprovider_api_user'] = array(
+    '#type' => 'textfield',
+    '#title' => t('OpenProvider API User'),
+    '#default_value' => variable_get('registrar_openprovider_api_user', ''),
+    '#description' => t("This is usually your regular openprovider username"),
+    '#required' => TRUE,
+  );
+
+  $form['registrar_openprovider']['registrar_openprovider_api_password'] = array(
+    '#type' => 'textfield',
+    '#title' => t('OpenProvider Password'),
+    '#default_value' => variable_get('registrar_openprovider_api_password', ''),
+    '#required' => TRUE,
+  );
+
+  return system_settings_form($form);
+}
+
+function registrar_openprovider_create_handle($contact) {
+  registrar_openprovider_include();
+  $request = _registrar_openprovider_new_request('createCustomerRequest');
+  $args_data = _registrar_openprovider_node_to_args_data($contact);
+  $request->setArgs($args_data);
+  $reply = _registrar_openprovider_do_request($request);
+
+  if ($reply->getFaultCode() == 0) {
+    $response = $reply->getValue();
+    $handle = $response['handle'];
+    $contact->remote_handles['registrar_openprovider'] = $handle;
+    dsm($handle);
+  }
+  else {
+    echo "Code: ". $reply->getFaultCode() ."\n";
+    echo "Error: ". $reply->getFaultString() ."\n";
+    echo "\n---------------------------------------\n";
+  }
+
+  return $handle;
+}
+
+function registrar_openprovider_check_domains($domain_names) {
+  registrar_openprovider_include();
+  $request = _registrar_openprovider_new_request('checkDomainRequest');
+
+  $args_data = array(
+    'domains' => array(),
+  );
+
+  foreach ($domain_names as $domain) {
+    list($name, $tld) = registrar_api_split_domain_name($domain);
+    $args_data['domains'][] = array('name' => $name, 'extension' => $tld);
+  }
+
+  $request->setArgs($args_data);
+  $reply = _registrar_openprovider_do_request($request);
+  $results = array();
+  foreach ($reply->getValue() as $rep) {
+    $results[$rep['domain']] = array('Domain' => $rep['domain'], 'Available' => ($rep['status'] == 'free' ? TRUE : FALSE));
+  }
+  return $results;
+}
+
+/**
+ * Returns an array of domains.
+ *
+ * @see registrar_api_domains_getlist()
+ */
+function registrar_openprovider_domains_getlist() {
+  registrar_openprovider_include();
+  $request = _registrar_openprovider_new_request('searchDomainRequest');
+  $args_data = array();
+  $request->setArgs($args_data);
+  $reply      = _registrar_openprovider_do_request($request);
+  $results    = array();
+  $reply_data = $reply->getValue();
+  foreach ($reply_data['results'] as $item) {
+    $domain_name = $item['domain']['name'] . $item['domain']['extension'];
+    $domains[$domain_name] = array(
+      'ID' => $item['id'],
+      'Name' => $domain_name,
+      // not implemented
+      'User' => '',
+      'Created' => $item['activeDate'],
+      'Expires' => $item['expirationDate'],
+      // not implemented
+      'IsExpired' => null,
+    );
+  }
+  return $domains;
+}
+
+function _registrar_openprovider_do_request($request) {
+  // Create a new API connection
+  $api = new OP_API(variable_get('registrar_openprovider_uri', 'https://api.openprovider.eu/'));
+  $request->setAuth(array(
+      'username' => variable_get('registrar_openprovider_api_user', ''),
+      'password' => variable_get('registrar_openprovider_api_password', ''),
+    ));
+  $debug = FALSE;
+  if ($debug) {
+    $api->setDebug(1);
+    debug($request, 'OP request', TRUE);
+  }
+  $reply = $api->process($request);
+
+  if ($debug) {
+    debug($reply, 'OP reply', TRUE);
+  }
+
+  return $reply;
+}
+
+function _registrar_openprovider_new_request($request_name) {
+  $request = new OP_Request;
+  $request->setCommand($request_name);
+
+  return $request;
+}
+
+/**
+ * Create an array of contact data for OpenProvider from a contact node
+ */
+function _registrar_openprovider_node_to_args_data($contact_node) {
+  $n = $contact_node;
+  // Prepare arguments array
+  $args_data = array(
+    // 'Company Ltd',
+    'companyName' => $n->company_name,
+    'name' => array(
+      // 'J.A.',
+      'initials' => $n->initials,
+      // 'John',
+      'firstName' => $n->firstname,
+      // "",
+      'prefix' => $n->nameprefix,
+      // 'Jones',
+      'lastName' => $n->lastname,
+    ),
+    'vat' => null,
+    // 'M',
+    'gender' => $n->gender,
+    'phone' => array(
+      'countryCode' => $n->phone_countrycode,
+      'areaCode' => $n->phone_areacode,
+      'subscriberNumber' => $n->phone_subscribernumber,
+    ),
+    'address' => array(
+      // 'Main Avenue',
+      'street' => $n->street,
+      // '2',
+      'number' => $n->housenumber,
+      // 'a',
+      'suffix' => $n->housesuffix,
+      // '8817 AB',
+      'zipcode' => $n->zipcode,
+      // 'Rotterdam',
+      'city' => $n->city,
+      'state' => $n->state,
+      'country' => $n->country,
+    ),
+    // 'not@existing.com',
+    'email' => $n->email,
+    /*
+  'additionalData' => array(
+  'birthDate' => '1958-12-03',
+  'companyRegistrationCity' => 'London',
+  'companyRegistrationNumber' => '7723601',
+  'companyRegistrationSubscriptionDate' => '2003-09-12',
+  )
+  */
+  );
+  return $args_data;
+}
+

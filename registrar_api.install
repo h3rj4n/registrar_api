@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Contains install and update functions for the registrar_api.
@@ -25,155 +26,123 @@ function registrar_api_uninstall() {
   drupal_uninstall_schema('registrar_api');
 }
 
-/**
- * Implementation of hook_schema().
- */
 function registrar_api_schema() {
-  return registrar_api_schema_1();
-}
-
-function registrar_api_schema_1() {
-
-  // Setup the contact fields for use in the table schemas
-  $contacts = array(
-    '_first_name' => array(
-      'description' => t("First Name"),
-      'type'        => 'varchar',
-      'length'      => 255,
-      'not null'    => TRUE,
-      'default'     => '',
-    ),
-    '_last_name' => array(
-      'description' => t("Last Name"),
-      'type'        => 'varchar',
-      'length'      => 255,
-      'not null'    => TRUE,
-      'default'     => '',
-    ),
-    '_organization_name' => array(
-      'description' => t("Organization Name"),
-      'type'        => 'varchar',
-      'length'      => 255,
-      'not null'    => TRUE,
-      'default'     => '',
-    ),
-    '_address1' => array(
-      'description' => t("Street Address"),
-      'type'        => 'varchar',
-      'length'      => 255,
-      'not null'    => TRUE,
-      'default'     => '',
-    ),
-    '_address2' => array(
-      'description' => t("Address 2"),
-      'type'        => 'varchar',
-      'length'      => 255,
-      'not null'    => FALSE,
-      'default'     => '',
-    ),
-    '_job_title' => array(
-      'description' => t("Job Title"),
-      'type'        => 'varchar',
-      'length'      => 255,
-      'not null'    => FALSE,
-      'default'     => '',
-    ),
-    '_city' => array(
-      'description' => t("City"),
-      'type'        => 'varchar',
-      'length'      => 50,
-      'not null'    => TRUE,
-      'default'     => '',
-    ),
-    '_state_province' => array(
-      'description' => t("State / Prov"),
-      'type'        => 'varchar',
-      'length'      => 50,
-      'not null'    => TRUE,
-      'default'     => '',
-    ),
-    '_state_province_choice' => array(
-      'description' => t("State or Prov Choice"),
-      'type'        => 'varchar',
-      'length'      => 50,
-      'not null'    => FALSE,
-      'default'     => '',
-    ),
-    '_postal_code' => array(
-      'description' => t("Zip / Postal Code"),
-      'type'        => 'varchar',
-      'length'      => 50,
-      'not null'    => TRUE,
-      'default'     => '',
-    ),
-    '_country' => array(
-      'description' => t("Country"),
-      'type'        => 'varchar',
-      'length'      => 50,
-      'not null'    => TRUE,
-      'default'     => '',
-    ),
-    '_phone' => array(
-      'description' => t("Phone Number"),
-      'type'        => 'varchar',
-      'length'      => 50,
-      'not null'    => TRUE,
-      'default'     => '',
-    ),
-    '_phone_ext' => array(
-      'description' => t("Phone Ext"),
-      'type'        => 'varchar',
-      'length'      => 50,
-      'not null'    => FALSE,
-      'default'     => '',
-    ),
-    '_fax' => array(
-      'description' => t("Fax"),
-      'type'        => 'varchar',
-      'length'      => 50,
-      'not null'    => FALSE,
-      'default'     => '',
-    ),
-    '_email_address' => array(
-      'description' => t("Email"),
-      'type'        => 'varchar',
-      'length'      => 255,
-      'not null'    => TRUE,
-      'default'     => '',
-    ),
-  );
-
   $schema['registrar_api_contact'] = array(
-    'description' => t("Stores domain contact information"),
-    'fields' => array(
-      'uid' => array(
-        'description' => t("Primary key: Users table uid"),
-        'type'        => 'int',
-        'not null'    => TRUE,
-      ),
-    ),
-    'primary key' => array('uid'),
-  );
-
-  $schema['registrar_api_node'] = array(
-    'description' => t("Stores the information for each domain node"),
+    'description' => 'Stores contact-specific information for contact-handle nodes.',
     'fields' => array(
       'nid' => array(
-        'description' => t("Primary key: Node table nid"),
-        'type'        => 'int',
-        'not null'    => TRUE,
+        'description' => "The contact's {node}.nid.",
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'company_name' => array(
+        'description' => 'Company Name.',
+        'type' => 'varchar',
+        'length' => 60,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'firstname' => array(
+        'description' => 'Firstname.',
+        'type' => 'varchar',
+        'length' => '60',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'lastname' => array(
+        'description' => 'Lastname.',
+        'type' => 'varchar',
+        'length' => '60',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'email' => array(
+        'description' => 'Email address.',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array('nid')
+  );
+
+  $schema['registrar_api_user_handles'] = array(
+    'description' => 'Maps contact handles to users.',
+    'fields' => array(
+      'nid' => array(
+        'description' => 'Contact {node}.nid',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'uid' => array(
+        'description' => 'User {user}.uid',
+        'type' => 'int',
+        'not null' => TRUE,
       ),
     ),
     'primary key' => array('nid'),
+    'indexes' => array('uid' => array('uid'))
   );
 
-  // Add all contact fields to the two tables
-  foreach (array('registrant', 'tech', 'admin', 'aux_billing') as $type) {
-    foreach ($contacts as $key => $value) {
-      $schema['registrar_api_contact']['fields'][$type . $key] = $value;
-      $schema['registrar_api_node']['fields'][$type . $key] = $value;
-    }
-  }
+  $schema['registrar_api_remote_handles'] = array(
+    'description' => 'Maps remote handles to internal handles.',
+    'fields' => array(
+      'nid' => array(
+        'description' => 'Contact {node}.nid.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'remote_handle' => array(
+        'description' => 'Remote handle.',
+        'type' => 'varchar',
+        'length' => '60',
+        'not null' => TRUE,
+      ),
+      'registrar' => array(
+        'description' => 'Registrar.',
+        'type' => 'varchar',
+        'length' => '100',
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('nid'),
+    'indexes' => array('remote_handle' => array('remote_handle'))
+  );
 
+  $schema['registrar_api_domain'] = array(
+    'description' => 'Domains.',
+    'fields' => array(
+      'nid' => array(
+        'description' => "The domain's {node}.nid",
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'tld' => array(
+        'description' => 'Top level domain.',
+        'type' => 'varchar',
+        'length' => '10',
+        'not null' => TRUE,
+      ),
+      'registrar_handle' => array(
+        'description' => 'Registrar handle.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'adm_handle' => array(
+        'description' => 'Administrative handle.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'tech_handle' => array(
+        'description' => 'Technical handle.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('nid'),
+    'indexes' => array('tld' => array('tld'))
+  );
   return $schema;
 }

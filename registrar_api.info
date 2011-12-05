@@ -1,5 +1,7 @@
-
-name = Registrar API
-description = Connects to various domain registrar API's to allow domain registration and management through Drupal
-package = Other
+name = Registrar API Core
+description = Connects to various domain registrar APIs to allow domain registration and managemant through Drupal
+dependencies[] = location
+dependencies[] = location_phone
+dependencies[] = location_fax
+package = RegistrarAPI
 core = 6.x
