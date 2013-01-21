@@ -8,141 +8,55 @@
 /**
  * Implementation of hook_enable().
  */
+/*
 function registrar_api_enable() {
   drupal_set_message(t('Registrar API module successfully installed. Please review the <a href="@settings">API configuration settings</a>.', array('@settings' => url('admin/settings/registrar_api'))));
 }
-
-/**
- * Implementation of hook_install().
- */
-function registrar_api_install() {
-  drupal_install_schema('registrar_api');
-}
-
-/**
- * Implementation of hook_uninstall().
- */
-function registrar_api_uninstall() {
-  drupal_uninstall_schema('registrar_api');
-}
+// */
 
 function registrar_api_schema() {
-  $schema['registrar_api_contact'] = array(
-    'description' => 'Stores contact-specific information for contact-handle nodes.',
+  $schema['registrar_domain'] = array(
+    'description' => 'Domains.',
     'fields' => array(
-      'nid' => array(
-        'description' => "The contact's {node}.nid.",
+      'did' => array(
+        'description' => "The domain ID.",
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
       ),
-      'company_name' => array(
-        'description' => 'Company Name.',
-        'type' => 'varchar',
-        'length' => 60,
-        'not null' => TRUE,
-        'default' => '',
-      ),
-      'firstname' => array(
-        'description' => 'Firstname.',
-        'type' => 'varchar',
-        'length' => '60',
-        'not null' => TRUE,
-        'default' => '',
-      ),
-      'lastname' => array(
-        'description' => 'Lastname.',
-        'type' => 'varchar',
-        'length' => '60',
-        'not null' => TRUE,
-        'default' => '',
-      ),
-      'email' => array(
-        'description' => 'Email address.',
-        'type' => 'varchar',
-        'length' => '255',
-        'not null' => TRUE,
-        'default' => '',
-      ),
-    ),
-    'primary key' => array('nid')
-  );
-
-  $schema['registrar_api_user_handles'] = array(
-    'description' => 'Maps contact handles to users.',
-    'fields' => array(
-      'nid' => array(
-        'description' => 'Contact {node}.nid',
-        'type' => 'int',
-        'not null' => TRUE,
-      ),
       'uid' => array(
-        'description' => 'User {user}.uid',
+        'description' => 'The user that created the domain.',
         'type' => 'int',
-        'not null' => TRUE,
-      ),
-    ),
-    'primary key' => array('nid'),
-    'indexes' => array('uid' => array('uid'))
-  );
-
-  $schema['registrar_api_remote_handles'] = array(
-    'description' => 'Maps remote handles to internal handles.',
-    'fields' => array(
-      'nid' => array(
-        'description' => 'Contact {node}.nid.',
-        'type' => 'int',
-        'not null' => TRUE,
-      ),
-      'remote_handle' => array(
-        'description' => 'Remote handle.',
-        'type' => 'varchar',
-        'length' => '60',
-        'not null' => TRUE,
-      ),
-      'registrar' => array(
-        'description' => 'Registrar.',
-        'type' => 'varchar',
-        'length' => '100',
-        'not null' => TRUE,
-      ),
-    ),
-    'primary key' => array('nid'),
-    'indexes' => array('remote_handle' => array('remote_handle'))
-  );
-
-  $schema['registrar_api_domain'] = array(
-    'description' => 'Domains.',
-    'fields' => array(
-      'nid' => array(
-        'description' => "The domain's {node}.nid",
-        'type' => 'int',
-        'not null' => TRUE,
-      ),
-      'tld' => array(
-        'description' => 'Top level domain.',
-        'type' => 'varchar',
-        'length' => '10',
+        'unsigned' => TRUE,
         'not null' => TRUE,
       ),
       'registrar_handle' => array(
-        'description' => 'Registrar handle.',
-        'type' => 'int',
+        'description' => 'Registrar handle. Wich API does the row comes from.',
+        'type' => 'varchar',
+        'length' => '120',
+        'not null' => TRUE,
+        'default' => 'openprovider',
+      ),
+      'name' => array(
+        'description' => 'The domain name.',
+        'type' => 'varchar',
+        'length' => '255',
         'not null' => TRUE,
       ),
-      'adm_handle' => array(
-        'description' => 'Administrative handle.',
+      'created' => array(
+        'description' => 'Created date.',
         'type' => 'int',
         'not null' => TRUE,
+        'default' => 0,
       ),
-      'tech_handle' => array(
-        'description' => 'Technical handle.',
+      'changed' => array(
+        'description' => 'Last modification date.',
         'type' => 'int',
         'not null' => TRUE,
+        'default' => 0
       ),
     ),
-    'primary key' => array('nid'),
-    'indexes' => array('tld' => array('tld'))
+    'primary key' => array('did'),
   );
   return $schema;
 }

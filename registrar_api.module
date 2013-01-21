@@ -4,6 +4,15 @@
  * @file
  * The registrar_api module provides basic API calls
  * to registrars with available API's
+ *
+ * @todo Attach more fields to the user form.
+ *    - Company name
+ *    - First name
+ *    - Last name
+ * @todo Contact handlers should be able to manager their users
+ *   This is also possible if you assign the groups right. A contact handler should
+ *   be able to manage the group of his users.
+ * @todo Map remote handlers to internal handlers
  */
 
 define('REGISTRAR_API_IANA_TLDS_URL', 'http://data.iana.org/TLD/tlds-alpha-by-domain.txt');
@@ -27,10 +36,12 @@ function registrar_api_help($path, $arg) {
 /**
  * Implementation of hook_init().
  */
+/* -- should not be used like this
 function registrar_api_init() {
   module_load_include('inc', 'registrar_api');
   module_load_include('inc', 'registrar_api', 'registrar_api.node');
 }
+// */
 
 /**
  * Implementation of hook_menu().
@@ -92,10 +103,29 @@ function registrar_api_menu() {
 }
 
 /**
- * Implementation of hook_perm().
+ * Implementation of hook_permission().
+ *
+ * @todo Add descriptions
  */
-function registrar_api_perm() {
-  return array('create registrar_contact content', 'edit own registrar_contact content', 'manage contacts', 'override default contacts');
+function registrar_api_permission() {
+  return array(
+    'create registrar_contact content' => array(
+      'title' => t('Create registrar contact content'),
+      'description' => t('TODO'),
+    ),
+    'edit own registrar_contact content' => array(
+      'title' => t('Edit own registrar_contact content'),
+      'description' => t('TODO'),
+    ),
+    'manage contacts' => array(
+      'title' => t('Manage contacts'),
+      'description' => t('TODO'),
+    ),
+    'override default contacts' => array(
+      'title' => t('Override default contacts'),
+      'description' => t('TODO'),
+    ),
+  );
 }
 
 /**
