@@ -15,7 +15,7 @@ function registrar_api_enable() {
 // */
 
 function registrar_api_schema() {
-  $schema['registrar_domain'] = array(
+  $schema['registrar'] = array(
     'description' => 'Domains.',
     'fields' => array(
       'did' => array(
