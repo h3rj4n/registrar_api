@@ -30,12 +30,18 @@ function registrar_api_schema() {
         'unsigned' => TRUE,
         'not null' => TRUE,
       ),
-      'registrar_handle' => array(
+      'registrar_handler' => array(
         'description' => 'Registrar handle. Wich API does the row comes from.',
         'type' => 'varchar',
         'length' => '120',
         'not null' => TRUE,
         'default' => 'openprovider',
+      ),
+      'registrar_id' => array(
+        'description' => 'The remote ID of the domain.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
       ),
       'name' => array(
         'description' => 'The domain name.',
