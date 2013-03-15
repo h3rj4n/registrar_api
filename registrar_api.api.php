@@ -12,11 +12,11 @@
  *   - description (optional)
  *   - module, the module name wich this hook implements.
  *     Default is set to registrar_<key name of array>
- *   - actions, an array of the actions the new provider supports. If key
- *     value array, the key of the array is the action, the value the
- *     function that should be called.
+ *   - actions, an array of the actions the new provider supports. To
+ *     support these actions you'll have to implement the right hooks.
  *     At time of release the registrar_api supports the following:
  *       - domain_check
+ *       - domain_check_multiple
  *       - domain_read
  *       - domain_create
  *       - domain_update
@@ -28,15 +28,38 @@ function hook_registrar_api_info() {
       'label' => 'OpenProvider',
       'description' => 'OpenProvider support',
       'module' => 'registrar_openprovider',
-      'actions' => array(
-        'domain_check' => 'registrar_openprovider_domain_check',
-        'domain_read' => 'registrar_openprovider_domain_read',
-        'domain_create' => 'registrar_openprovider_domain_create',
-        'domain_update' => 'registrar_openprovider_domain_update',
-        'domain_delete' => 'registrar_openprovider_domain_delete',
+      'callbacks' => array(
+        'domain_check',
+        'domain_check_multiple',
+        'domain_read',
+        'domain_create',
+        'domain_update',
+        'domain_delete',
       ),
     )
   );
 }
 
-function hook_registrar
+function hook_registrar_api_domain_check() {
+  
+}
+
+function hook_registrar_api_domain_check_multiple() {
+  
+}
+
+function hook_registrar_api_domain_read() {
+  
+}
+
+function hook_registrar_api_domain_create() {
+  
+}
+
+function hook_registrar_api_domain_update() {
+  
+}
+
+function hook_registrar_api_domain_delete() {
+  
+}
