@@ -3,5 +3,7 @@ description = Connects to various domain registrar APIs to allow domain registra
 package = registrar_api
 core = 7.x
 
+files[] = registrar_api.entity.inc
+
 dependencies[] = libraries
 dependencies[] = entity
