@@ -18,60 +18,6 @@
 define('REGISTRAR_API_IANA_TLDS_URL', 'http://data.iana.org/TLD/tlds-alpha-by-domain.txt');
 
 /**
- * Load a single domain object
- *
- * @param int $did
- *   The domain id wich should be loaded
- * @param bool $reset
- *   Wether the load should use cache or not
- */
-function registrar_api_load($did, $reset = FALSE) {
-  $domain = register_api_load_multiple(array($did), array(), $reset);
-  return reset($domain);
-}
-
-/**
- * Load multiple domain objects
- *
- * @param array $dids
- *   Multiple domain id's wich should be loaded.
- * @param array $conditions
- * @param bool $reset
- *   Wether the load should not use (entity) cache.
- */
-function registrar_api_load_multiple($dids = array(), $conditions = array(), $reset = FALSE) {
-  return entity_load('registrar', $dids, $conditions, $reset);
-}
-
-/**
- * Save a domain object
- */
-function registrar_api_save($domain) {
-  entity_save('registrar', $domain);
-}
-
-/**
- * Delete a domain object
- *
- * @param object $domain
- *   A domain object containing the domain id
- */
-function registrar_api_delete($domain) {
-  entity_delete('registrar', entity_id('registrar', $domain));
-}
-
-/**
- * Delete multiple domains
- *
- * @param array $dids
- *   An array containing all the domain id's wich should
- *   be deleted.
- */
-function registrar_api_delete_multiple($dids) {
-  entity_delete_multiple('registrar', $dids);
-}
-
-/**
  * Implementation of hook_help().
  */
 function registrar_api_help($path, $arg) {
@@ -102,28 +48,31 @@ function registrar_api_init() {
  */
 function registrar_api_menu() {
 
-  $items['admin/settings/registrar_api'] = array(
+  $items['admin/config/services/registrar_api'] = array(
     'title' => 'Registrar API Settings',
     'description' => 'Manage the registrar API settings',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('registrar_api_settings_form'),
     'access arguments' => array('access administration pages'),
+    'file' => 'registrar_api.admin.inc',
   );
-  $items['admin/settings/registrar_api/configure'] = array(
+  $items['admin/config/services/registrar_api/configure'] = array(
     'title' => 'Global',
     'type' => MENU_DEFAULT_LOCAL_TASK,
+    'file' => 'registrar_api.admin.inc',
   );
-  $items['admin/settings/registrar_api/registrars'] = array(
+  $items['admin/config/services/registrar_api/registrars'] = array(
     'title' => 'Registrars',
     'description' => 'Manage registrars settings',
     'access arguments' => array('access administration pages'),
     'page callback' => 't',
     'page arguments' => array(''),
     'type' => MENU_LOCAL_TASK,
+    'file' => 'registrar_api.admin.inc',
   );
   $registrars = registrar_api_get_registrars();
   foreach ($registrars as $rname => $v) {
-    $items['admin/settings/registrar_api/registrars/'. $rname] = array(
+    $items['admin/config/services/registrar_api/registrars/'. $rname] = array(
       'title' => $v['name'],
       'description' => $v['name'] .'Manage the registrar API settings',
       'page callback' => 'drupal_get_form',
@@ -147,190 +96,37 @@ function registrar_api_permission() {
 /**
  * Implementation of hook_theme().
  */
-function registrar_api_theme() {
-  return array(
-    'registrar_api_settings_form' => array(
-      'arguments' => array('form' => NULL),
-    ),
-  );
-}
-
-/**
- * Callback function for the registrar_api admin settings form.
- */
-function registrar_api_settings_form() {
-  $form = array();
-  
-  // Select available TLDs
-  $tlds = variable_get('registrar_api_iana_tlds', FALSE);
-  $form['iana'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Available TLDs'),
-    '#collapsible' => TRUE,
-    '#description' => t('Select the supported TLDs'),
-  );
-  if (!$tlds) {
-    $form['iana']['msg'] = array(
-      '#value' => t('To start using registrar API it\'s needed to download the TLDs database from <a href="@url">@url</a>', array('@url' => REGISTRAR_API_IANA_TLDS_URL)),
-    );
-    $form['iana']['submit'] = array(
-      '#type' => 'submit',
-      '#value' => 'Download IANA database now'
-    );
-    $form['#submit'] = array('registrar_api_settings_initialize');
-    return $form;
-  }
-
-  $tlds_enabled = variable_get('registrar_api_iana_tlds_enabled', array());
-  if (!empty($tlds_enabled)) {
-    $form['iana']['#collapsed'] = TRUE;
-  }
-  $options = array_merge($tlds_enabled, $tlds);
-  $form['iana']['tlds'] = array(
-    '#type' => 'checkboxes',
-    '#options' => $tlds,
-    '#value' => $tlds_enabled,
-  );
-
-  $form['registrars'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Select registrars'),
-    '#description' => t('Select the registrar to use by default and optionally a specific registrar per TLD.'),
-    '#collapsible' => TRUE,
-  );
-  $registrars = registrar_api_get_registrars();
-  $options = array();
-  foreach ($registrars as $k => $v) {
-    $options[$k] = $v['name'];
-  }
-  $default = variable_get('registrar_api_registrar_default', '');
-  if ($default != '') {
-    $form['registrars']['#collapsed'] = TRUE;
-  }
-  $form['registrars']['default_registrar'] = array(
-    '#type' => 'select',
-    '#title' => t('Default'),
-    '#default_value' => $default,
-    '#options' => $options,
-  );
-  
-  $form['registrars']['tld_registrar'] = array(
-    '#type' => 'item',
-    '#tree' => TRUE,
-  );
-  $options = array_merge(array('' => t('Default')), $options);
-  foreach ($tlds_enabled as $tld) {
-    $items = array(
-      'tld' => array('#value' => $tld),
-      'registrar' => array(
-        '#type' => 'select',
-        '#options' => $options,
-        '#default_value' => variable_get('registrar_api_registrar_'.$tld, ''),
-      ),
-    );
-    $form['registrars']['tld_registrar'][$tld] = $items;
-  }
-
-  $form['nameservers'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Default nameservers'),
-    '#description' => t('Select the nameservers to use by default.'),
-    '#collapsible' => TRUE,
-    '#tree' => TRUE,
-  );
-  $nameservers = variable_get('registrar_api_nameservers_default', array());
-  if (!empty($nameservers)) {
-    $form['nameservers']['#collapsed'] = TRUE;
-  }
-  for ($i=0;$i<5;$i++) {
-    $form['nameservers'][$i] = array(
-      '#type' => 'textfield',
-      '#default_value' => isset($nameservers[$i])?$nameservers[$i]:'',
-    );
-  }
-
-  $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Save configuration')
-  );
-
-  return $form;
-}
+//function registrar_api_theme() {
+//  return array(
+//    'registrar_api_settings_form' => array(
+//      'arguments' => array('form' => NULL),
+//    ),
+//  );
+//}
 
 /**
  * Return HTML for the registrar api settings form.
  */
-function theme_registrar_api_settings_form($form) {
-  if (isset($form['registrars'])) {
-    $header = array(t('TLD'), t('Registrar'));
-    $rows = array();
-    foreach (element_children($form['registrars']['tld_registrar']) as $item) {
-      if ($item == 'default') {
-        continue;
-      }
-      $items = &$form['registrars']['tld_registrar'][$item];
-      $rows[] = array(
-        drupal_render($items['tld']),
-        drupal_render($items['registrar']),
-      );
-    }
-    $form['registrars']['table']['#value'] = theme('table', $header, $rows);
-  }
-
-  $output = drupal_render($form);
-  return $output;
-}
-
-/**
- * Validate callback.
- */
-function registrar_api_settings_form_validate($form, &$form_state) {
-  $values = &$form_state['values'];
-
-  // Validate nameservers.
-  foreach ($values['nameservers'] as $i => $value) {
-    if ($value == '') {
-      continue;
-    }
-    if (!_registrar_api_check_valid_nameserver($value)) {
-      form_error($form['nameservers'][$i], t('Invalid nameserver.'));
-    }
-  }
-}
-
-/**
- * Submit callback for the settings form when the list of TLDs is not available.
- */
-function registrar_api_settings_initialize_tlds($form, $form_state) {
-  $result = drupal_http_request(REGISTRAR_API_IANA_TLDS_URL);
-  if ($result->code != 200) {
-    form_error($form['iana'], $result->status_message);
-  }
-  $tlds = explode("\n", trim($result->data));
-  array_shift($tlds);
-  $tlds = drupal_map_assoc($tlds);
-  variable_set('registrar_api_iana_tlds', $tlds);
-}
-
-/**
- * Submit callback.
- */
-function registrar_api_settings_form_submit($form, $form_state) {
-  $values = &$form_state['values'];
-  // Enabled IANA TLDs.
-  $tlds = variable_get('registrar_api_iana_tlds', array());
-  $enabled = array_intersect_assoc($tlds, $values['tlds']);
-  variable_set('registrar_api_iana_tlds_enabled', $enabled);
-
-  // Default and per tld registrars.
-  variable_set('registrar_api_registrar_default', $values['default_registrar']);
-  foreach ($values['tld_registrar'] as $tld => $value) {
-    variable_set('registrar_api_registrar_'.$tld, $value['registrar']);
-  }
-
-  // Default nameservers.
-  variable_set('registrar_api_nameservers_default', $values['nameservers']);
-}
+//function theme_registrar_api_settings_form($form) {
+//  if (isset($form['registrars'])) {
+//    $header = array(t('TLD'), t('Registrar'));
+//    $rows = array();
+//    foreach (element_children($form['registrars']['tld_registrar']) as $item) {
+//      if ($item == 'default') {
+//        continue;
+//      }
+//      $items = &$form['registrars']['tld_registrar'][$item];
+//      $rows[] = array(
+//        drupal_render($items['tld']),
+//        drupal_render($items['registrar']),
+//      );
+//    }
+//    $form['registrars']['table']['#value'] = theme('table', $header, $rows);
+//  }
+//
+//  $output = drupal_render($form);
+//  return $output;
+//}
 
 /**
  * Return the form for admin/settings/registrar_api/registrars/{RNAME}.

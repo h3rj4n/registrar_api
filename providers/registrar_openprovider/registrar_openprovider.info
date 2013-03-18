@@ -2,5 +2,6 @@ name = Registrar API implementation for OpenProvider
 description = Connects to the registrar API of OpenProvider
 package = RegistrarAPI
 dependencies[] = registrar_api
-core = 6.x
+dependencies[] = libraries
+core = 7.x
 

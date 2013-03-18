@@ -66,3 +66,10 @@ function registrar_api_schema() {
   );
   return $schema;
 }
+
+/**
+ * Implements hook_uninstall().
+ */
+function registrar_api_uninstall() {
+  variable_del('registrar_api*');
+}

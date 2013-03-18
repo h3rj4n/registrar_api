@@ -2,9 +2,10 @@
 
 function registrar_openprovider_registrar_info() {
   return array(
-    'registrar_openprovider' => array(
+    'openprovider' => array(
       'name' => 'OpenProvider',
       'description' => 'Openprovider domain registrar',
+      'registrar provider' => 'RegistrarOpenProvider',
     ),
   );
 }
@@ -13,8 +14,7 @@ function registrar_openprovider_include() {
   module_load_include('php', 'registrar_openprovider', 'API');
 }
 
-function registrar_openprovider_settings_form() {
-  $form = array();
+function registrar_openprovider_settings_form($form, &$form_state) {
 
   $form['registrar_openprovider'] = array(
     '#type' => 'fieldset',
