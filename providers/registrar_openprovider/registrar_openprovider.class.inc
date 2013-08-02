@@ -1,14 +1,10 @@
 <?php
 
-/**
- * @file
- * Provides all of the Registrar API calls.
+/*
+ * class Registrar
  */
 
-/*
- * class RegistrarApiProvider
- */
-abstract class RegistrarApiProvider {
+class RegistrarOpenProvider extends RegistrarApiProvider {
   
   /**
    * Check the availability status on a list of domains.
@@ -24,20 +20,8 @@ abstract class RegistrarApiProvider {
    *     )
    *   )
    */
-  abstract public function check_domains($domain_list);
-  
-  /**
-   * Check the availability status on the specified domain.
-   * @uses registrar_api_check_domains()
-   *
-   * @param $domain
-   *   The domain name to check availability on
-   *
-   * @return TRUE if domain is available, FALSE otherwise
-   */
-  public function check_domain($domain) {
-    $domains = $this->check_domains(array($domain));
-    return (bool) $domains[$domain]['Available'];
+  public function check_domains($domain_list) {
+    
   }
 
   /**
@@ -56,7 +40,9 @@ abstract class RegistrarApiProvider {
    * @todo integrate additional data?
    * @todo add optional parameters: limit, search pattern?
    */
-  abstract public function get_domains_list();
+  public function get_domains_list() {
+    
+  }
   
   /**
    * Register the given domain name
@@ -78,7 +64,9 @@ abstract class RegistrarApiProvider {
    *
    * return array containing the registered domain information
    */
-  abstract public function create_domain($domain_name, $years, $registrant, $tech, $admin, $auxbilling, $nameservers = NULL);
+  public function create_domain($domain_name, $years, $registrant, $tech, $admin, $auxbilling, $nameservers = NULL) {
+    
+  }
 
   /**
    * Check the availability status on the specified domain.
@@ -91,7 +79,9 @@ abstract class RegistrarApiProvider {
    *
    * @return array containing renewal information
    */
-  abstract public function renew_domain($domain, $years);
+  public function renew_domain($domain, $years) {
+    
+  }
   
   /**
    * Set the contact information on the domain
@@ -109,7 +99,9 @@ abstract class RegistrarApiProvider {
    *
    * @return none
    */
-  abstract public function set_contacts($domain, $years, $registrant, $tech, $admin, $auxbilling);
+  public function set_contacts($domain, $years, $registrant, $tech, $admin, $auxbilling) {
+    
+  }
   
   /**
    * Get the contact information for a domain
@@ -119,15 +111,44 @@ abstract class RegistrarApiProvider {
    *
    * @return array containing the domain contact information
    */
-  abstract public function get_contacts($domain);
+  public function get_contacts($domain) {
+    
+  }
   
-  /**
-   * Create the settings for for this provider
-   */
-  abstract public function settingsForm(&$form, &$form_state);
+  public function settingsForm(&$form, &$form_state) {
+    
+    $form['registrar_openprovider'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('OpenProvider Registrar Settings'),
+    );
   
-  /**
-   * Implement a validate function for the settings form
-   */
-  abstract public function settingsFormValidate($form, $form_state);
+    $form['registrar_openprovider']['registrar_openprovider_uri'] = array(
+      '#type' => 'textfield',
+      '#title' => t('OpenProvider Service URL'),
+      '#default_value' => variable_get('registrar_openprovider_uri', 'https://api.openprovider.eu/'),
+      '#description' => t("i.e. https://api.openprovider.eu/"),
+      '#required' => TRUE,
+    );
+  
+    $form['registrar_openprovider']['registrar_openprovider_api_user'] = array(
+      '#type' => 'textfield',
+      '#title' => t('OpenProvider API User'),
+      '#default_value' => variable_get('registrar_openprovider_api_user', ''),
+      '#description' => t("This is usually your regular openprovider username"),
+      '#required' => TRUE,
+    );
+  
+    $form['registrar_openprovider']['registrar_openprovider_api_password'] = array(
+      '#type' => 'textfield',
+      '#title' => t('OpenProvider Password'),
+      '#default_value' => variable_get('registrar_openprovider_api_password', ''),
+      '#required' => TRUE,
+    );
+    
+    return $form;
+  }
+  
+  public function settingsFormValidate($form, $form_state) {
+    // TODO
+  }
 }

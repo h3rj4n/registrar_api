@@ -34,19 +34,17 @@ function registrar_api_help($path, $arg) {
 }
 
 /**
- * Implementation of hook_init().
- */
-/* -- should not be used like this
-function registrar_api_init() {
-  module_load_include('inc', 'registrar_api');
-  module_load_include('inc', 'registrar_api', 'registrar_api.node');
-}
-// */
-
-/**
  * Implementation of hook_menu().
  */
 function registrar_api_menu() {
+  
+  $items['check-domain'] = array(
+    'title' => 'Check domain name',
+    'description' => 'Check if your domain is free',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('registrar_api_check_domain_form'),
+    'access arguments' => array('access content'),
+  );
 
   $items['admin/config/services/registrar_api'] = array(
     'title' => 'Registrar API Settings',
@@ -70,6 +68,10 @@ function registrar_api_menu() {
     'type' => MENU_LOCAL_TASK,
     'file' => 'registrar_api.admin.inc',
   );
+  $items['admin/config/services/registrar_api/registrars/all'] = array(
+    'title' => 'Registrars',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
   $registrars = registrar_api_get_registrars();
   foreach ($registrars as $rname => $v) {
     $items['admin/config/services/registrar_api/registrars/'. $rname] = array(
@@ -81,7 +83,40 @@ function registrar_api_menu() {
       'type' => MENU_LOCAL_TASK,
     );
   }
+
+  $items['admin/content/domains'] = array(
+    'title' => 'Domains',
+    'description' => 'Display all the known domains',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('registrar_api_domain_overview'),
+    'access arguments' => array('access administation pages'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'registrar_api.pages.inc',
+  );
   return $items;
+}
+
+function registrar_api_check_domain_form($form, &$form_state) {
+  $form['domain_name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Domain name'),
+    '#description' => t('Type the domain you want to check'),
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Submit'),
+  );
+  return $form;
+}
+
+function registrar_api_check_domain_form_submit($form, &$form_state) {
+  $values = $form_state['values'];
+  
+  $domain = $values['domain_name'];
+  $split = registrar_api_split_domain_name($domain);
+  
+  // the last part of the split should contain the TLDS
+  dpm($split);
 }
 
 /**
@@ -94,111 +129,44 @@ function registrar_api_permission() {
 }
 
 /**
- * Implementation of hook_theme().
- */
-//function registrar_api_theme() {
-//  return array(
-//    'registrar_api_settings_form' => array(
-//      'arguments' => array('form' => NULL),
-//    ),
-//  );
-//}
-
-/**
- * Return HTML for the registrar api settings form.
- */
-//function theme_registrar_api_settings_form($form) {
-//  if (isset($form['registrars'])) {
-//    $header = array(t('TLD'), t('Registrar'));
-//    $rows = array();
-//    foreach (element_children($form['registrars']['tld_registrar']) as $item) {
-//      if ($item == 'default') {
-//        continue;
-//      }
-//      $items = &$form['registrars']['tld_registrar'][$item];
-//      $rows[] = array(
-//        drupal_render($items['tld']),
-//        drupal_render($items['registrar']),
-//      );
-//    }
-//    $form['registrars']['table']['#value'] = theme('table', $header, $rows);
-//  }
-//
-//  $output = drupal_render($form);
-//  return $output;
-//}
-
-/**
  * Return the form for admin/settings/registrar_api/registrars/{RNAME}.
  *
  * Load the registrar specific form and extend it with items to set
  * default contacts' handlers.
  */
-function registrar_api_registrar_settings_form($form_state, $rname) {
-  $form = call_user_func_array($rname.'_settings_form', $form_state);
-  $form['registrar'] = array(
-    '#type' => 'hidden',
-    '#value' => $rname,
-  );
-
-  $form[$rname]['#weight'] = -20;
-  $form['handles'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Default contacts'),
-    '#description' => t('You can specify default contacts for domains registered with this registrar. If a default contact is choosen for any contact type, users without the «override default contacts» permission will not be able to change that contact type on domain creation.'),
-    '#collapsible' => TRUE,
-    '#weight' => -10,
-  );
-  $contacts = (object) array();
-  foreach (array('registrar', 'tech', 'adm') as $ctype) {
-    $ctype = $ctype.'_handle';
-    $variable = 'registrar_api_'.$rname.'_default_'.$ctype;
-    $nid = variable_get($variable, FALSE);
-    if ($nid) {
-      $handle = db_result(db_query("SELECT title FROM {node} n WHERE nid=%d", $nid));
-      $contacts->{$ctype} = $handle;
-    }
-  }
-  $handles = _registrar_api_domain_handles_form($contacts, FALSE);
-  $form['handles'] += $handles;
-  array_unshift($form['#submit'], 'registrar_api_registrar_settings_form_submit');
-  return $form;
+function registrar_api_registrar_settings_form($form, &$form_state, $rname) {
+  // get all the available registrars
+  $registrars = registrar_api_get_registrars();
+  // get the registrar that is being requested
+  $registrar = $registrars[$rname];
+  
+  $form_state['registrar'] = $registrar;
+  
+  // create the class based on the registrar settings
+  $class_name = $registrar['registrar provider'];
+  $provider = new $class_name;
+  
+  $provider->settingsForm($form, $form_state);
+  
+  return system_settings_form($form);
 }
 
 /**
  * Validate callback.
  */
 function registrar_api_registrar_settings_form_validate($form, &$form_state) {
-  foreach (array('registrar', 'tech', 'adm') as $ctype) {
-    $ctype = $ctype.'_handle';
-    $handle = $form_state['values'][$ctype];
-    if (empty($handle)) {
-      continue;
-    }
-    else {
-      $node = node_load(array('title' => $handle, 'type' => 'registrar_api_contact'));
-      if (!$node) {
-        form_error($form['handles'][$ctype], t('Invalid handle.'));
-      }
-      else {
-        form_set_value($form['handles'][$ctype], $node->nid, $form_state);
-      }
-    }
-  }
-}
-
-/**
- * Submit callback.
- */
-function registrar_api_registrar_settings_form_submit($form, &$form_state) {
-  $rname = $form_state['values']['registrar'];
-  unset($form_state['values']['registrar']);
-  foreach (array('registrar', 'tech', 'adm') as $ctype) {
-    $ctype = $ctype.'_handle';
-    $variable = 'registrar_api_'.$rname.'_default_'.$ctype;
-    $handle = $form_state['values'][$ctype];
-    variable_set($variable, $handle);
-    unset($form_state['values'][$ctype]);
+  
+  // get all the available registrars
+  $registrars = registrar_api_get_registrars();
+  // get the registrar that is being requested
+  $registrar = $registrars[$form_state['registrar']];
+  
+  // create the class based on the registrar settings
+  $class_name = $registrar['registrar provider'];
+  $provider = new $class_name;
+  
+  if (method_exists($provider, 'settingsFormValidate')) {
+    $provider->settingsFormValidate($form, $form_state);
   }
 }
 
@@ -220,26 +188,6 @@ function registrar_api_split_domain_name($domain_name) {
   array_shift($matches);
   return $matches;
 }
-
-/**** Pages ****/
-function registrar_api_user_page($user) {
-  $result = db_query("
-		SELECT * FROM {registrar_api_user_handles} handles 
-			LEFT JOIN {registrar_api_contact} contact 
-			ON (handles.nid = contact.nid)
-				LEFT JOIN {node} node 
-					ON (contact.nid = node.nid)
-		WHERE  handles.uid = %d", $user->uid);
-  $table_header = array('Handle', 'Contact name', 'Company');
-  $table_data   = array();
-  while ($contact = db_fetch_object($result)) {
-    $attr = array('title' => _registrar_api_format_contact_info($contact));
-    $table_data[] = array(l($contact->title, 'node/'. $contact->nid, array('attributes' => $attr)), _registrar_api_full_contact_name($contact), $contact->company_name);
-  }
-  return theme_table($table_header, $table_data);
-}
-
-/**** Private helper functions ****/
 
 /**
  * Helper function to provide form elements for contact handles.

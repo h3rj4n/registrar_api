@@ -4,6 +4,7 @@ package = registrar_api
 core = 7.x
 
 files[] = registrar_api.entity.inc
+files[] = registrar_api.class.inc
 
 dependencies[] = libraries
 dependencies[] = entity

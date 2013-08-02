@@ -3,5 +3,6 @@ description = Connects to the registrar API of OpenProvider
 package = RegistrarAPI
 dependencies[] = registrar_api
 dependencies[] = libraries
-core = 7.x
 
+files[] = registrar_openprovider.class.inc
+core = 7.x

@@ -1,0 +1,8 @@
+<?php
+
+/**
+ * Impelements hook_uninstall().
+ */
+function registrar_openprovider_uninstall() {
+  variable_del('registrar_openprovider_*');
+}
